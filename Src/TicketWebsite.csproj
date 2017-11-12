@@ -86,6 +86,10 @@
       <Private>True</Private>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Detail.xml" />
+    <Content Include="View.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
@@ -99,7 +103,10 @@ copy /y "$(TargetDir)Bridge\*.js"  "$(SolutionDir)\bin\js\"
 :: add reference 'Bridge.CustomUIMarkup' for index.html
 copy /y "D:\github\Bridge.CustomUIMarkup\bin\js\*.js"    "$(SolutionDir)Website\js\"
 copy /y "D:\github\Bridge.CustomUIMarkup\bin\css\*.css"  "$(SolutionDir)Website\css\"
-copy /y "$(SolutionDir)\bin\js\*.js"                     "$(SolutionDir)Website\js\"</PostBuildEvent>
+copy /y "$(SolutionDir)\bin\js\*.js"                     "$(SolutionDir)Website\js\"
+copy /y "$(ProjectDir)\*.xml"                            "$(SolutionDir)Website\xml\"
+
+</PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\Bridge.Min.16.5.0\build\Bridge.Min.targets" Condition="Exists('..\packages\Bridge.Min.16.5.0\build\Bridge.Min.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -1,69 +1,57 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using Bridge.CustomUIMarkup.Common;
 using Bridge.CustomUIMarkup.SemanticUI;
 using Bridge.Html5;
+using Bridge.jQuery2;
 
 namespace TicketWebsite
 {
-    class View:FrameworkElement
+    class View : FrameworkElement
     {
-        string Template => @"
+        public FrameworkElement mainContentContainer;
 
+        public void OnSafariClick()
+        {
+            FileUtil.ReadAsync("xml/Detail.xml", content =>
+            {
+                var builder = new Builder
+                {
+                    DataContext = new Model(),
+                    XmlString = content,
+                    Caller = this
+                };
 
-<ui.page.grid>
-   <ui.container>
-      <ui.text.menu.navbar FontSize='18'>
-         <left.menu>
-            <item>Project Name</item>
-         </left.menu>
-         <right.menu>
-            <item>Home</item>
-            <item>About</item>
-            <item>Contact</item>
-         </right.menu>
-      </ui.text.menu.navbar>
-      <ui.divider MarginBottom='10' />
-      <Carousel DataSource='img/carousel_1.jpg,img/carousel_2.jpg,img/carousel_3.jpg' />
-      <ui.divider MarginBottom='10' />
-	  <ui.cards>
-	  
-		  <card>
-			 <ui.image Src='http://www.samsunkorkuciftligi.com/upload/20170314__2069208026.jpg' />
-			 <content Align='Center'>
-				<Header Align='Center'>Motor Safari</Header>
-				<description>Macera sizi bekliyor...</description>
-				<ui.basic.button Text='İncele' MarginTop='11' AddClass='yellow' />
-			 </content>
-		  </card>
-		  
-		  <card>
-			 <ui.image Src='http://www.samsunkorkuciftligi.com/upload/20170314__2069208026.jpg' />
-			 <content Align='Center'>
-				<Header Align='Center'>Motor Safari</Header>
-				<description>Macera sizi bekliyor...</description>
-				<ui.basic.button Text='İncele' MarginTop='11' AddClass='yellow' />
-			 </content>
-		  </card>
-		  
-	  </ui.cards>
-   </ui.container>
-</ui.page.grid>
+                var element = (FrameworkElement)builder.Build();
 
-";
+                mainContentContainer.Root.Empty();
+
+                element.Root.AppendTo(mainContentContainer.Root);
+            });
+        }
+
+        #region Public Methods
         public void RenderInBody()
         {
-            var builder = new Builder
+            FileUtil.ReadAsync("xml/View.xml", content =>
             {
-                DataContext = new Model(),
-                XmlString = Template
-            };
+                var builder = new Builder
+                {
+                    DataContext = new Model(),
+                    XmlString = content,
+                    Caller = this
+                };
 
-            var element = (FrameworkElement)builder.Build();
-            element.Root.AppendTo(Document.Body);
+                var element = (FrameworkElement) builder.Build();
+                _root = element.Root;
+
+                element.Root.AppendTo(Document.Body);
+            });
         }
+        #endregion
+
+        #region Methods
+      
+        #endregion
     }
 }
