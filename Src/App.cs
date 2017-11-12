@@ -21,7 +21,7 @@ namespace TicketWebsite
                 ScriptLoader.LoadCssFiles(Bridge.CustomUIMarkup.jssor.Carousel.CssFiles); 
 
                 var scripts = new List<string>();
-                scripts.AddRange(VersionInfo.Scripts);
+                scripts.AddRange(VersionInfo.Scripts );
                 scripts.AddRange(Bridge.CustomUIMarkup.jssor.Carousel.JsFiles);
 
                 new ScriptLoader
@@ -37,6 +37,7 @@ namespace TicketWebsite
         static void RenderUIEditor()
         {
             new View().RenderInBody();
+            ;
         }
         #endregion
     }
