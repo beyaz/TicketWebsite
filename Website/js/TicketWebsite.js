@@ -24,6 +24,7 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
             methods: {
                 RenderUIEditor: function () {
                     new TicketWebsite.View().RenderInBody();
+                    ;
                 }
             }
         }
@@ -36,7 +37,7 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
         props: {
             Template: {
                 get: function () {
-                    return "\r\n\r\n\r\n";
+                    return "\r\n\r\n\r\n<ui.page.grid>\r\n   <ui.container>\r\n      <ui.text.menu.navbar FontSize='18'>\r\n         <left.menu>\r\n            <item>Project Name</item>\r\n         </left.menu>\r\n         <right.menu>\r\n            <item>Home</item>\r\n            <item>About</item>\r\n            <item>Contact</item>\r\n         </right.menu>\r\n      </ui.text.menu.navbar>\r\n      <ui.divider MarginBottom='10' />\r\n      <Carousel DataSource='img/carousel_1.jpg,img/carousel_2.jpg,img/carousel_3.jpg' />\r\n      <ui.divider MarginBottom='10' />\r\n\t  <ui.cards>\r\n\t  \r\n\t\t  <card>\r\n\t\t\t <ui.image Src='http://www.samsunkorkuciftligi.com/upload/20170314__2069208026.jpg' />\r\n\t\t\t <content Align='Center'>\r\n\t\t\t\t<Header Align='Center'>Motor Safari</Header>\r\n\t\t\t\t<description>Macera sizi bekliyor...</description>\r\n\t\t\t\t<ui.basic.button Text='İncele' MarginTop='11' AddClass='yellow' />\r\n\t\t\t </content>\r\n\t\t  </card>\r\n\t\t  \r\n\t\t  <card>\r\n\t\t\t <ui.image Src='http://www.samsunkorkuciftligi.com/upload/20170314__2069208026.jpg' />\r\n\t\t\t <content Align='Center'>\r\n\t\t\t\t<Header Align='Center'>Motor Safari</Header>\r\n\t\t\t\t<description>Macera sizi bekliyor...</description>\r\n\t\t\t\t<ui.basic.button Text='İncele' MarginTop='11' AddClass='yellow' />\r\n\t\t\t </content>\r\n\t\t  </card>\r\n\t\t  \r\n\t  </ui.cards>\r\n   </ui.container>\r\n</ui.page.grid>\r\n\r\n";
                 }
             }
         },
