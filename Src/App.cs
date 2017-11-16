@@ -4,6 +4,8 @@ using Bridge.CustomUIMarkup.Common;
 using Bridge.CustomUIMarkup.SemanticUI;
 using Bridge.Html5;
 using Bridge.jQuery2;
+using TicketWebsite.Shared;
+using TicketWebsite.Views;
 
 namespace TicketWebsite
 {
@@ -36,7 +38,9 @@ namespace TicketWebsite
         #region Methods
         static void RenderUIEditor()
         {
-            new View().RenderInBody();
+            var model = new FakeFullModel();
+
+            new ShopPage{DataContext = model.ShopPage}.RenderInBody();
             ;
         }
         #endregion

@@ -570,12 +570,14 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
         statics: {
             fields: {
                 JsDirectory: null,
-                CssDirectory: null
+                CssDirectory: null,
+                Map: null
             },
             ctors: {
                 init: function () {
                     this.JsDirectory = "Scripts/";
                     this.CssDirectory = "css/";
+                    this.Map = { };
                 }
             },
             methods: {
@@ -729,94 +731,6 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
 
                 Bridge.CustomUIMarkup.Common.Extensions.highlight(query);
             },
-            GetIntellisenseInfos: function () {
-                return new (System.Collections.Generic.List$1(Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo)).ctor();
-            },
-            CreateInstance: function (xmlNode) {
-                var tag = xmlNode.nodeName.toUpperCase();
-
-
-                var controlType = this.CreateType(tag);
-
-                if (controlType == null) {
-                    if (xmlNode.nodeName.length <= 3) {
-                        return new System.Windows.FrameworkElement();
-                    }
-
-                    throw new System.ArgumentException((System.String.format("NotRecognizedTag:", null) || "") + (tag || ""));
-
-
-
-                }
-
-                return Bridge.createInstance(controlType);
-            },
-            ProcessAttribute: function (instance, name, value) {
-                if (Bridge.referenceEquals(name, "class")) {
-                    name = "Class";
-                }
-
-                var fe = Bridge.as(instance, System.Windows.FrameworkElement);
-
-                var bi = System.Windows.Data.BindingInfo.TryParseExpression(value);
-                if (bi != null) {
-                    bi.Source = this.DataContext;
-                    bi.Target = instance;
-                    bi.TargetPropertyName = name;
-
-                    bi.Connect();
-
-                    return;
-                }
-
-                var targetProperty = System.ComponentModel.ReflectionHelper.FindProperty(instance, name);
-                if (targetProperty != null) {
-                    if (Bridge.Reflection.isEnum(targetProperty.rt)) {
-                        System.ComponentModel.ReflectionHelper.SetPropertyValue(instance, name, System.Enum.parse(targetProperty.rt, value, true));
-                        return;
-                    }
-
-                    var converterAttributes = System.Attribute.getCustomAttributes(targetProperty, System.ComponentModel.TypeConverterAttribute);
-                    var firstConverterAtribute = converterAttributes != null ? System.Linq.Enumerable.from(converterAttributes).firstOrDefault(null, null) : null;
-                    if (firstConverterAtribute != null) {
-                        var converter = Bridge.cast(firstConverterAtribute, System.ComponentModel.TypeConverterAttribute);
-                        var valueConverter = Bridge.cast(Bridge.createInstance(converter._type), System.Windows.Data.IValueConverter);
-                        var convertedValue = valueConverter.System$Windows$Data$IValueConverter$Convert(value, Bridge.Reflection.getMembers(Bridge.getType(instance), 16, 284, name).rt, null, System.Globalization.CultureInfo.getCurrentCulture());
-
-                        System.ComponentModel.ReflectionHelper.SetPropertyValue(instance, name, convertedValue);
-                        return;
-                    }
-
-                    System.ComponentModel.ReflectionHelper.SetPropertyValue(instance, name, Bridge.CustomUIMarkup.Common.ConvertHelper.ChangeType(value, targetProperty.rt));
-                    return;
-                }
-
-                if (System.String.startsWith(name, "on.")) {
-                    var eventName = System.Extensions.RemoveFromStart(name, "on.");
-
-                    var methodInfo = Bridge.Reflection.getMembers(Bridge.getType(this.Caller), 8, 284, value);
-
-                    fe != null ? fe.On(eventName, Bridge.fn.bind(this, function () {
-                            Bridge.Reflection.midel(methodInfo, Bridge.unbox(this.Caller))(null);
-                        })) : null;
-                    return;
-                }
-
-                if (Bridge.referenceEquals(name, "x.Name")) {
-                    var fi = Bridge.Reflection.getMembers(Bridge.getType(this.Caller), 4, 284, value);
-
-                    Bridge.Reflection.fieldAccess(fi, Bridge.unbox(this.Caller), Bridge.unbox(instance));
-                    return;
-                }
-
-                var instanceAsBag = Bridge.as(instance, System.ComponentModel.Bag);
-                if (instanceAsBag != null) {
-                    instanceAsBag.SetValue(name, value);
-                    return;
-                }
-
-                throw new System.MissingMemberException(name);
-            },
             BuildNode: function (xmlNode) {
                 var $t, $t1;
                 var instance = this.CreateInstance(xmlNode);
@@ -863,8 +777,6 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                             continue;
                         }
 
-
-
                         var subControl = this.BuildNode(childNode);
 
                         var el = Bridge.cast(subControl, System.Windows.FrameworkElement);
@@ -883,10 +795,100 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                         $t1.System$IDisposable$dispose();
                     }
                 }
-
-
-
                 return instance;
+            },
+            CreateInstance: function (xmlNode) {
+                var tag = xmlNode.nodeName.toUpperCase();
+
+                var controlType = this.CreateType(tag);
+
+                if (controlType == null) {
+                    if (xmlNode.nodeName.length <= 3) {
+                        return new System.Windows.FrameworkElement();
+                    }
+
+                    throw new System.ArgumentException((System.String.format("NotRecognizedTag:", null) || "") + (tag || ""));
+                }
+
+                return Bridge.createInstance(controlType);
+            },
+            ProcessAttribute: function (instance, name, value) {
+                if (Bridge.referenceEquals(name, "class")) {
+                    name = "Class";
+                }
+
+                var fe = Bridge.as(instance, System.Windows.FrameworkElement);
+
+
+                var bi = System.Windows.Data.BindingInfo.TryParseExpression(value);
+                if (bi != null) {
+                    var eventInfo = System.ComponentModel.ReflectionHelper.FindEvent(instance, name);
+                    if (eventInfo != null) {
+                        var methodInfo = System.ComponentModel.ReflectionHelper.GetMethodInfo(this.DataContext, bi.SourcePath.Path);
+
+                        var handler = Bridge.Reflection.createDelegate(methodInfo, this.DataContext);
+
+                        Bridge.Reflection.midel(eventInfo.ad, instance)(handler);
+
+                        return;
+                    }
+
+                    bi.Source = this.DataContext;
+                    bi.Target = instance;
+                    bi.TargetPath = System.Windows.PropertyPath.op_Implicit(name);
+
+                    bi.Connect();
+
+                    return;
+                }
+
+                var targetProperty = System.ComponentModel.ReflectionHelper.FindProperty(instance, name);
+                if (targetProperty != null) {
+                    if (Bridge.Reflection.isEnum(targetProperty.rt)) {
+                        System.ComponentModel.ReflectionHelper.SetPropertyValue(instance, name, System.Enum.parse(targetProperty.rt, value, true));
+                        return;
+                    }
+
+                    var converterAttributes = System.Attribute.getCustomAttributes(targetProperty, System.ComponentModel.TypeConverterAttribute);
+                    var firstConverterAtribute = converterAttributes != null ? System.Linq.Enumerable.from(converterAttributes).firstOrDefault(null, null) : null;
+                    if (firstConverterAtribute != null) {
+                        var converter = Bridge.cast(firstConverterAtribute, System.ComponentModel.TypeConverterAttribute);
+                        var valueConverter = Bridge.cast(Bridge.createInstance(converter._type), System.Windows.Data.IValueConverter);
+                        var convertedValue = valueConverter.System$Windows$Data$IValueConverter$Convert(value, Bridge.Reflection.getMembers(Bridge.getType(instance), 16, 284, name).rt, null, System.Globalization.CultureInfo.getCurrentCulture());
+
+                        System.ComponentModel.ReflectionHelper.SetPropertyValue(instance, name, convertedValue);
+                        return;
+                    }
+
+                    System.ComponentModel.ReflectionHelper.SetPropertyValue(instance, name, Bridge.CustomUIMarkup.Common.ConvertHelper.ChangeType(value, targetProperty.rt));
+                    return;
+                }
+
+                if (System.String.startsWith(name, "on.")) {
+                    var eventName = System.Extensions.RemoveFromStart(name, "on.");
+
+                    var methodInfo1 = Bridge.Reflection.getMembers(Bridge.getType(this.Caller), 8, 284, value);
+
+                    fe != null ? fe.On(eventName, Bridge.fn.bind(this, function () {
+                            Bridge.Reflection.midel(methodInfo1, Bridge.unbox(this.Caller))(null);
+                        })) : null;
+                    return;
+                }
+
+                if (Bridge.referenceEquals(name, "x.Name")) {
+                    var fi = Bridge.Reflection.getMembers(Bridge.getType(this.Caller), 4, 284, value);
+
+                    Bridge.Reflection.fieldAccess(fi, Bridge.unbox(this.Caller), Bridge.unbox(instance));
+                    return;
+                }
+
+                var instanceAsBag = Bridge.as(instance, System.ComponentModel.Bag);
+                if (instanceAsBag != null) {
+                    instanceAsBag.SetValue(name, value);
+                    return;
+                }
+
+                throw new System.MissingMemberException(name);
             }
         }
     });
@@ -1063,7 +1065,7 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
 
                 info.Source = this.DataContext;
                 info.Target$1 = $(element);
-                info.TargetPropertyName = propertyName;
+                info.TargetPath = System.Windows.PropertyPath.op_Implicit(propertyName);
 
                 info.Connect();
             },
@@ -1076,9 +1078,9 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                     return;
                 }
 
-                var mi = Bridge.Reflection.getMembers(Bridge.getType(this.Caller), 8, 284, info.SourcePath);
+                var mi = Bridge.Reflection.getMembers(Bridge.getType(this.Caller), 8, 284, info.SourcePath.Path);
                 if (mi == null) {
-                    throw new System.ArgumentException(info.SourcePath);
+                    throw new System.ArgumentException(info.SourcePath.Path);
                 }
 
                 if (Bridge.referenceEquals(jQueryEventName, "click") && Bridge.referenceEquals(System.Linq.Enumerable.from((mi.p || [])).firstOrDefault(null, null), jQuery.Event)) {
@@ -1087,7 +1089,7 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                     }));
                 } else {
                     if ((mi.p || []).length !== 0) {
-                        throw new System.ArgumentException(info.SourcePath);
+                        throw new System.ArgumentException(info.SourcePath.Path);
                     }
                     $(element).on(jQueryEventName, Bridge.fn.bind(this, function () {
                         Bridge.Reflection.midel(mi, Bridge.unbox(this.Caller))(null);
@@ -1448,6 +1450,13 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                     }
 
                     Bridge.Reflection.midel(propertyInfo.s, Bridge.unbox(instance))(Bridge.unbox(value));
+                },
+                GetMethodInfo: function (instance, methodName) {
+                    var methodInfo = System.ComponentModel.ReflectionHelper.FindMethodInfo(instance, methodName);
+                    if (methodInfo == null) {
+                        throw new System.MissingMemberException("MethodNotFound: " + (Bridge.Reflection.getTypeFullName(Bridge.getType(instance)) || "") + " -> " + (methodName || ""));
+                    }
+                    return methodInfo;
                 }
             }
         }
@@ -2173,92 +2182,40 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
 
                     text = System.Extensions.RemoveFromStart(text, "Binding ");
 
-                    return ($t = new System.Windows.Data.BindingInfo(), $t.SourcePath = text, $t);
+                    return ($t = new System.Windows.Data.BindingInfo(), $t.SourcePath = System.Windows.PropertyPath.op_Implicit(text), $t);
                 }
             }
         },
         fields: {
             BindingMode: 0,
             Source: null,
-            Path: null,
+            SourcePath: null,
             Target: null,
-            TargetPropertyName: null
-        },
-        props: {
-            SourcePath: {
-                get: function () {
-                    var $t;
-                    return ($t = this.Path) != null ? $t.Path : null;
-                },
-                set: function (value) {
-                    this.Path = new System.Windows.PropertyPath(value);
-                }
-            },
-            TargetValue: {
-                get: function () {
-                    return Bridge.Reflection.midel(Bridge.Reflection.getMembers(Bridge.getType(this.Target), 16, 284, this.TargetPropertyName).g, Bridge.unbox(this.Target))();
-                }
-            }
+            TargetPath: null
         },
         methods: {
             Connect: function () {
-                if (this.TargetPropertyName != null) {
-                    var eventInfo = System.ComponentModel.ReflectionHelper.FindEvent(this.Target, this.TargetPropertyName);
-                    if (eventInfo != null) {
-                        var methodInfo = Bridge.Reflection.getMembers(Bridge.getType(this.Source), 8, 284, this.SourcePath);
-
-                        var handler = Bridge.Reflection.createDelegate(methodInfo, this.Source);
-                        if (Bridge.staticEquals(handler, null)) {
-                            handler = Bridge.Reflection.createDelegate(methodInfo, this.Source);
-                        }
-                        if (Bridge.staticEquals(handler, null)) {
-                            throw new System.ArgumentException(this.SourcePath);
-                        }
-
-                        Bridge.Reflection.midel(eventInfo.ad, this.Target)(handler);
-
-                        return;
-                    }
-                }
                 this.ConnectSourceToTarget();
-
-                this.UpdateTarget();
 
                 if (this.BindingMode === System.Windows.Data.BindingMode.TwoWay) {
                     this.ConnectTargetToSource();
+                } else {
+                    this.TargetPath.Walk(this.Target);
                 }
+
+                this.UpdateTarget();
             },
-            UpdateSource: function (newValue) {
-                System.ComponentModel.ReflectionHelper.SetPropertyValue(this.Source, this.SourcePath, newValue);
+            UpdateSource: function () {
+                this.SourcePath.SetPropertyValue(this.TargetPath.GetPropertyValue());
             },
             UpdateTarget: function () {
-                var newValue = System.ComponentModel.ReflectionHelper.GetPropertyValue(this.Source, this.SourcePath);
-
-                System.ComponentModel.ReflectionHelper.SetPropertyValue(this.Target, this.TargetPropertyName, newValue);
+                this.TargetPath.SetPropertyValue(this.SourcePath.GetPropertyValue());
             },
             ConnectSourceToTarget: function () {
-                var source = Bridge.as(this.Source, System.ComponentModel.INotifyPropertyChanged);
-                if (source == null) {
-                    return;
-                }
-
-                source.System$ComponentModel$INotifyPropertyChanged$addPropertyChanged(Bridge.fn.bind(this, function (sender, e) {
-                    if (Bridge.referenceEquals(e.propertyName, this.SourcePath)) {
-                        this.UpdateTarget();
-                    }
-                }));
+                this.SourcePath.Listen(this.Source, Bridge.fn.cacheBind(this, this.UpdateTarget));
             },
             ConnectTargetToSource: function () {
-                var target = Bridge.as(this.Target, System.ComponentModel.INotifyPropertyChanged);
-                if (target == null) {
-                    return;
-                }
-
-                target.System$ComponentModel$INotifyPropertyChanged$addPropertyChanged(Bridge.fn.bind(this, function (sender, e) {
-                    if (Bridge.referenceEquals(e.propertyName, this.TargetPropertyName)) {
-                        this.UpdateSource(this.TargetValue);
-                    }
-                }));
+                this.TargetPath.Listen(this.Target, Bridge.fn.cacheBind(this, this.UpdateSource));
             }
         }
     });
@@ -2321,6 +2278,8 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                     return (ownerTypeFullName || "") + "->" + (propertyName || "");
                 },
                 CreateKey$1: function (ownerType, propertyName) {
+
+
                     return System.Windows.DependencyProperty.CreateKey(Bridge.Reflection.getTypeFullName(ownerType), propertyName);
                 },
                 TryFind: function (ownerType, propertyName) {
@@ -2415,13 +2374,120 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
     });
 
     Bridge.define("System.Windows.PropertyPath", {
+        statics: {
+            methods: {
+                op_Implicit: function (path) {
+                    return new System.Windows.PropertyPath(path);
+                }
+            }
+        },
         fields: {
+            Triggers: null,
             Path: null
         },
         ctors: {
+            init: function () {
+                this.Triggers = new (System.Collections.Generic.List$1(System.Windows.PropertyPath.Trigger)).ctor();
+            },
             ctor: function (path) {
                 this.$initialize();
                 this.Path = path;
+            }
+        },
+        methods: {
+            Clear: function () {
+                this.Triggers.forEach(function (t) {
+                    t.StopListen();
+                });
+                this.Triggers.clear();
+            },
+            Walk: function (instance) {
+                this.Clear();
+
+                this.ParsePath(instance, this.Path);
+            },
+            Listen: function (instance, onPropertyValueChanged) {
+                var $t;
+                this.Walk(instance);
+
+                $t = Bridge.getEnumerator(this.Triggers);
+                try {
+                    while ($t.moveNext()) {
+                        var trigger = $t.Current;
+                        trigger.OnPropertyValueChanged = onPropertyValueChanged;
+                        trigger.Listen();
+                    }
+                } finally {
+                    if (Bridge.is($t, System.IDisposable)) {
+                        $t.System$IDisposable$dispose();
+                    }
+                }},
+            ParsePath: function (instance, path) {
+                var $t;
+                while (true) {
+                    if (instance == null) {
+                        return;
+                    }
+
+                    var firstDat = System.String.indexOf(path, String.fromCharCode(46));
+
+                    if (firstDat < 0) {
+                        this.Triggers.add(($t = new System.Windows.PropertyPath.Trigger(), $t["Instance"] = instance, $t.PropertyName = path, $t));
+                        return;
+                    }
+
+                    var propertyName = path.substr(0, firstDat);
+
+                    this.Triggers.add(($t = new System.Windows.PropertyPath.Trigger(), $t["Instance"] = instance, $t.PropertyName = propertyName, $t));
+
+                    instance = System.ComponentModel.ReflectionHelper.GetPropertyValue(instance, propertyName);
+
+                    path = path.substr(((firstDat + 1) | 0));
+                }
+            },
+            GetPropertyValue: function () {
+                var lastTrigger = System.Linq.Enumerable.from(this.Triggers).last();
+
+                return System.ComponentModel.ReflectionHelper.GetPropertyValue(lastTrigger["Instance"], lastTrigger.PropertyName);
+            },
+            SetPropertyValue: function (value) {
+                var lastTrigger = System.Linq.Enumerable.from(this.Triggers).last();
+
+                System.ComponentModel.ReflectionHelper.SetPropertyValue(lastTrigger["Instance"], lastTrigger.PropertyName, value);
+            }
+        }
+    });
+
+    Bridge.define("System.Windows.PropertyPath.Trigger", {
+        fields: {
+            "Instance": null,
+            OnPropertyValueChanged: null,
+            PropertyName: null
+        },
+        props: {
+            "InstanceAsNotifyPropertyChanged": {
+                get: function () {
+                    return Bridge.as(this["Instance"], System.ComponentModel.INotifyPropertyChanged);
+                }
+            }
+        },
+        methods: {
+            Listen: function () {
+                if (this["InstanceAsNotifyPropertyChanged"] == null) {
+                    return;
+                }
+                this["InstanceAsNotifyPropertyChanged"].System$ComponentModel$INotifyPropertyChanged$addPropertyChanged(Bridge.fn.cacheBind(this, this.OnChange));
+            },
+            StopListen: function () {
+                if (this["InstanceAsNotifyPropertyChanged"] == null) {
+                    return;
+                }
+                this["InstanceAsNotifyPropertyChanged"].System$ComponentModel$INotifyPropertyChanged$removePropertyChanged(Bridge.fn.cacheBind(this, this.OnChange));
+            },
+            OnChange: function (sender, e) {
+                if (Bridge.referenceEquals(e.propertyName, this.PropertyName)) {
+                    this.OnPropertyValueChanged();
+                }
             }
         }
     });
@@ -2467,81 +2533,98 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
         inherits: [Bridge.CustomUIMarkup.UI.Design.Builder],
         statics: {
             fields: {
-                Types: null
+                _tags: null,
+                TagTypeMap: null
+            },
+            props: {
+                Tags: {
+                    get: function () {
+                        return Bridge.CustomUIMarkup.SemanticUI.Builder._tags;
+                    }
+                }
+            },
+            ctors: {
+                init: function () {
+                    this._tags = function (_o1) {
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("div", System.Windows.html_div));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("span", System.Windows.html_span));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("strong", System.Windows.html_strong));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("a", System.Windows.html_a));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("img", System.Windows.html_img));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("computer.tablet.only.row", Bridge.CustomUIMarkup.SemanticUI.computer_tablet_only_row));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.navbar.menu", Bridge.CustomUIMarkup.SemanticUI.ui_navbar_menu));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("mobile.only.row", Bridge.CustomUIMarkup.SemanticUI.mobile_only_row));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("right.menu", Bridge.CustomUIMarkup.SemanticUI.right_menu));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.page.grid", Bridge.CustomUIMarkup.SemanticUI.ui_page_grid));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("left.menu", Bridge.CustomUIMarkup.SemanticUI.left_menu));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.text.menu.navbar", Bridge.CustomUIMarkup.SemanticUI.ui_text_menu_navbar));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.button", Bridge.CustomUIMarkup.SemanticUI.ui_button));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("TabPanel", Bridge.CustomUIMarkup.SemanticUI.TabPanel));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("Tab", Bridge.CustomUIMarkup.SemanticUI.TabItem));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("card", Bridge.CustomUIMarkup.SemanticUI.card));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.card", Bridge.CustomUIMarkup.SemanticUI.ui_card));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.cards", Bridge.CustomUIMarkup.SemanticUI.ui_cards));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("description", Bridge.CustomUIMarkup.SemanticUI.description));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("content", Bridge.CustomUIMarkup.SemanticUI.content));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("extra-content", Bridge.CustomUIMarkup.SemanticUI.ExtraContent));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.basic.button", Bridge.CustomUIMarkup.SemanticUI.ui_basic_button));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("carousel", Bridge.CustomUIMarkup.jssor.Carousel));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.divider", Bridge.CustomUIMarkup.SemanticUI.ui_divider));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.menu", Bridge.CustomUIMarkup.SemanticUI.ui_menu));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("item", Bridge.CustomUIMarkup.SemanticUI.item));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.vertical.menu", Bridge.CustomUIMarkup.SemanticUI.ui_vertical_menu));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("textInput", Bridge.CustomUIMarkup.SemanticUI.InputText));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("textBox", Bridge.CustomUIMarkup.SemanticUI.InputText));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("combo", Bridge.CustomUIMarkup.SemanticUI.Combo));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("comboBox", Bridge.CustomUIMarkup.SemanticUI.Combo));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.equal.width.grid", Bridge.CustomUIMarkup.SemanticUI.ui_equal_width_grid));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("textArea", Bridge.CustomUIMarkup.SemanticUI.TextArea));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.container", Bridge.CustomUIMarkup.SemanticUI.ui_container));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.stacked", Bridge.CustomUIMarkup.SemanticUI.ui_stacked));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.grid", Bridge.CustomUIMarkup.SemanticUI.ui_grid));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui page grid", Bridge.CustomUIMarkup.SemanticUI.ui_page_grid));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("field", Bridge.CustomUIMarkup.SemanticUI.Field));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.form", Bridge.CustomUIMarkup.SemanticUI.ui_form));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("row", Bridge.CustomUIMarkup.SemanticUI.Row));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("column", Bridge.CustomUIMarkup.SemanticUI.column));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.header.1", Bridge.CustomUIMarkup.SemanticUI.ui_header_1));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.header.2", Bridge.CustomUIMarkup.SemanticUI.ui_header_2));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.header.3", Bridge.CustomUIMarkup.SemanticUI.ui_header_3));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("header", Bridge.CustomUIMarkup.SemanticUI.header));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.image", Bridge.CustomUIMarkup.SemanticUI.ui_image));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("icon", Bridge.CustomUIMarkup.SemanticUI.Icon));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.segment", Bridge.CustomUIMarkup.SemanticUI.ui_segment));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("textBlock", System.Windows.Controls.TextBlock));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("xmlEditor", Bridge.CustomUIMarkup.SemanticUI.XmlEditor));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("uiEditor", Bridge.CustomUIMarkup.SemanticUI.UIEditor));
+                            return _o1;
+                        }(new (System.Collections.Generic.List$1(Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo)).ctor());
+                }
+            },
+            methods: {
+                RegisterTag: function (tagName, type) {
+                    Bridge.CustomUIMarkup.SemanticUI.Builder._tags.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo(tagName, type));
+                }
             }
         },
         methods: {
-            GetIntellisenseInfos: function () {
-                return function (_o1) {
-                        var $t;
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("div", System.Windows.html_div));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("a", System.Windows.html_a));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("computer.tablet.only.row", Bridge.CustomUIMarkup.SemanticUI.computer_tablet_only_row));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.navbar.menu", Bridge.CustomUIMarkup.SemanticUI.ui_navbar_menu));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("mobile.only.row", Bridge.CustomUIMarkup.SemanticUI.mobile_only_row));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("right.menu", Bridge.CustomUIMarkup.SemanticUI.right_menu));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.page.grid", Bridge.CustomUIMarkup.SemanticUI.ui_page_grid));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("left.menu", Bridge.CustomUIMarkup.SemanticUI.left_menu));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.text.menu.navbar", Bridge.CustomUIMarkup.SemanticUI.ui_text_menu_navbar));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.button", Bridge.CustomUIMarkup.SemanticUI.ui_button));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("TabPanel", Bridge.CustomUIMarkup.SemanticUI.TabPanel));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("Tab", Bridge.CustomUIMarkup.SemanticUI.TabItem));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("card", Bridge.CustomUIMarkup.SemanticUI.card));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.card", Bridge.CustomUIMarkup.SemanticUI.ui_card));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.cards", Bridge.CustomUIMarkup.SemanticUI.ui_cards));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("description", Bridge.CustomUIMarkup.SemanticUI.description));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("content", Bridge.CustomUIMarkup.SemanticUI.content));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("extra-content", Bridge.CustomUIMarkup.SemanticUI.ExtraContent));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.basic.button", Bridge.CustomUIMarkup.SemanticUI.ui_basic_button));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("carousel", Bridge.CustomUIMarkup.jssor.Carousel));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.divider", Bridge.CustomUIMarkup.SemanticUI.ui_divider));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.menu", Bridge.CustomUIMarkup.SemanticUI.ui_menu));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("item", Bridge.CustomUIMarkup.SemanticUI.item));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.vertical.menu", Bridge.CustomUIMarkup.SemanticUI.ui_vertical_menu));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("textInput", Bridge.CustomUIMarkup.SemanticUI.InputText));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("textBox", Bridge.CustomUIMarkup.SemanticUI.InputText));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("combo", Bridge.CustomUIMarkup.SemanticUI.Combo));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("comboBox", Bridge.CustomUIMarkup.SemanticUI.Combo));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.equal.width.grid", Bridge.CustomUIMarkup.SemanticUI.ui_equal_width_grid));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("textArea", Bridge.CustomUIMarkup.SemanticUI.TextArea));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.container", Bridge.CustomUIMarkup.SemanticUI.ui_container));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.stacked", Bridge.CustomUIMarkup.SemanticUI.ui_stacked));
-                        _o1.add(($t = new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.grid", Bridge.CustomUIMarkup.SemanticUI.ui_grid), $t.ChildrenTags = System.Array.init(["Row"], System.String), $t));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui page grid", Bridge.CustomUIMarkup.SemanticUI.ui_page_grid));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("field", Bridge.CustomUIMarkup.SemanticUI.Field));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.form", Bridge.CustomUIMarkup.SemanticUI.ui_form));
-                        _o1.add(($t = new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("row", Bridge.CustomUIMarkup.SemanticUI.Row), $t.ChildrenTags = System.Array.init(["column"], System.String), $t));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("column", Bridge.CustomUIMarkup.SemanticUI.column));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.header.1", Bridge.CustomUIMarkup.SemanticUI.ui_header_1));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.header.2", Bridge.CustomUIMarkup.SemanticUI.ui_header_2));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.header.3", Bridge.CustomUIMarkup.SemanticUI.ui_header_3));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("header", Bridge.CustomUIMarkup.SemanticUI.header));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.image", Bridge.CustomUIMarkup.SemanticUI.ui_image));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("icon", Bridge.CustomUIMarkup.SemanticUI.Icon));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.segment", Bridge.CustomUIMarkup.SemanticUI.ui_segment));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("textBlock", System.Windows.Controls.TextBlock));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("xmlEditor", Bridge.CustomUIMarkup.SemanticUI.XmlEditor));
-                        _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("uiEditor", Bridge.CustomUIMarkup.SemanticUI.UIEditor));
-                        return _o1;
-                    }(new (System.Collections.Generic.List$1(Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo)).ctor());
-            },
             CreateType: function (tag) {
                 var $t;
-                if (Bridge.CustomUIMarkup.SemanticUI.Builder.Types == null) {
-                    Bridge.CustomUIMarkup.SemanticUI.Builder.Types = new (System.Collections.Generic.Dictionary$2(System.String,Function))();
-                    $t = Bridge.getEnumerator(this.GetIntellisenseInfos(), Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo);
+                if (Bridge.CustomUIMarkup.SemanticUI.Builder.TagTypeMap == null) {
+                    Bridge.CustomUIMarkup.SemanticUI.Builder.TagTypeMap = new (System.Collections.Generic.Dictionary$2(System.String,Function))();
+                    $t = Bridge.getEnumerator(Bridge.CustomUIMarkup.SemanticUI.Builder._tags);
                     try {
                         while ($t.moveNext()) {
                             var intellisenseInfo = $t.Current;
-                            Bridge.CustomUIMarkup.SemanticUI.Builder.Types.set(intellisenseInfo.TagName.toUpperCase(), intellisenseInfo.Type);
+                            Bridge.CustomUIMarkup.SemanticUI.Builder.TagTypeMap.set(intellisenseInfo.TagName.toUpperCase(), intellisenseInfo.Type);
                         }
                     } finally {
                         if (Bridge.is($t, System.IDisposable)) {
                             $t.System$IDisposable$dispose();
                         }
                     }}
-                if (Bridge.CustomUIMarkup.SemanticUI.Builder.Types.containsKey(tag)) {
-                    return Bridge.CustomUIMarkup.SemanticUI.Builder.Types.get(tag);
+                if (Bridge.CustomUIMarkup.SemanticUI.Builder.TagTypeMap.containsKey(tag)) {
+                    return Bridge.CustomUIMarkup.SemanticUI.Builder.TagTypeMap.get(tag);
                 }
 
                 return null;
@@ -2602,26 +2685,22 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
         },
         methods: {
             UpdateTarget: function () {
-                if (System.ComponentModel.ReflectionHelper.FindProperty(this.Source, this.SourcePath) == null) {
-                    return;
-                }
-
-                var value = System.ComponentModel.ReflectionHelper.GetPropertyValue(this.Source, this.SourcePath);
+                var value = this.SourcePath.GetPropertyValue();
 
                 if (this["UpdateOnlyInnerHTML"]) {
                     this.Target$1.html(System.String.concat(value, ""));
                     return;
                 }
 
-                if (Bridge.referenceEquals(this.TargetPropertyName, "value")) {
+                if (Bridge.referenceEquals(this.TargetPath.Path, "value")) {
                     this.Target$1.val(System.String.concat(value, ""));
                 } else {
-                    this.Target$1.attr(this.TargetPropertyName, System.String.concat(value, ""));
+                    this.Target$1.attr(this.TargetPath.Path, System.String.concat(value, ""));
                 }
             },
             ConnectTargetToSource: function () {
                 this.Target$1.focusout(Bridge.fn.bind(this, function (ev) {
-                        this.UpdateSource(this.Target$1.val());
+                        this.UpdateSource();
                     }));
             }
         }
@@ -3057,7 +3136,7 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                 // TODO: remove
                 this.addPropertyChanged(Bridge.fn.bind(this, function (s, a) {
                     var $t;
-                    var bi = ($t = new System.Windows.Data.HTMLBindingInfo(), $t.BindingMode = System.Windows.Data.BindingMode.OneWay, $t.Source = this, $t.SourcePath = propertyName, $t.Target$1 = targetElement, $t["UpdateOnlyInnerHTML"] = true, $t);
+                    var bi = ($t = new System.Windows.Data.HTMLBindingInfo(), $t.BindingMode = System.Windows.Data.BindingMode.OneWay, $t.Source = this, $t.SourcePath = System.Windows.PropertyPath.op_Implicit(propertyName), $t.Target$1 = targetElement, $t["UpdateOnlyInnerHTML"] = true, $t);
                     bi.UpdateTarget();
                 }));
             }
@@ -3073,12 +3152,28 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
             props: {
                 CssFiles: {
                     get: function () {
-                        return System.Array.init(["https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/codemirror.css", "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/addon/hint/show-hint.css", "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/addon/fold/foldgutter.css", (Bridge.CustomUIMarkup.Common.ScriptLoader.CssDirectory || "") + "CodeMirror.css"], System.String);
+                        return System.Array.init([(Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "codemirror.css", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/hint/show-hint.css", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/fold/foldgutter.css", (Bridge.CustomUIMarkup.Common.ScriptLoader.CssDirectory || "") + "CodeMirror.css"], System.String);
+                    }
+                },
+                CodeMirrorDirectoryDefault: {
+                    get: function () {
+                        return "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/";
+                    }
+                },
+                CodeMirrorDirectory: {
+                    get: function () {
+                        return Bridge.cast(Bridge.CustomUIMarkup.Common.ScriptLoader.Map.CodeMirrorDir, System.String);
+                    }
+                },
+                JsDir: {
+                    get: function () {
+                        var $t;
+                        return ($t = Bridge.CustomUIMarkup.CodeMirror.XmlEditor.CodeMirrorDirectory, $t != null ? $t : Bridge.CustomUIMarkup.CodeMirror.XmlEditor.CodeMirrorDirectoryDefault);
                     }
                 },
                 Scripts: {
                     get: function () {
-                        return System.Array.init(["https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/codemirror.js", "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/mode/xml/xml.js", "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/addon/hint/show-hint.js", "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/addon/hint/xml-hint.js", "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/addon/edit/closetag.js", "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/addon/fold/foldcode.js", "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/addon/fold/foldgutter.js", "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/addon/fold/xml-fold.js", "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/addon/fold/indent-fold.js", "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/addon/fold/markdown-fold.js", "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/mode/markdown/markdown.js"], System.String);
+                        return System.Array.init([(Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "codemirror.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "mode/xml/xml.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/hint/show-hint.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/hint/xml-hint.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/edit/closetag.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/fold/foldcode.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/fold/foldgutter.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/fold/xml-fold.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/fold/indent-fold.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/fold/markdown-fold.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "mode/markdown/markdown.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/edit/matchtags.js"], System.String);
                     }
                 }
             },
@@ -3089,17 +3184,9 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
             },
             methods: {
                 TextChanged: function (d, e) {
-                    var newValue = Bridge.cast(e.NewValue, System.String);
+                    return;
 
-                    var me = Bridge.cast(d, Bridge.CustomUIMarkup.CodeMirror.XmlEditor);
 
-                    if (me._editor != null) {
-                        if (me.isFiring_OnTextChanged) {
-                            return;
-                        }
-
-                        me._editor.setValue(newValue);
-                    }
                 }
             }
         },
@@ -3127,6 +3214,7 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
             ctor: function () {
                 this.$initialize();
                 System.Windows.FrameworkElement.ctor.call(this);
+
                 System.ComponentModel.Extensions.OnPropertyChanged(this, "FontSize", Bridge.fn.cacheBind(this, this.FontSizeChanged));
             }
         },
@@ -3216,7 +3304,7 @@ this._editor = CodeMirror.fromTextArea(document.getElementById(id),
 	},
 	hintOptions: {schemaInfo: schemaInfo},
     autoCloseTags:true,
-
+    matchTags: {bothTags: true},
     foldGutter: true,
     gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter']
 });
@@ -3349,6 +3437,8 @@ me._editor.display.wrapper.style.height = '95%';
                     $e1 = System.Exception.create($e1);
                     var e;
                     if (Bridge.is($e1, System.Xml.XmlException)) {
+                        e = $e1;
+                        this.SetErrorMessage(e.toString());
                     } else {
                         e = $e1;
                         this.SetErrorMessage(e.toString());
@@ -3359,9 +3449,10 @@ me._editor.display.wrapper.style.height = '95%';
                 this.Container.empty();
             },
             SetErrorMessage: function (message) {
-                this.Container.html(message);
+                Bridge.CustomUIMarkup.Common.Extensions.SetFirstChild(this.Container, Bridge.CustomUIMarkup.Common.DOM.div().html(message));
             },
             SetOutput: function (element) {
+                this.Container.empty();
                 element.appendTo(this.Container);
             }
         }
@@ -3935,6 +4026,33 @@ me._editor.display.wrapper.style.height = '95%';
         methods: {
             InitDOM: function () {
                 this._root = $(document.createElement("div"));
+            }
+        }
+    });
+
+    Bridge.define("System.Windows.html_img", {
+        inherits: [System.Windows.FrameworkElement],
+        methods: {
+            InitDOM: function () {
+                this._root = $(document.createElement("img"));
+            }
+        }
+    });
+
+    Bridge.define("System.Windows.html_span", {
+        inherits: [System.Windows.FrameworkElement],
+        methods: {
+            InitDOM: function () {
+                this._root = $(document.createElement("span"));
+            }
+        }
+    });
+
+    Bridge.define("System.Windows.html_strong", {
+        inherits: [System.Windows.FrameworkElement],
+        methods: {
+            InitDOM: function () {
+                this._root = $(document.createElement("strong"));
             }
         }
     });
@@ -4649,7 +4767,7 @@ me._editor.display.wrapper.style.height = '95%';
         props: {
             "SchemaInfo": {
                 get: function () {
-                    var xmlIntellisenseInfos = new Bridge.CustomUIMarkup.SemanticUI.Builder().GetIntellisenseInfos();
+                    var xmlIntellisenseInfos = Bridge.CustomUIMarkup.SemanticUI.Builder.Tags;
                     return Bridge.CustomUIMarkup.CodeMirror.SchemaInfo.CreateFrom(xmlIntellisenseInfos).ToJson();
                 }
             }
