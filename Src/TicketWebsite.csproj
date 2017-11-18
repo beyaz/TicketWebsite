@@ -40,6 +40,7 @@
     <Compile Include="Common\Builder.cs" />
     <Compile Include="Common\TemplateComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shared\FakeFullModel.cs" />
     <Compile Include="Views\ShopPage.cs" />
     <Compile Include="Shared\Field.cs" />
     <Compile Include="Shared\FullModel.cs" />
@@ -92,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="img\ShopPageHeaderBackground.jpg" />
+    <Content Include="xml\ContactPage.Body.xml" />
     <Content Include="xml\Shop.HeaderPart.xml" />
     <Content Include="xml\Card.Product.xml" />
     <Content Include="img\Card.Product.jpg" />

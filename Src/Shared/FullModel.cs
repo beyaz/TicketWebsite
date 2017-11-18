@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace TicketWebsite.Shared
 {
@@ -23,42 +22,4 @@ namespace TicketWebsite.Shared
         #endregion
 
     }
-    public class FakeFullModel : FullModel
-    {
-
-        public FakeFullModel()
-        {
-            ShopPage = new ShopPageModel
-            {
-                 ProductCards = new List<Bag>
-                 {
-                     new Bag
-                     {
-                         [Field.ProductCardImagePath]="img/Card.Product.jpg"
-                     },
-                     new Bag
-                     {
-                         [Field.ProductCardImagePath]="img/Card.Product.jpg"
-                     },
-                     new Bag
-                     {
-                         [Field.ProductCardImagePath]="img/Card.Product.jpg"
-                     },
-                     new Bag
-                     {
-                         [Field.ProductCardImagePath]="img/Card.Product.jpg"
-                     },
-                     new Bag
-                     {
-                         [Field.ProductCardImagePath]="img/Card.Product.jpg"
-                     },
-                     new Bag
-                     {
-                         [Field.ProductCardImagePath]="img/Card.Product.jpg"
-                     }
-                 }
-            };
-        }
-    }
-
 }

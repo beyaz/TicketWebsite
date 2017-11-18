@@ -1,26 +1,24 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 
 namespace TicketWebsite.Common
 {
     class TemplateComponent : FrameworkElement
     {
-        #region Properties
-        public  string Template { get; set; }
+        #region Public Properties
+        public string Template { get; set; }
         #endregion
 
         #region Public Methods
         public override void InitDOM()
         {
-            _root = new Builder
+            var builder = new Builder
             {
                 Caller = this,
                 DataContext = DataContext,
                 XmlString = Template
-            }.Build().As<FrameworkElement>().Root;
+            };
+            _root = builder.Build().Root;
         }
         #endregion
     }
-
-   
 }
