@@ -93,6 +93,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Detail.xml" />
+    <Content Include="img\ShopPageHeaderBackground.jpg" />
+    <Content Include="Views\Shop.HeaderPart.xml" />
     <Content Include="Views\Card.Product.xml" />
     <Content Include="img\Card.Product.jpg" />
   </ItemGroup>

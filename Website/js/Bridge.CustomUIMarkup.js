@@ -413,7 +413,17 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
 
     Bridge.define("Bridge.CustomUIMarkup.Common.DOM", {
         statics: {
+            props: {
+                head: {
+                    get: function () {
+                        return $("head");
+                    }
+                }
+            },
             methods: {
+                CreateElement: function (tagName) {
+                    return $(document.createElement(tagName));
+                },
                 a: function (className) {
                     return $(document.createElement("a")).addClass(className);
                 },
@@ -549,6 +559,18 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                     childElement.insertAfter(children.last());
 
                     return query;
+                },
+                Foreach: function (query, action) {
+                    query != null ? query.children().each(function (e, i) {
+                        action($(Bridge.box(e, System.Int32)));
+                    }) : null;
+
+                    return query;
+                },
+                SetClass: function (query, newClassName) {
+                    query.attr("class", newClassName);
+
+                    return query;
                 }
             }
         }
@@ -628,31 +650,19 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
             props: {
                 "TestUI": {
                     get: function () {
-                        return "\r\n\r\n<ui.container>\r\n    \r\n    <ComboBox \r\n            ItemsSource = '{Binding Examples}' \r\n            DisplayMemberPath = 'Name'\r\n            SelectedValuePath = 'XmlTemplate' \r\n\t\t    SelectedValue = '{Binding CurrentTemplate}' />\r\n        \r\n    <UIEditor SourceText = '{CurrentTemplate}'  />\r\n        \r\n</ui.container>\r\n\r\n\r\n";
+                        return "\r\n\r\n<div class='ui two row grid' HeightPercent = '100' WidthPercent = '100' >\r\n    <row>\r\n        <column Align='Center'>\r\n             <ComboBox \r\n                ItemsSource = '{Binding Examples}' \r\n                DisplayMemberPath = 'Name'\r\n                SelectedValuePath = 'XmlTemplate' \r\n\t\t        SelectedValue = '{Binding CurrentTemplate}' />\r\n        </column>\r\n    </row>\r\n    \r\n    <row HeightPercent = '100'>\r\n        <UIEditor SourceText = '{CurrentTemplate}'  />\r\n    </row>\r\n        \r\n</div>\r\n\r\n\r\n";
                     }
                 }
             },
             methods: {
                 Init: function () {
-                    $(function () {
-                            var $t;
-                            Bridge.CustomUIMarkup.Common.ScriptLoader.LoadCssFile(Bridge.CustomUIMarkup.SemanticUI.VersionInfo.CssFile);
-                            Bridge.CustomUIMarkup.Common.ScriptLoader.LoadCssFiles(Bridge.CustomUIMarkup.CodeMirror.XmlEditor.CssFiles);
-                            Bridge.CustomUIMarkup.Common.ScriptLoader.LoadCssFiles(Bridge.CustomUIMarkup.jssor.Carousel.CssFiles);
-
-                            var scripts = new (System.Collections.Generic.List$1(System.String)).ctor();
-                            scripts.addRange(Bridge.CustomUIMarkup.SemanticUI.VersionInfo.Scripts);
-                            scripts.addRange(Bridge.CustomUIMarkup.CodeMirror.XmlEditor.Scripts);
-                            scripts.addRange(Bridge.CustomUIMarkup.jssor.Carousel.JsFiles);
-
-                            ($t = new Bridge.CustomUIMarkup.Common.ScriptLoader(), $t.Scripts = scripts, $t.OnLoacCompleted = Bridge.CustomUIMarkup.DesignerSamples.App.RenderUIEditor, $t).Load();
-                        });
+                    $(Bridge.CustomUIMarkup.DesignerSamples.App.RenderUIEditor);
                 },
                 RenderUIEditor: function () {
                     var $t;
                     var builder = ($t = new Bridge.CustomUIMarkup.SemanticUI.Builder(), $t.DataContext = new Bridge.CustomUIMarkup.DesignerSamples.ExampleDataContext(), $t.XmlString = Bridge.CustomUIMarkup.DesignerSamples.App["TestUI"], $t);
 
-                    var element = Bridge.cast(builder.Build(), System.Windows.FrameworkElement);
+                    var element = builder.Build();
 
                     element.Root.appendTo(document.body);
                 }
@@ -685,6 +695,9 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                         e = System.Exception.create(e);
                         throw new System.Xml.XmlException("XmlParseErrorOccured.", e);
                     }
+                },
+                IsUserDefinedTag: function (tag) {
+                    return System.Linq.Enumerable.from(tag).contains(46) || System.Linq.Enumerable.from(tag).contains(45) || System.Linq.Enumerable.from(tag).contains(58);
                 }
             }
         },
@@ -711,13 +724,9 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
         },
         methods: {
             Build: function () {
-                var instance = null;
-
                 var rootNode = (this._rootNode = Bridge.CustomUIMarkup.UI.Design.Builder.GetRootNode(this.XmlString));
 
-                instance = this.BuildNode(rootNode);
-
-                return instance;
+                return this.BuildNode(rootNode);
             },
             FocusToLine: function (lineNumber) {
                 lineNumber = (lineNumber + 1) | 0;
@@ -731,6 +740,9 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
 
                 Bridge.CustomUIMarkup.Common.Extensions.highlight(query);
             },
+            CreateType: function (tag) {
+                return null;
+            },
             BuildNode: function (xmlNode) {
                 var $t, $t1;
                 var instance = this.CreateInstance(xmlNode);
@@ -741,12 +753,12 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                     this.LineNumberToControlMap.set(lineNumber, instance);
                 }
 
-                var frameworkElement = Bridge.as(instance, System.Windows.FrameworkElement);
-                if (frameworkElement != null) {
-                    frameworkElement.DataContext = this.DataContext;
-                    frameworkElement.InitDOM();
-                    Bridge.Reflection.midel(Bridge.Reflection.getMembers(Bridge.getType(frameworkElement), 8, 36 | 256, "AfterInitDOM"), frameworkElement)(null);
+                instance.DataContext = this.DataContext;
+                if (instance._root == null) {
+                    instance.InitDOM();
                 }
+
+                instance.AfterInitDOM();
 
                 $t = Bridge.getEnumerator(xmlNode.attributes);
                 try {
@@ -768,27 +780,30 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                         }
 
                         if (childNode.nodeType === 3) {
+                            // skip empty spaces
                             var html = $(childNode).text();
                             if (System.String.isNullOrWhiteSpace(html)) {
                                 continue;
                             }
 
-                            Bridge.cast(instance, System.Windows.FrameworkElement)["InnerHTML"] = html;
+                            // maybe <div> {LastName} </div>
+                            var bindingInfo = System.Windows.Data.BindingInfo.TryParseExpression(html);
+                            if (bindingInfo != null) {
+                                bindingInfo.Source = this.DataContext;
+                                bindingInfo.Target = instance;
+                                bindingInfo.TargetPath = System.Windows.PropertyPath.op_Implicit("InnerHTML");
+
+                                bindingInfo.Connect();
+                                continue;
+                            }
+
+                            instance["InnerHTML"] = html;
                             continue;
                         }
 
                         var subControl = this.BuildNode(childNode);
 
-                        var el = Bridge.cast(subControl, System.Windows.FrameworkElement);
-
-                        var iaddChild = Bridge.as(instance, System.Windows.Markup.IAddChild);
-
-                        if (iaddChild != null) {
-                            iaddChild.System$Windows$Markup$IAddChild$Add(el);
-                            continue;
-                        }
-
-                        throw new System.ArgumentException(Bridge.Reflection.getTypeFullName(Bridge.getType(subControl)));
+                        instance.Add(subControl);
                     }
                 } finally {
                     if (Bridge.is($t1, System.IDisposable)) {
@@ -798,27 +813,30 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                 return instance;
             },
             CreateInstance: function (xmlNode) {
+                var $t;
                 var tag = xmlNode.nodeName.toUpperCase();
 
                 var controlType = this.CreateType(tag);
 
                 if (controlType == null) {
-                    if (xmlNode.nodeName.length <= 3) {
-                        return new System.Windows.FrameworkElement();
+                    if (Bridge.CustomUIMarkup.UI.Design.Builder.IsUserDefinedTag(xmlNode.nodeName) === false) {
+                        return ($t = new System.Windows.FrameworkElement(), $t._root = Bridge.CustomUIMarkup.Common.DOM.CreateElement(xmlNode.nodeName), $t);
                     }
 
                     throw new System.ArgumentException((System.String.format("NotRecognizedTag:", null) || "") + (tag || ""));
                 }
 
-                return Bridge.createInstance(controlType);
+                return Bridge.cast(Bridge.createInstance(controlType), System.Windows.FrameworkElement);
             },
             ProcessAttribute: function (instance, name, value) {
+                var $t;
+                var nameUpperCase = name.toUpperCase();
+
                 if (Bridge.referenceEquals(name, "class")) {
                     name = "Class";
                 }
 
-                var fe = Bridge.as(instance, System.Windows.FrameworkElement);
-
+                var targetProperty = System.ComponentModel.ReflectionHelper.FindProperty(instance, name);
 
                 var bi = System.Windows.Data.BindingInfo.TryParseExpression(value);
                 if (bi != null) {
@@ -833,6 +851,14 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                         return;
                     }
 
+                    if (System.String.contains(name,".") === false) {
+                        if (targetProperty == null) {
+                            ($t = new System.Windows.Data.HTMLBindingInfo(), $t.Source = this.DataContext, $t.SourcePath = System.Windows.PropertyPath.op_Implicit(bi.SourcePath.Path), $t.Target$1 = instance._root, $t.TargetPath = System.Windows.PropertyPath.op_Implicit(name), $t.BindingMode = System.Windows.Data.BindingMode.OneWay, $t).Connect();
+
+                            return;
+                        }
+                    }
+
                     bi.Source = this.DataContext;
                     bi.Target = instance;
                     bi.TargetPath = System.Windows.PropertyPath.op_Implicit(name);
@@ -842,7 +868,6 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                     return;
                 }
 
-                var targetProperty = System.ComponentModel.ReflectionHelper.FindProperty(instance, name);
                 if (targetProperty != null) {
                     if (Bridge.Reflection.isEnum(targetProperty.rt)) {
                         System.ComponentModel.ReflectionHelper.SetPropertyValue(instance, name, System.Enum.parse(targetProperty.rt, value, true));
@@ -869,26 +894,34 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
 
                     var methodInfo1 = Bridge.Reflection.getMembers(Bridge.getType(this.Caller), 8, 284, value);
 
-                    fe != null ? fe.On(eventName, Bridge.fn.bind(this, function () {
-                            Bridge.Reflection.midel(methodInfo1, Bridge.unbox(this.Caller))(null);
-                        })) : null;
+                    instance.On(eventName, Bridge.fn.bind(this, function () {
+                        Bridge.Reflection.midel(methodInfo1, Bridge.unbox(this.Caller))(null);
+                    }));
                     return;
                 }
+
+                if (System.String.startsWith(nameUpperCase, "CSS.")) {
+                    var styleAttributeName = name.substr(4);
+                    instance._root.css(styleAttributeName, value);
+                    return;
+                }
+
+                // css.Pseudo.backgroundImage
+                if (System.String.startsWith(nameUpperCase, "CSS.PSEUDO.")) {
+                    var pseudoAttributeName = name.substr(11);
+                    Bridge.CustomUIMarkup.Common.DOM.head.append("<style>#" + (instance["Id"] || "") + "::" + (pseudoAttributeName || "") + "{ content:'bar' }</style>");
+                    return;
+                }
+
 
                 if (Bridge.referenceEquals(name, "x.Name")) {
                     var fi = Bridge.Reflection.getMembers(Bridge.getType(this.Caller), 4, 284, value);
 
-                    Bridge.Reflection.fieldAccess(fi, Bridge.unbox(this.Caller), Bridge.unbox(instance));
+                    Bridge.Reflection.fieldAccess(fi, Bridge.unbox(this.Caller), instance);
                     return;
                 }
 
-                var instanceAsBag = Bridge.as(instance, System.ComponentModel.Bag);
-                if (instanceAsBag != null) {
-                    instanceAsBag.SetValue(name, value);
-                    return;
-                }
-
-                throw new System.MissingMemberException(name);
+                instance._root.attr(name, value);
             }
         }
     });
@@ -958,23 +991,6 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                 Big: 5,
                 Huge: 6,
                 Massive: 7
-            }
-        }
-    });
-
-    Bridge.define("Bridge.CustomUIMarkup.SemanticUI.VersionInfo", {
-        statics: {
-            props: {
-                CssFile: {
-                    get: function () {
-                        return "https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.css";
-                    }
-                },
-                Scripts: {
-                    get: function () {
-                        return System.Array.init(["https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.js"], System.String);
-                    }
-                }
             }
         }
     });
@@ -1147,12 +1163,9 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
         ctors: {
             ctor: function (tagName, type) {
                 this.$initialize();
-                if (tagName == null) {
-                    throw new System.ArgumentNullException("tagName");
-                }
-                if (type == null) {
-                    throw new System.ArgumentNullException("type");
-                }
+                System.Diagnostics.Debug.assert(tagName != null);
+                System.Diagnostics.Debug.assert(type != null);
+
 
                 this.TagName = tagName;
                 this.Type = type;
@@ -2551,6 +2564,7 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                             _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("strong", System.Windows.html_strong));
                             _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("a", System.Windows.html_a));
                             _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("img", System.Windows.html_img));
+                            _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("SplitPanel", System.Windows.Controls.SplitPanel));
                             _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("computer.tablet.only.row", Bridge.CustomUIMarkup.SemanticUI.computer_tablet_only_row));
                             _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("ui.navbar.menu", Bridge.CustomUIMarkup.SemanticUI.ui_navbar_menu));
                             _o1.add(new Bridge.CustomUIMarkup.UI.Design.XmlIntellisenseInfo("mobile.only.row", Bridge.CustomUIMarkup.SemanticUI.mobile_only_row));
@@ -2750,6 +2764,7 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                 "InnerHTMLProperty": null,
                 VisibilityProperty: null,
                 HeightProperty: null,
+                HeightPercentProperty: null,
                 BackgroundProperty: null,
                 "ID": 0
             },
@@ -2779,6 +2794,9 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                     this["InnerHTMLProperty"] = System.Windows.DependencyProperty.Register$1("InnerHTML", System.String, System.Windows.FrameworkElement, new System.Windows.PropertyMetadata.$ctor1(System.Windows.FrameworkElement.OnInnerHTMLChanged));
                     this.VisibilityProperty = System.Windows.DependencyProperty.Register$1("Visibility", System.Windows.Visibility, System.Windows.FrameworkElement, new System.Windows.PropertyMetadata.$ctor1(System.Windows.FrameworkElement.OnVisibilityChanged));
                     this.HeightProperty = System.Windows.DependencyProperty.Register$1("Height", System.Double, System.Windows.FrameworkElement, System.Windows.FrameworkElement.CreateJQueryCssUpdater("height"));
+                    this.HeightPercentProperty = System.Windows.DependencyProperty.Register$1("HeightPercent", System.Double, System.Windows.FrameworkElement, System.Windows.FrameworkElement.CreateJQueryCssUpdater$1("height", function (v) {
+                        return System.String.concat(v, "%");
+                    }));
                     this.BackgroundProperty = System.Windows.DependencyProperty.Register$1("Background", System.String, System.Windows.FrameworkElement, new System.Windows.PropertyMetadata.$ctor1(System.Windows.FrameworkElement.OnBackgroundChanged));
                 }
             },
@@ -3058,6 +3076,14 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                     this.SetValue$1(System.Windows.FrameworkElement.HeightProperty, Bridge.box(value, System.Double, System.Double.format, System.Double.getHashCode));
                 }
             },
+            HeightPercent: {
+                get: function () {
+                    return System.Nullable.getValue(Bridge.cast(Bridge.unbox(this.GetValue$1(System.Windows.FrameworkElement.HeightPercentProperty)), System.Double));
+                },
+                set: function (value) {
+                    this.SetValue$1(System.Windows.FrameworkElement.HeightPercentProperty, Bridge.box(value, System.Double, System.Double.format, System.Double.getHashCode));
+                }
+            },
             "Id": {
                 get: function () {
                     var $t;
@@ -3125,6 +3151,9 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                 if (this._childeren == null) {
                     this._childeren = new (System.Collections.Generic.List$1(System.Windows.FrameworkElement)).ctor();
                 }
+
+
+
                 this._childeren.add(element);
 
                 this.AfterAddChild(element);
@@ -3149,34 +3178,6 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
             fields: {
                 TextProperty: null
             },
-            props: {
-                CssFiles: {
-                    get: function () {
-                        return System.Array.init([(Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "codemirror.css", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/hint/show-hint.css", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/fold/foldgutter.css", (Bridge.CustomUIMarkup.Common.ScriptLoader.CssDirectory || "") + "CodeMirror.css"], System.String);
-                    }
-                },
-                CodeMirrorDirectoryDefault: {
-                    get: function () {
-                        return "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/";
-                    }
-                },
-                CodeMirrorDirectory: {
-                    get: function () {
-                        return Bridge.cast(Bridge.CustomUIMarkup.Common.ScriptLoader.Map.CodeMirrorDir, System.String);
-                    }
-                },
-                JsDir: {
-                    get: function () {
-                        var $t;
-                        return ($t = Bridge.CustomUIMarkup.CodeMirror.XmlEditor.CodeMirrorDirectory, $t != null ? $t : Bridge.CustomUIMarkup.CodeMirror.XmlEditor.CodeMirrorDirectoryDefault);
-                    }
-                },
-                Scripts: {
-                    get: function () {
-                        return System.Array.init([(Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "codemirror.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "mode/xml/xml.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/hint/show-hint.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/hint/xml-hint.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/edit/closetag.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/fold/foldcode.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/fold/foldgutter.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/fold/xml-fold.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/fold/indent-fold.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/fold/markdown-fold.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "mode/markdown/markdown.js", (Bridge.CustomUIMarkup.CodeMirror.XmlEditor.JsDir || "") + "addon/edit/matchtags.js"], System.String);
-                    }
-                }
-            },
             ctors: {
                 init: function () {
                     this.TextProperty = System.Windows.DependencyProperty.Register$1("Text", System.String, Bridge.CustomUIMarkup.CodeMirror.XmlEditor, new System.Windows.PropertyMetadata.$ctor1(Bridge.CustomUIMarkup.CodeMirror.XmlEditor.TextChanged));
@@ -3184,9 +3185,17 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
             },
             methods: {
                 TextChanged: function (d, e) {
-                    return;
+                    var newValue = Bridge.cast(e.NewValue, System.String);
 
+                    var me = Bridge.cast(d, Bridge.CustomUIMarkup.CodeMirror.XmlEditor);
 
+                    if (me._editor != null) {
+                        if (me.isFiring_OnTextChanged) {
+                            return;
+                        }
+
+                        me._editor.setValue(newValue);
+                    }
                 }
             }
         },
@@ -3249,7 +3258,7 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                     }));
             },
             Render$1: function (id) {
-                var fontSize = this.getItem("FontSize") == null ? 12 : this.FontSize;
+                var fontSize = this.getItem("FontSize") == null ? 15 : this.FontSize;
 
                 var schemaInfo = this["SchemaInfo"];
 
@@ -3304,7 +3313,7 @@ this._editor = CodeMirror.fromTextArea(document.getElementById(id),
 	},
 	hintOptions: {schemaInfo: schemaInfo},
     autoCloseTags:true,
-    matchTags: {bothTags: true},
+    matchTags: {bothTags: false},
     foldGutter: true,
     gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter']
 });
@@ -3374,9 +3383,14 @@ me._editor.display.wrapper.style.height = '95%';
                     return System.Array.getItem(this.OutputElement.Childeren, 1, System.Windows.FrameworkElement).Root;
                 }
             },
-            Template: {
+            Template_old: {
                 get: function () {
                     return "\r\n<ui.container>\r\n    <XmlEditor Text ='{SourceText}' \r\n        OnTextChanged = '{OnTextChanged}' \r\n        OnCursorLineNumberChanged = '{OnCursorLineNumberChanged}' \r\n        Height='400' />\r\n    <ui.container Border = '1px solid Green' />\r\n</ui.container>";
+                }
+            },
+            Template: {
+                get: function () {
+                    return "\r\n<SplitPanel Orientation='horizontal' HeightPercent = '100' WidthPercent = '100'>\r\n    <XmlEditor Text ='{SourceText}' HeightPercent = '100' WidthPercent = '100' \r\n        OnTextChanged = '{OnTextChanged}' \r\n        OnCursorLineNumberChanged = '{OnCursorLineNumberChanged}' \r\n         />\r\n    <div Border = '1px solid Green' HeightPercent = '100' WidthPercent = '100' />\r\n</SplitPanel>";
                 }
             },
             SourceText: {
@@ -3408,7 +3422,7 @@ me._editor.display.wrapper.style.height = '95%';
                 builder.XmlString = this.Template;
                 builder.DataContext = this;
 
-                this.OutputElement = Bridge.cast(builder.Build(), System.Windows.FrameworkElement);
+                this.OutputElement = builder.Build();
 
                 this._root = this.OutputElement.Root;
             },
@@ -3544,23 +3558,6 @@ me._editor.display.wrapper.style.height = '95%';
                 DataSourceProperty: null
             },
             props: {
-                CssFiles: {
-                    get: function () {
-                        return function (_o1) {
-                                _o1.add((Bridge.CustomUIMarkup.Common.ScriptLoader.CssDirectory || "") + "Carousel.css");
-                                return _o1;
-                            }(new (System.Collections.Generic.List$1(System.String)).ctor());
-                    }
-                },
-                JsFiles: {
-                    get: function () {
-                        return function (_o2) {
-                                _o2.add((Bridge.CustomUIMarkup.Common.ScriptLoader.JsDirectory || "") + "jssor.slider-26.5.0.min.js");
-                                _o2.add((Bridge.CustomUIMarkup.Common.ScriptLoader.JsDirectory || "") + "jssor.Carousel.js");
-                                return _o2;
-                            }(new (System.Collections.Generic.List$1(System.String)).ctor());
-                    }
-                },
                 Template: {
                     get: function () {
                         return "<div id='jssor_1' style='position:relative;margin:0 auto;top:0px;left:0px;width:980px;height:380px;overflow:hidden;visibility:hidden;'>\r\n    <!-- Loading Screen \r\n    <div data-u='loading' class='jssorl-009-spin' style='position:absolute;top:0px;left:0px;width:100%;height:100%;text-align:center;background-color:rgba(0,0,0,0.7);'>\r\n        <img style='margin-top:-19px;position:relative;top:50%;width:38px;height:38px;' src='img/spin.svg' />\r\n    </div> -->\r\n    <div data-u='slides' id='imagesContainer' style='cursor:default;position:relative;top:0px;left:0px;width:980px;height:380px;overflow:hidden;'>\r\n        <!-- template\r\n        <div>\r\n            <img data-u='image' src='img/001.jpg' />\r\n        </div>\r\n        -->\r\n    </div>\r\n    <!-- Bullet Navigator -->\r\n    <div data-u='navigator' class='jssorb051' style='position:absolute;bottom:12px;right:12px;' data-autocenter='1' data-scale='0.5' data-scale-bottom='0.75'>\r\n        <div data-u='prototype' class='i' style='width:16px;height:16px;'>\r\n            <svg viewbox='0 0 16000 16000' style='position:absolute;top:0;left:0;width:100%;height:100%;'>\r\n                <circle class='b' cx='8000' cy='8000' r='5800'></circle>\r\n            </svg>\r\n        </div>\r\n    </div>\r\n    <!-- Arrow Navigator -->\r\n    <div data-u='arrowleft' class='jssora051' style='width:55px;height:55px;top:0px;left:25px;' data-autocenter='2' data-scale='0.75' data-scale-left='0.75'>\r\n        <svg viewbox='0 0 16000 16000' style='position:absolute;top:0;left:0;width:100%;height:100%;'>\r\n            <polyline class='a' points='11040,1920 4960,8000 11040,14080 '></polyline>\r\n        </svg>\r\n    </div>\r\n    <div data-u='arrowright' class='jssora051' style='width:55px;height:55px;top:0px;right:25px;' data-autocenter='2' data-scale='0.75' data-scale-right='0.75'>\r\n        <svg viewbox='0 0 16000 16000' style='position:absolute;top:0;left:0;width:100%;height:100%;'>\r\n            <polyline class='a' points='4960,1920 11040,8000 4960,14080 '></polyline>\r\n        </svg>\r\n    </div>\r\n</div>";
@@ -3963,6 +3960,96 @@ me._editor.display.wrapper.style.height = '95%';
         }
     });
 
+    Bridge.define("System.Windows.Controls.SplitPanel", {
+        inherits: [System.Windows.FrameworkElement],
+        statics: {
+            fields: {
+                horizontal: null,
+                vertical: null,
+                OrientationProperty: null
+            },
+            ctors: {
+                init: function () {
+                    this.horizontal = "horizontal";
+                    this.vertical = "vertical";
+                    this.OrientationProperty = System.Windows.DependencyProperty.Register$1("Orientation", System.Windows.Controls.Orientation, System.Windows.Controls.SplitPanel, new System.Windows.PropertyMetadata.$ctor1(System.Windows.Controls.SplitPanel.OnOrientationChanged));
+                }
+            },
+            methods: {
+                OnOrientationChanged: function (d, e) {
+                    var me = Bridge.cast(d, System.Windows.Controls.SplitPanel);
+                    me.SetOrientation(System.Nullable.getValue(Bridge.cast(Bridge.unbox(e.NewValue), System.Int32)));
+                }
+            }
+        },
+        fields: {
+            _direction: null,
+            _left: null,
+            _right: null,
+            _wrapper: null
+        },
+        props: {
+            ClassName: {
+                get: function () {
+                    return "split split-" + (this._direction || "");
+                }
+            },
+            Orientation: {
+                get: function () {
+                    return System.Nullable.getValue(Bridge.cast(Bridge.unbox(this.GetValue$1(System.Windows.Controls.SplitPanel.OrientationProperty)), System.Int32));
+                },
+                set: function (value) {
+                    this.SetValue$1(System.Windows.Controls.SplitPanel.OrientationProperty, Bridge.box(value, System.Windows.Controls.Orientation, System.Enum.toStringFn(System.Windows.Controls.Orientation)));
+                }
+            }
+        },
+        ctors: {
+            init: function () {
+                this._direction = "horizontal";
+            }
+        },
+        methods: {
+            InitDOM: function () {
+                this._root = Bridge.CustomUIMarkup.Common.DOM.div();
+
+                this._left = Bridge.CustomUIMarkup.Common.DOM.div().appendTo(this._root);
+
+                this._right = Bridge.CustomUIMarkup.Common.DOM.div().appendTo(this._root);
+
+                this.ReInitializeWrapper();
+            },
+            AfterAddChild: function (element) {
+                if (System.Array.getCount(this.Childeren, System.Windows.FrameworkElement) === 1) {
+                    Bridge.CustomUIMarkup.Common.Extensions.SetFirstChild(this._left, Bridge.CustomUIMarkup.Common.Extensions.RemoveFromParent(this._root.children().last()));
+                } else {
+                    Bridge.CustomUIMarkup.Common.Extensions.SetFirstChild(this._right, Bridge.CustomUIMarkup.Common.Extensions.RemoveFromParent(this._root.children().last()));
+                }
+
+                this.ReInitializeWrapper();
+            },
+            ReInitializeWrapper: function () {
+                this._wrapper != null ? this._wrapper.destroy() : null;
+
+                this._wrapper = this.Split();
+            },
+            SetOrientation: function (orientation) {
+                this._direction = orientation === System.Windows.Controls.Orientation.Horizontal ? System.Windows.Controls.SplitPanel.horizontal : System.Windows.Controls.SplitPanel.vertical;
+
+                Bridge.CustomUIMarkup.Common.Extensions.Foreach(Bridge.CustomUIMarkup.Common.Extensions.SetClass(this._root, this.ClassName).children(), Bridge.fn.bind(this, function (c) {
+                    Bridge.CustomUIMarkup.Common.Extensions.SetClass(c, this.ClassName);
+                }));
+                Bridge.CustomUIMarkup.Common.Extensions.SetClass(this._left, this.ClassName);
+                Bridge.CustomUIMarkup.Common.Extensions.SetClass(this._right, this.ClassName);
+
+                this.ReInitializeWrapper();
+            },
+            Split: function () {
+                return Split([this._left[0], this._right[0]], { sizes:[50,50],  direction:this._direction });
+                ;
+            }
+        }
+    });
+
     Bridge.define("System.Windows.Controls.TextBlock", {
         inherits: [System.Windows.FrameworkElement],
         statics: {
@@ -4032,6 +4119,26 @@ me._editor.display.wrapper.style.height = '95%';
 
     Bridge.define("System.Windows.html_img", {
         inherits: [System.Windows.FrameworkElement],
+        statics: {
+            fields: {
+                SrcProperty: null
+            },
+            ctors: {
+                init: function () {
+                    this.SrcProperty = System.Windows.DependencyProperty.Register$1("Src", System.String, System.Windows.html_img, System.Windows.FrameworkElement.CreateHtmlAttributeUpdater("src"));
+                }
+            }
+        },
+        props: {
+            Src: {
+                get: function () {
+                    return Bridge.cast(this.GetValue$1(System.Windows.html_img.SrcProperty), System.String);
+                },
+                set: function (value) {
+                    this.SetValue$1(System.Windows.html_img.SrcProperty, value);
+                }
+            }
+        },
         methods: {
             InitDOM: function () {
                 this._root = $(document.createElement("img"));

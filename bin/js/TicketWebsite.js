@@ -8,17 +8,7 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
 
     Bridge.define("TicketWebsite.App", {
         main: function Main () {
-            $(function () {
-                    var $t;
-                    Bridge.CustomUIMarkup.Common.ScriptLoader.LoadCssFile(Bridge.CustomUIMarkup.SemanticUI.VersionInfo.CssFile);
-                    Bridge.CustomUIMarkup.Common.ScriptLoader.LoadCssFiles(Bridge.CustomUIMarkup.jssor.Carousel.CssFiles);
-
-                    var scripts = new (System.Collections.Generic.List$1(System.String)).ctor();
-                    scripts.addRange(Bridge.CustomUIMarkup.SemanticUI.VersionInfo.Scripts);
-                    scripts.addRange(Bridge.CustomUIMarkup.jssor.Carousel.JsFiles);
-
-                    ($t = new Bridge.CustomUIMarkup.Common.ScriptLoader(), $t.Scripts = scripts, $t.OnLoacCompleted = TicketWebsite.App.RenderUIEditor, $t).Load();
-                });
+            $(TicketWebsite.App.RenderUIEditor);
         },
         statics: {
             methods: {
@@ -56,7 +46,20 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
         methods: {
             InitDOM: function () {
                 var $t;
-                this._root = Bridge.unbox(($t = new TicketWebsite.Common.Builder(), $t.Caller = this, $t.DataContext = this.DataContext, $t.XmlString = this.Template, $t).Build()).Root;
+                this._root = ($t = new TicketWebsite.Common.Builder(), $t.Caller = this, $t.DataContext = this.DataContext, $t.XmlString = this.Template, $t).Build().Root;
+            }
+        }
+    });
+
+    Bridge.define("TicketWebsite.Common.TemplateComponent", {
+        inherits: [System.Windows.FrameworkElement],
+        fields: {
+            Template: null
+        },
+        methods: {
+            InitDOM: function () {
+                var $t;
+                this._root = ($t = new TicketWebsite.Common.Builder(), $t.Caller = this, $t.DataContext = this.DataContext, $t.XmlString = this.Template, $t).Build().Root;
             }
         }
     });
@@ -147,7 +150,22 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
                     if (Bridge.is($t, System.IDisposable)) {
                         $t.System$IDisposable$dispose();
                     }
-                }}
+                }
+                Bridge.CustomUIMarkup.Common.FileUtil.ReadAsync("xml/Shop.HeaderPart.xml", function (content) {
+                    var $t2;
+                    var headerPart = ($t2 = new TicketWebsite.Common.TemplateComponent(), $t2.Template = content, $t2.DataContext = null, $t2);
+                    headerPart.InitDOM();
+
+                    var target = $(document.getElementsByClassName("ui inverted vertical masthead center aligned segment"));
+                    var p = target.get(0).parentNode;
+                    target.remove();
+                    Bridge.CustomUIMarkup.Common.Extensions.SetFirstChild($(p), headerPart.Root);
+
+
+
+
+                });
+            }
         }
     });
 

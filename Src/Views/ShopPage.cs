@@ -1,6 +1,8 @@
 ﻿using System.Windows;
+using Bridge.CustomUIMarkup.Common;
 using Bridge.Html5;
 using Bridge.jQuery2;
+using TicketWebsite.Common;
 using TicketWebsite.Shared;
 
 namespace TicketWebsite.Views
@@ -25,6 +27,25 @@ namespace TicketWebsite.Views
 
                 ProductsContainer.Append(card.Root);
             }
+
+            FileUtil.ReadAsync("xml/Shop.HeaderPart.xml", (content) =>
+            {
+                var headerPart = new TemplateComponent
+                {
+                    Template = content,
+                    DataContext = null // TODO ? 
+                };
+                headerPart.InitDOM();
+
+                var target = new jQuery(Document.GetElementsByClassName("ui inverted vertical masthead center aligned segment"));
+                var p = target.Get(0).ParentNode;
+                target.Remove();
+                new jQuery(p).SetFirstChild(headerPart.Root);
+
+
+
+
+            });
         }
         #endregion
     }

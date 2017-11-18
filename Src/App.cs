@@ -17,21 +17,7 @@ namespace TicketWebsite
         #region Public Methods
         public static void Main()
         {
-            jQuery.Ready(() =>
-            {
-                ScriptLoader.LoadCssFile(VersionInfo.CssFile);
-                ScriptLoader.LoadCssFiles(Bridge.CustomUIMarkup.jssor.Carousel.CssFiles); 
-
-                var scripts = new List<string>();
-                scripts.AddRange(VersionInfo.Scripts );
-                scripts.AddRange(Bridge.CustomUIMarkup.jssor.Carousel.JsFiles);
-
-                new ScriptLoader
-                {
-                    Scripts = scripts,
-                    OnLoacCompleted = RenderUIEditor
-                }.Load();
-            });
+            jQuery.Ready(RenderUIEditor);
         }
         #endregion
 
