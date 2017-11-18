@@ -52,7 +52,28 @@ namespace TicketWebsite.Views
                     ProductsContainer.Append(card.Root);
                 }
             });
+
+
+            // replace footer
+            FileUtil.ReadAsync("xml/Footer.xml", (content) =>
+            {
+                var headerPart = new TemplateComponent
+                {
+                    Template = content,
+                    DataContext = null // TODO ? 
+                };
+                headerPart.InitDOM();
+
+                var target = new jQuery(Document.GetElementsByClassName("ui inverted vertical footer segment"));
+                var p = target.Get(0).ParentNode;
+                target.Remove();
+                new jQuery(p).SetLastChild(headerPart.Root);
+
+            });
         }
+
+
+        
         #endregion
     }
 }

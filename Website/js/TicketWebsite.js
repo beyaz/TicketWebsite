@@ -42,7 +42,8 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
         methods: {
             InitDOM: function () {
                 var $t;
-                this._root = ($t = new TicketWebsite.Common.Builder(), $t.Caller = this, $t.DataContext = this.DataContext, $t.XmlString = this.Template, $t).Build().Root;
+                var builder = ($t = new TicketWebsite.Common.Builder(), $t.Caller = this, $t.DataContext = this.DataContext, $t.XmlString = this.Template, $t);
+                this._root = builder.Build().Root;
             }
         }
     });
@@ -149,6 +150,20 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
                             $t.System$IDisposable$dispose();
                         }
                     }}));
+
+
+                // replace footer
+                Bridge.CustomUIMarkup.Common.FileUtil.ReadAsync("xml/Footer.xml", function (content) {
+                    var $t;
+                    var headerPart = ($t = new TicketWebsite.Common.TemplateComponent(), $t.Template = content, $t.DataContext = null, $t);
+                    headerPart.InitDOM();
+
+                    var target = $(document.getElementsByClassName("ui inverted vertical footer segment"));
+                    var p = target.get(0).parentNode;
+                    target.remove();
+                    Bridge.CustomUIMarkup.Common.Extensions.SetLastChild($(p), headerPart.Root);
+
+                });
             }
         }
     });

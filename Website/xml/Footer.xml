@@ -1,0 +1,90 @@
+﻿<div class="ui vertical inverted footer segment" css.backgroundColor='#293b4c'>
+  <div class="ui center aligned container">
+    <div class="ui stackable inverted divided very relaxed equal width grid">
+      <div class="row">
+        <section class="footer-widget widget text-4 widget_text column">
+          <h4 class="ui inverted header">Social media</h4>
+          <div class="textwidget">
+            <a href="#" target="_blank" style="margin-bottom:.5em" class="ui right labeled icon inverted button">
+              <i class="facebook icon"></i>Facebook
+            </a>
+            <br/>
+            <a href="#" target="_blank" style="margin-bottom:.5em" class="ui right labeled icon inverted button">
+              <i class="twitter icon"></i>Twitter
+            </a>
+            <br/>
+            <a href="#" target="_blank" style="margin-bottom:.5em" class="ui right labeled icon inverted button">
+              <i class="google plus icon"></i>Google Plus
+            </a>
+            <br/>
+            <a href="#" target="_blank" style="margin-bottom:.5em" class="ui right labeled icon inverted button">
+              <i class="instagram icon"></i>Instagram
+            </a>
+            <br/>
+            <a href="#" target="_blank" style="margin-bottom:.5em" class="ui right labeled icon inverted button">
+              <i class="youtube icon"></i>YouTube
+            </a>
+            <br/>
+          </div>
+        </section>
+        <section class="footer-widget widget nav_menu-2 widget_nav_menu column">
+          <h4 class="ui inverted header">Menu</h4>
+          <div class="menu-software-main-menu-container">
+            <nav id="menu-software-main-menu" class="ui chap-menu vertical secondary inverted small fluid marginless menu">
+              <a href="https://chap.website/software" class="single item menu-item menu-item-type-custom menu-item-object-custom menu-item-10 active" role="menuitem">Home</a>
+              <a href="https://chap.website/software/about/" class="single item menu-item menu-item-type-post_type menu-item-object-page menu-item-2074" role="menuitem">About</a>
+              <a href="https://chap.website/software/download/" class="single item menu-item menu-item-type-post_type menu-item-object-page menu-item-2008" role="menuitem">Download</a>
+              <a href="https://chap.website/software/category/changelog/" class="single item menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2005" role="menuitem">Changelog</a>
+              <a href="https://chap.website/software/faq/" class="single item menu-item menu-item-type-post_type menu-item-object-page menu-item-2072" role="menuitem">FAQ</a>
+              <a href="https://chap.website/software/contact/" class="single item menu-item menu-item-type-post_type menu-item-object-page menu-item-2073" role="menuitem">Contact</a>
+            </nav>
+          </div>
+        </section>
+        <section class="footer-widget widget text-5 widget_text column">
+          <h4 class="ui inverted header">Newsletter</h4>
+          <div class="textwidget">
+            Sign up for our newsletter to keep up to date with the latest releases. We respect your privacy and will not share your e-mail with anyone!
+            <div class="ui hidden divider"></div>
+            <form method="get" class="ui form">
+              <div class="ui fluid action input">
+                <input type="email" placeholder="E-mail address"/>
+                <button type="submit" class="ui inverted button">Sign up</button>
+              </div>
+            </form>
+          </div>
+        </section>
+        <section class="footer-widget widget text-6 widget_text column">
+          <h4 class="ui inverted header">
+            Download <div class="ui shadowless red label">v2.32 beta</div>
+          </h4>
+          <div class="textwidget">
+            <button class="ui blue fluid icon button">
+              Windows <i class="windows icon"></i>
+            </button>
+            <button class="ui black fluid icon button">
+              Mac <i class="apple icon"></i>
+            </button>
+            <button class="ui green fluid icon button">
+              Linux <i class="linux icon"></i>
+            </button>
+            <div class="ui inverted link list" role="list">
+              <a href="/software/pricing" class="item" role="listitem">Pricing</a>
+              <a href="/software/download#older-versions" class="item" role="listitem">Older versions</a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class="ui inverted section divider"  ></div>
+    <div class="ui basic center aligned inverted paddingless marginless segment" css.backgroundColor='#293b4c'>
+      <div class="ui small vertical inverted link list" role="list">
+        <div class="item" role="listitem">
+          <span>Powered by</span>
+          <a href="https://chap.website" target="_blank"> Uğ-Ab-Öm </a>
+          <span> Company name.</span>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
