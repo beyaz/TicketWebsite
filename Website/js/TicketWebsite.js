@@ -28,25 +28,8 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
         statics: {
             ctors: {
                 ctor: function () {
-                    Bridge.CustomUIMarkup.SemanticUI.Builder.RegisterTag("ProductCard", TicketWebsite.Views.ProductCard);
+                    // RegisterTag("ProductCard", typeof(ProductCard));
                 }
-            }
-        }
-    });
-
-    Bridge.define("TicketWebsite.Common.ComponentBase", {
-        inherits: [System.Windows.FrameworkElement],
-        props: {
-            Template: {
-                get: function () {
-                    return null;
-                }
-            }
-        },
-        methods: {
-            InitDOM: function () {
-                var $t;
-                this._root = ($t = new TicketWebsite.Common.Builder(), $t.Caller = this, $t.DataContext = this.DataContext, $t.XmlString = this.Template, $t).Build().Root;
             }
         }
     });
@@ -133,27 +116,11 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
         },
         methods: {
             RenderInBody: function () {
-                var $t, $t1;
-                this.ProductsContainer.empty();
 
-                $t = Bridge.getEnumerator(this.DataContext$1.ProductCards);
-                try {
-                    while ($t.moveNext()) {
-                        var productCard = $t.Current;
-                        var card = ($t1 = new TicketWebsite.Views.ProductCard(), $t1.DataContext = productCard, $t1);
-
-                        card.InitDOM();
-
-                        this.ProductsContainer.append(card.Root);
-                    }
-                } finally {
-                    if (Bridge.is($t, System.IDisposable)) {
-                        $t.System$IDisposable$dispose();
-                    }
-                }
+                // replace header
                 Bridge.CustomUIMarkup.Common.FileUtil.ReadAsync("xml/Shop.HeaderPart.xml", function (content) {
-                    var $t2;
-                    var headerPart = ($t2 = new TicketWebsite.Common.TemplateComponent(), $t2.Template = content, $t2.DataContext = null, $t2);
+                    var $t;
+                    var headerPart = ($t = new TicketWebsite.Common.TemplateComponent(), $t.Template = content, $t.DataContext = null, $t);
                     headerPart.InitDOM();
 
                     var target = $(document.getElementsByClassName("ui inverted vertical masthead center aligned segment"));
@@ -161,10 +128,27 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
                     target.remove();
                     Bridge.CustomUIMarkup.Common.Extensions.SetFirstChild($(p), headerPart.Root);
 
-
-
-
                 });
+
+                // replace body
+                this.ProductsContainer.empty();
+                Bridge.CustomUIMarkup.Common.FileUtil.ReadAsync("xml/Card.Product.xml", Bridge.fn.bind(this, function (template) {
+                    var $t, $t1;
+                    $t = Bridge.getEnumerator(this.DataContext$1.ProductCards);
+                    try {
+                        while ($t.moveNext()) {
+                            var productCard = $t.Current;
+                            var card = ($t1 = new TicketWebsite.Common.TemplateComponent(), $t1.Template = template, $t1.DataContext = productCard, $t1);
+
+                            card.InitDOM();
+
+                            this.ProductsContainer.append(card.Root);
+                        }
+                    } finally {
+                        if (Bridge.is($t, System.IDisposable)) {
+                            $t.System$IDisposable$dispose();
+                        }
+                    }}));
             }
         }
     });
@@ -176,24 +160,33 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
                 var $t;
                 this.$initialize();
                 TicketWebsite.Shared.FullModel.ctor.call(this);
-                this.ShopPage = ($t = new TicketWebsite.Shared.ShopPageModel(), $t.ProductCards = function (_o2) {
-                        _o2.add(function (_o1) {
+                this.ShopPage = ($t = new TicketWebsite.Shared.ShopPageModel(), $t.ProductCards = function (_o7) {
+                        _o7.add(function (_o1) {
                                 _o1.setItem(TicketWebsite.Shared.Field["ProductCardImagePath"], "img/Card.Product.jpg");
                                 return _o1;
                             }(new System.ComponentModel.Bag()));
-                        return _o2;
+                        _o7.add(function (_o2) {
+                                _o2.setItem(TicketWebsite.Shared.Field["ProductCardImagePath"], "img/Card.Product.jpg");
+                                return _o2;
+                            }(new System.ComponentModel.Bag()));
+                        _o7.add(function (_o3) {
+                                _o3.setItem(TicketWebsite.Shared.Field["ProductCardImagePath"], "img/Card.Product.jpg");
+                                return _o3;
+                            }(new System.ComponentModel.Bag()));
+                        _o7.add(function (_o4) {
+                                _o4.setItem(TicketWebsite.Shared.Field["ProductCardImagePath"], "img/Card.Product.jpg");
+                                return _o4;
+                            }(new System.ComponentModel.Bag()));
+                        _o7.add(function (_o5) {
+                                _o5.setItem(TicketWebsite.Shared.Field["ProductCardImagePath"], "img/Card.Product.jpg");
+                                return _o5;
+                            }(new System.ComponentModel.Bag()));
+                        _o7.add(function (_o6) {
+                                _o6.setItem(TicketWebsite.Shared.Field["ProductCardImagePath"], "img/Card.Product.jpg");
+                                return _o6;
+                            }(new System.ComponentModel.Bag()));
+                        return _o7;
                     }(new (System.Collections.Generic.List$1(System.ComponentModel.Bag)).ctor()), $t);
-            }
-        }
-    });
-
-    Bridge.define("TicketWebsite.Views.ProductCard", {
-        inherits: [TicketWebsite.Common.ComponentBase],
-        props: {
-            Template: {
-                get: function () {
-                    return "\r\n<div class='ui card post-37 product type-product status-publish has-post-thumbnail product_cat-tools product_tag-amazon first instock shipping-taxable product-type-external'>\r\n  <div class='ui fluid image'>\r\n    <a href='https://chap.website/shop1/product/affiliate-product/' class='woocommerce-LoopProduct-link'>\r\n      <img width='300' height='300'\r\n           src='{Binding ProductCardImagePath}'\r\n           class='attachment-shop_catalog size-shop_catalog wp-post-image'\r\n           srcset='//chap.website/shop1/wp-content/uploads/sites/44/2017/05/felix-russell-saw-167176-300x300.jpg 300w, //chap.website/shop1/wp-content/uploads/sites/44/2017/05/felix-russell-saw-167176-150x150.jpg 150w, //chap.website/shop1/wp-content/uploads/sites/44/2017/05/felix-russell-saw-167176-180x180.jpg 180w, //chap.website/shop1/wp-content/uploads/sites/44/2017/05/felix-russell-saw-167176-600x600.jpg 600w'\r\n           sizes='(max-width: 300px) 100vw, 300px' />\r\n    </a>\r\n  </div>\r\n  <div class='content'>\r\n    <div class='header'>\r\n      <a href='https://chap.website/shop1/product/affiliate-product/'\r\n         class='ui tiny header woocommerce-LoopProduct-link'>\r\n        Affiliate product\r\n      </a>\r\n    </div>\r\n    <div class='meta'>\r\n      <a href='https://chap.website/shop1/product-category/tools/' rel='tag'>Tools</a>\r\n    </div>\r\n    <div class='star-rating'>\r\n      <span style='width:20%'>Rated <strong class='rating'>1.00</strong> out of 5</span>\r\n    </div>\r\n  </div>\r\n  <div class='extra content'>\r\n    <div class='ui medium header'>\r\n      <span class='woocommerce-Price-amount amount'>\r\n        <span class='woocommerce-Price-currencySymbol'>£</span>15.00\r\n      </span>\r\n    </div>\r\n  </div>\r\n  <a class='ui bottom attached medium button button product_type_external' rel='nofollow' href='https://amazon.com'\r\n     data-quantity='1' data-product_id='37' data-product_sku=''>\r\n    <i class='add icon'></i>Buy from Amazon\r\n  </a>\r\n</div>\r\n\r\n";
-                }
             }
         }
     });

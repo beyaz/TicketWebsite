@@ -1,187 +1,102 @@
 {
-	GlobalKeys:
+	"GlobalKeys":
 	{
-		
+		"$(TargetDir)"  :"D:\\github\\TicketWebsite\\Src\\bin\\Debug\\",
+		"$(SolutionDir)":"D:\\github\\TicketWebsite\\",
+		"$(Bridge.CustomUIMarkup)":"D:\\github\\Bridge.CustomUIMarkup\\"
 	},
-	Tasks:
+	"Tasks":
 	[	
+		
 		{
-			"FullClassName": "WhiteStone.Tasks.GetFileContentFromWebIfNotInTarggetDir",
+			"FullClassName": "WhiteStone.Tasks.CopyFile",
 			"Keys":
-			{
-				"SourceUrl": "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/codemirror.js",
-				"TargetDirectory" :"D:\\github\\Bridge.CustomUIMarkup\\bin\\js\\codemirror\\5.31.0\\"
-			}			
+			{	
+				"Source" : "$(TargetDir)bridge\\jquery-2.2.4.js",
+				"Target" : "$(SolutionDir)\\WebSite\\js\\jquery-2.2.4.js"
+			}
 		}
 		,
 		{
-			"FullClassName": "WhiteStone.Tasks.GetFileContentFromWebIfNotInTarggetDir",
+			"FullClassName": "WhiteStone.Tasks.CopyFile",
 			"Keys":
-			{
-				"SourceUrl": "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/mode/xml/xml.js",
-				"TargetDirectory" :"D:\\github\\Bridge.CustomUIMarkup\\bin\\js\\codemirror\\5.31.0\\mode\\xml\\"
-			}			
-		},
-		{
-			"FullClassName": "WhiteStone.Tasks.GetFileContentFromWebIfNotInTarggetDir",
-			"Keys":
-			{
-				"SourceUrl": "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/addon/hint/show-hint.js",
-				"TargetDirectory" :"D:\\github\\Bridge.CustomUIMarkup\\bin\\js\\codemirror\\5.31.0\\addon\\hint\\"
-			}			
+			{	
+				"Source" : "$(TargetDir)bridge\\bridge.js",
+				"Target" : "$(SolutionDir)\\WebSite\\js\\bridge.js"
+			}
 		}
 		,
 		{
-			"FullClassName": "WhiteStone.Tasks.GetFileContentFromWebIfNotInTarggetDir",
+			"FullClassName": "WhiteStone.Tasks.CopyFile",
 			"Keys":
-			{
-				"SourceUrl": "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/addon/hint/xml-hint.js",
-				"TargetDirectory" :"D:\\github\\Bridge.CustomUIMarkup\\bin\\js\\codemirror\\5.31.0\\addon\\hint\\"
-			}			
+			{	
+				"Source" : "$(TargetDir)bridge\\bridge.console.js",
+				"Target" : "$(SolutionDir)\\WebSite\\js\\bridge.console.js"
+			}
 		}
 		,
 		{
-			"FullClassName": "WhiteStone.Tasks.GetFileContentFromWebIfNotInTarggetDir",
+			"FullClassName": "WhiteStone.Tasks.CopyFile",
 			"Keys":
-			{
-				"SourceUrl": "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/addon/edit/closetag.js",
-				"TargetDirectory" :"D:\\github\\Bridge.CustomUIMarkup\\bin\\js\\codemirror\\5.31.0\\addon\\edit\\"
-			}			
+			{	
+				"Source" : "$(TargetDir)bridge\\bridge.meta.js",
+				"Target" : "$(SolutionDir)\\WebSite\\js\\bridge.meta.js"
+			}
 		}
 		,
 		{
-			"FullClassName": "WhiteStone.Tasks.GetFileContentFromWebIfNotInTarggetDir",
+			"FullClassName": "WhiteStone.Tasks.CopyFile",
 			"Keys":
-			{
-				"SourceUrl": "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/addon/fold/foldcode.js",
-				"TargetDirectory" :"D:\\github\\Bridge.CustomUIMarkup\\bin\\js\\codemirror\\5.31.0\\addon\\fold\\"
-			}			
+			{	
+				"Source" : "$(Bridge.CustomUIMarkup)bin\\js\\Bridge.CustomUIMarkup.js",
+				"Target" : "$(SolutionDir)\\WebSite\\js\\Bridge.CustomUIMarkup.js"
+			}
 		}
 		,
 		{
-			"FullClassName": "WhiteStone.Tasks.GetFileContentFromWebIfNotInTarggetDir",
+			"FullClassName": "WhiteStone.Tasks.CopyFile",
 			"Keys":
-			{
-				"SourceUrl": "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/addon/fold/foldgutter.js",
-				"TargetDirectory" :"D:\\github\\Bridge.CustomUIMarkup\\bin\\js\\codemirror\\5.31.0\\addon\\fold\\"
-			}			
+			{	
+				"Source" : "$(Bridge.CustomUIMarkup)bin\\js\\Bridge.CustomUIMarkup.meta.js",
+				"Target" : "$(SolutionDir)\\WebSite\\js\\Bridge.CustomUIMarkup.meta.js"
+			}
 		}
 		,
 		{
-			"FullClassName": "WhiteStone.Tasks.GetFileContentFromWebIfNotInTarggetDir",
+			"FullClassName": "WhiteStone.Tasks.CopyFile",
 			"Keys":
-			{
-				"SourceUrl": "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/addon/fold/xml-fold.js",
-				"TargetDirectory" :"D:\\github\\Bridge.CustomUIMarkup\\bin\\js\\codemirror\\5.31.0\\addon\\fold\\"
-			}			
+			{	
+				"Source" : "$(TargetDir)bridge\\TicketWebsite.js",
+				"Target" : "$(SolutionDir)\\WebSite\\js\\TicketWebsite.js"
+			}
 		}
 		,
 		{
-			"FullClassName": "WhiteStone.Tasks.GetFileContentFromWebIfNotInTarggetDir",
+			"FullClassName": "WhiteStone.Tasks.CopyFile",
 			"Keys":
-			{
-				"SourceUrl": "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/addon/fold/indent-fold.js",
-				"TargetDirectory" :"D:\\github\\Bridge.CustomUIMarkup\\bin\\js\\codemirror\\5.31.0\\addon\\fold\\"
-			}			
+			{	
+				"Source" : "$(TargetDir)bridge\\TicketWebsite.meta.js",
+				"Target" : "$(SolutionDir)\\WebSite\\js\\TicketWebsite.meta.js"
+			}
 		}
 		,
 		{
-			"FullClassName": "WhiteStone.Tasks.GetFileContentFromWebIfNotInTarggetDir",
+			"FullClassName": "WhiteStone.Tasks.CopyDirectory",
 			"Keys":
-			{
-				"SourceUrl": "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/addon/fold/markdown-fold.js",
-				"TargetDirectory" :"D:\\github\\Bridge.CustomUIMarkup\\bin\\js\\codemirror\\5.31.0\\addon\\fold\\"
-			}			
+			{	
+				"Source" : "$(SolutionDir)Src\\img\\",
+				"Target" : "$(SolutionDir)\\WebSite\\img\\"
+			}
 		}
 		,
 		{
-			"FullClassName": "WhiteStone.Tasks.GetFileContentFromWebIfNotInTarggetDir",
+			"FullClassName": "WhiteStone.Tasks.CopyDirectory",
 			"Keys":
-			{
-				"SourceUrl": "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/mode/markdown/markdown.js",
-				"TargetDirectory" :"D:\\github\\Bridge.CustomUIMarkup\\bin\\js\\codemirror\\5.31.0\\mode\\markdown\\"
-			}			
+			{	
+				"Source" : "$(SolutionDir)Src\\xml\\",
+				"Target" : "$(SolutionDir)\\WebSite\\xml\\"
+			}
 		}
-		,
-		{
-			"FullClassName": "WhiteStone.Tasks.GetFileContentFromWebIfNotInTarggetDir",
-			"Keys":
-			{
-				"SourceUrl": "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/addon/edit/matchtags.js",
-				"TargetDirectory" :"D:\\github\\Bridge.CustomUIMarkup\\bin\\js\\codemirror\\5.31.0\\addon\\edit\\"
-			}			
-		}
-		,	
-		
-		{
-			"FullClassName": "WhiteStone.Tasks.GetFileContentFromWebIfNotInTarggetDir",
-			"Keys":
-			{
-				"SourceUrl": "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/codemirror.css",
-				"TargetDirectory" :"D:\\github\\Bridge.CustomUIMarkup\\bin\\js\\codemirror\\5.31.0\\"
-			}			
-		}
-		,
-		{
-			"FullClassName": "WhiteStone.Tasks.GetFileContentFromWebIfNotInTarggetDir",
-			"Keys":
-			{
-				"SourceUrl": "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/addon/hint/show-hint.css",
-				"TargetDirectory" :"D:\\github\\Bridge.CustomUIMarkup\\bin\\js\\codemirror\\5.31.0\\addon\\hint\\"
-			}			
-		}
-		,
-		{
-			"FullClassName": "WhiteStone.Tasks.GetFileContentFromWebIfNotInTarggetDir",
-			"Keys":
-			{
-				"SourceUrl": "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/addon/fold/foldgutter.css",
-				"TargetDirectory" :"D:\\github\\Bridge.CustomUIMarkup\\bin\\js\\codemirror\\5.31.0\\addon\\fold\\"
-			}			
-		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 	
 	]
 }

@@ -35,6 +35,26 @@ namespace TicketWebsite.Shared
                      new Bag
                      {
                          [Field.ProductCardImagePath]="img/Card.Product.jpg"
+                     },
+                     new Bag
+                     {
+                         [Field.ProductCardImagePath]="img/Card.Product.jpg"
+                     },
+                     new Bag
+                     {
+                         [Field.ProductCardImagePath]="img/Card.Product.jpg"
+                     },
+                     new Bag
+                     {
+                         [Field.ProductCardImagePath]="img/Card.Product.jpg"
+                     },
+                     new Bag
+                     {
+                         [Field.ProductCardImagePath]="img/Card.Product.jpg"
+                     },
+                     new Bag
+                     {
+                         [Field.ProductCardImagePath]="img/Card.Product.jpg"
                      }
                  }
             };

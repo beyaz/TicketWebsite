@@ -1,13 +1,13 @@
 ﻿<div class='ui card'>
   <div class='ui fluid image'>
-    <img Src='{ProductCardImagePath}'  />
+    <img Src='{ProductCardImagePath}' />
   </div>
   <div class='content'>
     <div class='header'>
-      Affiliate product
+      Motor Safari
     </div>
     <div class='meta'>
-      Tools
+      Macera
     </div>
     <div class='star-rating'>
 
@@ -15,15 +15,14 @@
   </div>
   <div class='extra content'>
     <div class='ui medium header'>
-      <span class='woocommerce-Price-amount amount'>
+      <span>
         £ 15.00
       </span>
     </div>
   </div>
-  <ui.button   class='ui bottom attached medium button' >
-    İncele  <i MarginLeft='6' class="search icon"></i>
-  </ui.button>
-
-
+  <div class='ui bottom attached medium button'>
+    <i class="search icon" />
+    <span>İncele</span>
+  </div>
 
 </div>

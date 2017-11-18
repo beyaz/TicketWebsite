@@ -17,17 +17,8 @@ namespace TicketWebsite.Views
         #region Public Methods
         public void RenderInBody()
         {
-            ProductsContainer.Empty();
-
-            foreach (var productCard in DataContext.ProductCards)
-            {
-                var card = new ProductCard {DataContext = productCard};
-
-                card.InitDOM();
-
-                ProductsContainer.Append(card.Root);
-            }
-
+            
+            // replace header
             FileUtil.ReadAsync("xml/Shop.HeaderPart.xml", (content) =>
             {
                 var headerPart = new TemplateComponent
@@ -42,9 +33,24 @@ namespace TicketWebsite.Views
                 target.Remove();
                 new jQuery(p).SetFirstChild(headerPart.Root);
 
+            });
 
+            // replace body
+            ProductsContainer.Empty();
+            FileUtil.ReadAsync("xml/Card.Product.xml", template =>
+            {
+                foreach (var productCard in DataContext.ProductCards)
+                {
+                    var card = new TemplateComponent
+                    {
+                        Template = template,
+                        DataContext = productCard
+                    };
 
+                    card.InitDOM();
 
+                    ProductsContainer.Append(card.Root);
+                }
             });
         }
         #endregion

@@ -1,0 +1,28 @@
+﻿<div class='ui card'>
+  <div class='ui fluid image'>
+    <img Src='{ProductCardImagePath}' />
+  </div>
+  <div class='content'>
+    <div class='header'>
+      Motor Safari
+    </div>
+    <div class='meta'>
+      Macera
+    </div>
+    <div class='star-rating'>
+
+    </div>
+  </div>
+  <div class='extra content'>
+    <div class='ui medium header'>
+      <span>
+        £ 15.00
+      </span>
+    </div>
+  </div>
+  <div class='ui bottom attached medium button'>
+    <i class="search icon" />
+    <span>İncele</span>
+  </div>
+
+</div>

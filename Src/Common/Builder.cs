@@ -7,7 +7,7 @@ namespace TicketWebsite.Common
         #region Constructors
         static Builder()
         {
-            RegisterTag("ProductCard", typeof(ProductCard));
+            // RegisterTag("ProductCard", typeof(ProductCard));
         }
         #endregion
     }
