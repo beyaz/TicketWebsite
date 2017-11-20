@@ -1,0 +1,31 @@
+﻿<div class='ui stackable grid container'>
+
+  <aside id='chap-primary-sidebar' class='four wide sidebar column'>
+    <Views.Pages.Shop.LeftMenu.View />
+  </aside>
+
+  <div class='twelve wide column'>
+
+    <ui.form>
+
+      <ui.selection.dropdown />
+
+
+    </ui.form>
+
+    <ui.hidden.clearing.divider />
+
+    <Views.Pages.Shop.ProductsContainer.View  DataContext ='{ProductsContainerModel}' />
+
+    <ui.hidden.clearing.divider />
+
+    <div class='ui centered grid'>
+      <div class='center aligned column'>
+
+        <Views.ui_pagination_menu ItemCount='5' ActiveNumber='3' />
+
+      </div>
+    </div>
+  </div>
+
+</div>

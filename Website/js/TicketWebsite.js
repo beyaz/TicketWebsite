@@ -13,11 +13,7 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
         statics: {
             methods: {
                 RenderUIEditor: function () {
-                    var $t;
-                    var model = new TicketWebsite.Shared.FakeFullModel();
-
-                    ($t = new TicketWebsite.Views.ShopPage(), $t.DataContext = model.ShopPage, $t).RenderInBody();
-                    ;
+                    new TicketWebsite.Views.ShopPage().RenderInBody();
                 }
             }
         }
@@ -25,10 +21,30 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
 
     Bridge.define("TicketWebsite.Common.Builder", {
         inherits: [Bridge.CustomUIMarkup.SemanticUI.Builder],
+        methods: {
+            CreateType: function (tag) {
+
+                var fullName = "TicketWebsite." + (tag || "");
+
+                var type = System.Linq.Enumerable.from(Bridge.Reflection.getAssemblyTypes(Bridge.Reflection.getTypeAssembly(Bridge.getType(this)))).firstOrDefault(function (x) {
+                        return Bridge.referenceEquals(Bridge.Reflection.getTypeFullName(x).toUpperCase(), fullName.toUpperCase());
+                    }, null);
+
+                if (type != null) {
+                    return type;
+                }
+
+                return Bridge.CustomUIMarkup.SemanticUI.Builder.prototype.CreateType.call(this, tag);
+            }
+        }
+    });
+
+    Bridge.define("TicketWebsite.Common.FileService", {
         statics: {
-            ctors: {
-                ctor: function () {
-                    // RegisterTag("ProductCard", typeof(ProductCard));
+            methods: {
+                GetFileContent: function (fileName) {
+                    return TicketWebsite.FileContents[fileName];
+                    ;
                 }
             }
         }
@@ -48,22 +64,29 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
         }
     });
 
-    Bridge.define("TicketWebsite.Shared.FullModel", {
+    Bridge.define("TicketWebsite.Shared.ModelBase", {
         inherits: [System.ComponentModel.Bag],
         fields: {
-            _shopPage: null
+            _labels: null
         },
         props: {
-            ShopPage: {
+            Labels: {
                 get: function () {
-                    return this._shopPage;
+                    return this._labels;
                 },
                 set: function (value) {
-                    if (!Bridge.referenceEquals(this._shopPage, value)) {
-                        this._shopPage = value;
-                        this.OnPropertyChanged("ShopPage");
+                    if (!Bridge.referenceEquals(this._labels, value)) {
+                        this._labels = value;
+                        this.OnPropertyChanged("Labels");
                     }
                 }
+            }
+        },
+        ctors: {
+            ctor: function () {
+                this.$initialize();
+                System.ComponentModel.Bag.ctor.call(this);
+                this.Labels = new TicketWebsite.Shared.Labels();
             }
         }
     });
@@ -71,18 +94,210 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
     Bridge.define("TicketWebsite.Shared.Field", {
         statics: {
             fields: {
+                Product_Categories: null,
                 "ProductCardImagePath": null
             },
             ctors: {
                 init: function () {
+                    this.Product_Categories = "Product_Categories";
                     this["ProductCardImagePath"] = "ProductCardImagePath";
                 }
             }
         }
     });
 
-    Bridge.define("TicketWebsite.Shared.ShopPageModel", {
+    Bridge.define("TicketWebsite.Shared.Labels", {
         inherits: [System.ComponentModel.Bag],
+        ctors: {
+            ctor: function () {
+                this.$initialize();
+                System.ComponentModel.Bag.ctor.call(this);
+                this.setItem(TicketWebsite.Shared.Field.Product_Categories, "Product Categories");
+            }
+        }
+    });
+
+    Bridge.define("TicketWebsite.Views.ShopPage", {
+        inherits: [System.Windows.FrameworkElement],
+        methods: {
+            ReplaceHeaderPart: function () {
+                var part = new TicketWebsite.Views.Pages.Shop.HeaderPart.View();
+                part.InitDOM();
+
+                var target = $(document.getElementsByClassName("ui inverted vertical masthead center aligned segment"));
+                var p = target.get(0).parentNode;
+                target.remove();
+                Bridge.CustomUIMarkup.Common.Extensions.SetFirstChild($(p), part.Root);
+
+            },
+            ReplaceFooterPart: function () {
+                var part = new TicketWebsite.Views.Footer.View();
+                part.InitDOM();
+
+                var target = $(document.getElementsByClassName("ui inverted vertical footer segment"));
+                var p = target.get(0).parentNode;
+                target.remove();
+                Bridge.CustomUIMarkup.Common.Extensions.SetLastChild($(p), part.Root);
+
+            },
+            RenderBody: function () {
+                var $t;
+                var part = ($t = new TicketWebsite.Views.Pages.Shop.View(), $t.DataContext = new TicketWebsite.Models.SiteModelFake().ShopPage, $t);
+                part.InitDOM();
+
+                var target = $(document.getElementsByClassName("ui stackable grid container"));
+
+                target.remove();
+
+                part.Root.insertAfter(System.Windows.DOM.ById("WS-TopPart"));
+
+
+            },
+            RenderInBody: function () {
+
+
+                this.ReplaceHeaderPart();
+                this.ReplaceFooterPart();
+
+
+                this.RenderBody();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            }
+        }
+    });
+
+    Bridge.define("TicketWebsite.Views.ui_pagination_menu", {
+        inherits: [System.Windows.FrameworkElement],
+        statics: {
+            fields: {
+                "ItemCountProperty": null,
+                ActiveNumberProperty: null
+            },
+            ctors: {
+                init: function () {
+                    this["ItemCountProperty"] = System.Windows.DependencyProperty.Register$1("ItemCount", System.String, TicketWebsite.Views.ui_pagination_menu, new System.Windows.PropertyMetadata.$ctor1(TicketWebsite.Views.ui_pagination_menu.OnItemCountChanged));
+                    this.ActiveNumberProperty = System.Windows.DependencyProperty.Register$1("ActiveNumber", System.String, TicketWebsite.Views.ui_pagination_menu, new System.Windows.PropertyMetadata.$ctor1(TicketWebsite.Views.ui_pagination_menu.OnActiveNumberChanged));
+                }
+            },
+            methods: {
+                OnItemCountChanged: function (d, e) {
+                    var me = Bridge.cast(d, TicketWebsite.Views.ui_pagination_menu);
+
+                    me.CreateSubElements();
+                },
+                OnActiveNumberChanged: function (d, e) {
+                    var me = Bridge.cast(d, TicketWebsite.Views.ui_pagination_menu);
+
+                    me.SetActive(System.Extensions.ToInt32(e.NewValue));
+                }
+            }
+        },
+        fields: {
+            _numbers: null
+        },
+        props: {
+            "ItemCount": {
+                get: function () {
+                    return System.Nullable.getValue(Bridge.cast(Bridge.unbox(this.GetValue$1(TicketWebsite.Views.ui_pagination_menu["ItemCountProperty"])), System.Int32));
+                },
+                set: function (value) {
+                    this.SetValue$1(TicketWebsite.Views.ui_pagination_menu["ItemCountProperty"], Bridge.box(value, System.Int32));
+                }
+            },
+            ActiveNumber: {
+                get: function () {
+                    return System.Nullable.getValue(Bridge.cast(Bridge.unbox(this.GetValue$1(TicketWebsite.Views.ui_pagination_menu.ActiveNumberProperty)), System.Int32));
+                },
+                set: function (value) {
+                    this.SetValue$1(TicketWebsite.Views.ui_pagination_menu.ActiveNumberProperty, Bridge.box(value, System.Int32));
+                }
+            }
+        },
+        ctors: {
+            init: function () {
+                this._numbers = new (System.Collections.Generic.List$1($)).ctor();
+            },
+            ctor: function () {
+                this.$initialize();
+                System.Windows.FrameworkElement.ctor.call(this);
+                this._root = System.Windows.DOM.div("ui pagination menu");
+            }
+        },
+        methods: {
+            SetActive: function (index) {
+
+                this._numbers.forEach(function (x) {
+                    x.removeClass("active");
+                });
+                this._numbers.getItem(((index - 1) | 0)).addClass("active");
+
+            },
+            CreateSubElements: function () {
+                //<div class='ui pagination menu' >
+                //   <a class='item'  >1</a> 
+                //   <a class='item'  >2</a>
+                //   <a class='item active ' >3</a>
+                //   <a class='next icon item ' >
+                //    <i class='right chevron icon'></i>
+                //   </a>		
+                //</div>
+
+                this._numbers.clear();
+                this._root.empty();
+
+                for (var i = 0; i < this["ItemCount"]; i = (i + 1) | 0) {
+                    Bridge.jQuery2.Extensions.AppendTo(System.Windows.DOM.a("item").html(i.toString()).appendTo(this._root), this._numbers);
+                }
+
+                System.Windows.DOM.a("next icon item").appendTo(this._root).append(System.Windows.DOM.i("right chevron icon"));
+
+            }
+        }
+    });
+
+    Bridge.define("TicketWebsite.Models.Pages.Shop.LeftMenu.Model", {
+        inherits: [TicketWebsite.Shared.ModelBase]
+    });
+
+    Bridge.define("TicketWebsite.Models.Pages.Shop.Model", {
+        inherits: [TicketWebsite.Shared.ModelBase],
+        fields: {
+            _productsContainerModel: null
+        },
+        props: {
+            ProductsContainerModel: {
+                get: function () {
+                    return this._productsContainerModel;
+                },
+                set: function (value) {
+                    if (!Bridge.referenceEquals(this._productsContainerModel, value)) {
+                        this._productsContainerModel = value;
+                        this.OnPropertyChanged("ProductsContainerModel");
+                    }
+                }
+            }
+        }
+    });
+
+    Bridge.define("TicketWebsite.Models.Pages.Shop.ProductsContainer.Model", {
+        inherits: [TicketWebsite.Shared.ModelBase],
         fields: {
             _productCards: null
         },
@@ -101,81 +316,147 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
         }
     });
 
-    Bridge.define("TicketWebsite.Views.ShopPage", {
-        inherits: [System.Windows.FrameworkElement],
-        props: {
-            DataContext$1: {
-                get: function () {
-                    return Bridge.cast(this.DataContext, TicketWebsite.Shared.ShopPageModel);
-                }
-            },
-            ProductsContainer: {
-                get: function () {
-                    return $(document.getElementsByClassName("ui three tablet doubling mobile stackable products cards"));
-                }
-            }
+    Bridge.define("TicketWebsite.Models.SiteModel", {
+        inherits: [TicketWebsite.Shared.ModelBase],
+        fields: {
+            _shopPage: null
         },
-        methods: {
-            RenderInBody: function () {
-
-                // replace header
-                Bridge.CustomUIMarkup.Common.FileUtil.ReadAsync("xml/Shop.HeaderPart.xml", function (content) {
-                    var $t;
-                    var headerPart = ($t = new TicketWebsite.Common.TemplateComponent(), $t.Template = content, $t.DataContext = null, $t);
-                    headerPart.InitDOM();
-
-                    var target = $(document.getElementsByClassName("ui inverted vertical masthead center aligned segment"));
-                    var p = target.get(0).parentNode;
-                    target.remove();
-                    Bridge.CustomUIMarkup.Common.Extensions.SetFirstChild($(p), headerPart.Root);
-
-                });
-
-                // replace body
-                this.ProductsContainer.empty();
-                Bridge.CustomUIMarkup.Common.FileUtil.ReadAsync("xml/Card.Product.xml", Bridge.fn.bind(this, function (template) {
-                    var $t, $t1;
-                    $t = Bridge.getEnumerator(this.DataContext$1.ProductCards);
-                    try {
-                        while ($t.moveNext()) {
-                            var productCard = $t.Current;
-                            var card = ($t1 = new TicketWebsite.Common.TemplateComponent(), $t1.Template = template, $t1.DataContext = productCard, $t1);
-
-                            card.InitDOM();
-
-                            this.ProductsContainer.append(card.Root);
-                        }
-                    } finally {
-                        if (Bridge.is($t, System.IDisposable)) {
-                            $t.System$IDisposable$dispose();
-                        }
-                    }}));
-
-
-                // replace footer
-                Bridge.CustomUIMarkup.Common.FileUtil.ReadAsync("xml/Footer.xml", function (content) {
-                    var $t;
-                    var headerPart = ($t = new TicketWebsite.Common.TemplateComponent(), $t.Template = content, $t.DataContext = null, $t);
-                    headerPart.InitDOM();
-
-                    var target = $(document.getElementsByClassName("ui inverted vertical footer segment"));
-                    var p = target.get(0).parentNode;
-                    target.remove();
-                    Bridge.CustomUIMarkup.Common.Extensions.SetLastChild($(p), headerPart.Root);
-
-                });
+        props: {
+            ShopPage: {
+                get: function () {
+                    return this._shopPage;
+                },
+                set: function (value) {
+                    if (!Bridge.referenceEquals(this._shopPage, value)) {
+                        this._shopPage = value;
+                        this.OnPropertyChanged("ShopPage");
+                    }
+                }
             }
         }
     });
 
-    Bridge.define("TicketWebsite.Shared.FakeFullModel", {
-        inherits: [TicketWebsite.Shared.FullModel],
+    Bridge.define("TicketWebsite.Views.Footer.View", {
+        inherits: [TicketWebsite.Common.TemplateComponent],
         ctors: {
             ctor: function () {
-                var $t;
                 this.$initialize();
-                TicketWebsite.Shared.FullModel.ctor.call(this);
-                this.ShopPage = ($t = new TicketWebsite.Shared.ShopPageModel(), $t.ProductCards = function (_o7) {
+                TicketWebsite.Common.TemplateComponent.ctor.call(this);
+                this.Template = TicketWebsite.Common.FileService.GetFileContent("Views/Footer/View.xml");
+            }
+        }
+    });
+
+    Bridge.define("TicketWebsite.Views.Pages.Contact.View", {
+        inherits: [TicketWebsite.Common.TemplateComponent],
+        ctors: {
+            ctor: function () {
+                this.$initialize();
+                TicketWebsite.Common.TemplateComponent.ctor.call(this);
+                this.Template = TicketWebsite.Common.FileService.GetFileContent("Views/Pages/Contact/View.xml");
+            }
+        }
+    });
+
+    Bridge.define("TicketWebsite.Views.Pages.Shop.HeaderPart.View", {
+        inherits: [TicketWebsite.Common.TemplateComponent],
+        ctors: {
+            ctor: function () {
+                this.$initialize();
+                TicketWebsite.Common.TemplateComponent.ctor.call(this);
+                this.Template = TicketWebsite.Common.FileService.GetFileContent("Views/Pages/Shop/HeaderPart/View.xml");
+
+            }
+        }
+    });
+
+    Bridge.define("TicketWebsite.Views.Pages.Shop.LeftMenu.View", {
+        inherits: [TicketWebsite.Common.TemplateComponent],
+        ctors: {
+            ctor: function () {
+                this.$initialize();
+                TicketWebsite.Common.TemplateComponent.ctor.call(this);
+                this.Template = TicketWebsite.Common.FileService.GetFileContent("Views/Pages/Shop/LeftMenu/View.xml");
+                this.DataContext = new TicketWebsite.Models.Pages.Shop.LeftMenu.Model();
+            }
+        }
+    });
+
+    Bridge.define("TicketWebsite.Views.Pages.Shop.ProductsContainer.View", {
+        inherits: [TicketWebsite.Common.TemplateComponent],
+        props: {
+            Model: {
+                get: function () {
+                    return Bridge.as(this.DataContext, TicketWebsite.Models.Pages.Shop.ProductsContainer.Model);
+                }
+            }
+        },
+        ctors: {
+            ctor: function () {
+                this.$initialize();
+                TicketWebsite.Common.TemplateComponent.ctor.call(this);
+                this._root = System.Windows.DOM.div("ui three tablet doubling mobile stackable products cards");
+                System.ComponentModel.Extensions.OnPropertyChanged(this, "DataContext", Bridge.fn.cacheBind(this, this.OnDataContextChanged));
+            }
+        },
+        methods: {
+            OnDataContextChanged: function () {
+                var $t, $t1;
+                if (this.Model == null) {
+                    return;
+                }
+                this._root.empty();
+
+                $t = Bridge.getEnumerator(this.Model.ProductCards);
+                try {
+                    while ($t.moveNext()) {
+                        var productCard = $t.Current;
+
+                        var card = ($t1 = new TicketWebsite.Views.Pages.Shop.ProductsContainerCardItem.View(), $t1.DataContext = productCard, $t1);
+
+                        card.InitDOM();
+
+                        this._root.append(card.Root);
+                    }
+                } finally {
+                    if (Bridge.is($t, System.IDisposable)) {
+                        $t.System$IDisposable$dispose();
+                    }
+                }
+            }
+        }
+    });
+
+    Bridge.define("TicketWebsite.Views.Pages.Shop.ProductsContainerCardItem.View", {
+        inherits: [TicketWebsite.Common.TemplateComponent],
+        ctors: {
+            ctor: function () {
+                this.$initialize();
+                TicketWebsite.Common.TemplateComponent.ctor.call(this);
+                this.Template = TicketWebsite.Common.FileService.GetFileContent("Views/Pages/Shop/ProductsContainerCardItem/View.xml");
+            }
+        }
+    });
+
+    Bridge.define("TicketWebsite.Views.Pages.Shop.View", {
+        inherits: [TicketWebsite.Common.TemplateComponent],
+        ctors: {
+            ctor: function () {
+                this.$initialize();
+                TicketWebsite.Common.TemplateComponent.ctor.call(this);
+                this.Template = TicketWebsite.Common.FileService.GetFileContent("Views/Pages/Shop/View.xml");
+            }
+        }
+    });
+
+    Bridge.define("TicketWebsite.Models.SiteModelFake", {
+        inherits: [TicketWebsite.Models.SiteModel],
+        ctors: {
+            ctor: function () {
+                var $t, $t1;
+                this.$initialize();
+                TicketWebsite.Models.SiteModel.ctor.call(this);
+                this.ShopPage = ($t = new TicketWebsite.Models.Pages.Shop.Model(), $t.ProductsContainerModel = ($t1 = new TicketWebsite.Models.Pages.Shop.ProductsContainer.Model(), $t1.ProductCards = function (_o7) {
                         _o7.add(function (_o1) {
                                 _o1.setItem(TicketWebsite.Shared.Field["ProductCardImagePath"], "img/Card.Product.jpg");
                                 return _o1;
@@ -201,7 +482,7 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
                                 return _o6;
                             }(new System.ComponentModel.Bag()));
                         return _o7;
-                    }(new (System.Collections.Generic.List$1(System.ComponentModel.Bag)).ctor()), $t);
+                    }(new (System.Collections.Generic.List$1(System.ComponentModel.Bag)).ctor()), $t1), $t);
             }
         }
     });

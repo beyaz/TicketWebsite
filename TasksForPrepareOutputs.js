@@ -78,7 +78,7 @@
 				"Source" : "$(TargetDir)bridge\\TicketWebsite.meta.js",
 				"Target" : "$(SolutionDir)\\WebSite\\js\\TicketWebsite.meta.js"
 			}
-		}
+		}		
 		,
 		{
 			"FullClassName": "WhiteStone.Tasks.CopyDirectory",
@@ -93,10 +93,21 @@
 			"FullClassName": "WhiteStone.Tasks.CopyDirectory",
 			"Keys":
 			{	
-				"Source" : "$(SolutionDir)Src\\xml\\",
-				"Target" : "$(SolutionDir)\\WebSite\\xml\\"
+				"Source" : "$(Bridge.CustomUIMarkup)bin\\Lib\\semantic-ui\\",
+				"Target" : "$(SolutionDir)\\WebSite\\Lib\\semantic-ui\\"
 			}
 		}
+		,
+		{
+			"FullClassName": "WhiteStone.Tasks.CombineFilesIntoJsFile",
+			"Keys":
+			{	
+				"Source" : "$(SolutionDir)Src\\Views\\*.xml",
+				"Target" : "$(SolutionDir)\\WebSite\\js\\FileContents.js",
+				"JsObjectPath" : "TicketWebsite.FileContents"
+			}
+		}
+		
 	
 	]
 }

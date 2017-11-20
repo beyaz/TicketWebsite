@@ -1,0 +1,25 @@
+﻿<section class='ui basic vertical segment'>
+  <h2 class='ui header'>{Binding Labels.Product_Categories}</h2>
+  <div class='ui fluid vertical default menu'>
+    <div class='item'>
+      <div class='marginless header'>
+        <a class='ui tiny header'>Clothing (12)</a>
+      </div>
+      <div class='menu'>
+        <a class='item'>Hoodies (6)</a>
+        <a class='item'>T-shirts (6)</a>
+      </div>
+    </div>
+    <div class='item'>
+      <div class='marginless header'>
+        <a class='ui tiny header'>Gear (6)</a>
+      </div>
+      <div class='menu'>
+        <a class='item'>Backpacks (4)</a>
+        <a class='item'>Navigation (2)</a>
+      </div>
+    </div>
+    <a class='item'>Photography (5)</a>
+    <a class='item'>Tools (3)</a>
+  </div>
+</section>

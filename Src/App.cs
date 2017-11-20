@@ -1,19 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Windows;
-using Bridge.CustomUIMarkup.Common;
-using Bridge.CustomUIMarkup.SemanticUI;
-using Bridge.Html5;
-using Bridge.jQuery2;
-using TicketWebsite.Shared;
+﻿using Bridge.jQuery2;
 using TicketWebsite.Views;
 
 namespace TicketWebsite
 {
-    
     public class App
     {
-        
-
         #region Public Methods
         public static void Main()
         {
@@ -24,10 +15,7 @@ namespace TicketWebsite
         #region Methods
         static void RenderUIEditor()
         {
-            var model = new FakeFullModel();
-
-            new ShopPage{DataContext = model.ShopPage}.RenderInBody();
-            ;
+            new ShopPage().RenderInBody();
         }
         #endregion
     }
