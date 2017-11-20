@@ -2,7 +2,7 @@
 
 namespace TicketWebsite.Views.Pages.Shop.HeaderPart
 {
-    class View : TemplateComponent
+    public class View : TemplateComponent
     {
         #region Constructors
         public View()

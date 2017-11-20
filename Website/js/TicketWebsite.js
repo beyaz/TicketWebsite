@@ -11,9 +11,16 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
             $(TicketWebsite.App.RenderUIEditor);
         },
         statics: {
+            props: {
+                SiteModel: {
+                    get: function () {
+                        return new TicketWebsite.Models.SiteModelFake();
+                    }
+                }
+            },
             methods: {
                 RenderUIEditor: function () {
-                    new TicketWebsite.Views.ShopPage().RenderInBody();
+                    TicketWebsite.Views.Pages.Shop.View.RenderInBody(TicketWebsite.App.SiteModel.ShopPage);
                 }
             }
         }
@@ -117,73 +124,7 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
         }
     });
 
-    Bridge.define("TicketWebsite.Views.ShopPage", {
-        inherits: [System.Windows.FrameworkElement],
-        methods: {
-            ReplaceHeaderPart: function () {
-                var part = new TicketWebsite.Views.Pages.Shop.HeaderPart.View();
-                part.InitDOM();
-
-                var target = $(document.getElementsByClassName("ui inverted vertical masthead center aligned segment"));
-                var p = target.get(0).parentNode;
-                target.remove();
-                Bridge.CustomUIMarkup.Common.Extensions.SetFirstChild($(p), part.Root);
-
-            },
-            ReplaceFooterPart: function () {
-                var part = new TicketWebsite.Views.Footer.View();
-                part.InitDOM();
-
-                var target = $(document.getElementsByClassName("ui inverted vertical footer segment"));
-                var p = target.get(0).parentNode;
-                target.remove();
-                Bridge.CustomUIMarkup.Common.Extensions.SetLastChild($(p), part.Root);
-
-            },
-            RenderBody: function () {
-                var $t;
-                var part = ($t = new TicketWebsite.Views.Pages.Shop.View(), $t.DataContext = new TicketWebsite.Models.SiteModelFake().ShopPage, $t);
-                part.InitDOM();
-
-                var target = $(document.getElementsByClassName("ui stackable grid container"));
-
-                target.remove();
-
-                part.Root.insertAfter(System.Windows.DOM.ById("WS-TopPart"));
-
-
-            },
-            RenderInBody: function () {
-
-
-                this.ReplaceHeaderPart();
-                this.ReplaceFooterPart();
-
-
-                this.RenderBody();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            }
-        }
-    });
-
-    Bridge.define("TicketWebsite.Views.ui_pagination_menu", {
+    Bridge.define("TicketWebsite.Views.Controls.PaginationMenu.View", {
         inherits: [System.Windows.FrameworkElement],
         statics: {
             fields: {
@@ -192,18 +133,18 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
             },
             ctors: {
                 init: function () {
-                    this["ItemCountProperty"] = System.Windows.DependencyProperty.Register$1("ItemCount", System.String, TicketWebsite.Views.ui_pagination_menu, new System.Windows.PropertyMetadata.$ctor1(TicketWebsite.Views.ui_pagination_menu.OnItemCountChanged));
-                    this.ActiveNumberProperty = System.Windows.DependencyProperty.Register$1("ActiveNumber", System.String, TicketWebsite.Views.ui_pagination_menu, new System.Windows.PropertyMetadata.$ctor1(TicketWebsite.Views.ui_pagination_menu.OnActiveNumberChanged));
+                    this["ItemCountProperty"] = System.Windows.DependencyProperty.Register$1("ItemCount", System.String, TicketWebsite.Views.Controls.PaginationMenu.View, new System.Windows.PropertyMetadata.$ctor1(TicketWebsite.Views.Controls.PaginationMenu.View.OnItemCountChanged));
+                    this.ActiveNumberProperty = System.Windows.DependencyProperty.Register$1("ActiveNumber", System.String, TicketWebsite.Views.Controls.PaginationMenu.View, new System.Windows.PropertyMetadata.$ctor1(TicketWebsite.Views.Controls.PaginationMenu.View.OnActiveNumberChanged));
                 }
             },
             methods: {
                 OnItemCountChanged: function (d, e) {
-                    var me = Bridge.cast(d, TicketWebsite.Views.ui_pagination_menu);
+                    var me = Bridge.cast(d, TicketWebsite.Views.Controls.PaginationMenu.View);
 
                     me.CreateSubElements();
                 },
                 OnActiveNumberChanged: function (d, e) {
-                    var me = Bridge.cast(d, TicketWebsite.Views.ui_pagination_menu);
+                    var me = Bridge.cast(d, TicketWebsite.Views.Controls.PaginationMenu.View);
 
                     me.SetActive(System.Extensions.ToInt32(e.NewValue));
                 }
@@ -215,18 +156,18 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
         props: {
             "ItemCount": {
                 get: function () {
-                    return System.Nullable.getValue(Bridge.cast(Bridge.unbox(this.GetValue$1(TicketWebsite.Views.ui_pagination_menu["ItemCountProperty"])), System.Int32));
+                    return System.Nullable.getValue(Bridge.cast(Bridge.unbox(this.GetValue$1(TicketWebsite.Views.Controls.PaginationMenu.View["ItemCountProperty"])), System.Int32));
                 },
                 set: function (value) {
-                    this.SetValue$1(TicketWebsite.Views.ui_pagination_menu["ItemCountProperty"], Bridge.box(value, System.Int32));
+                    this.SetValue$1(TicketWebsite.Views.Controls.PaginationMenu.View["ItemCountProperty"], Bridge.box(value, System.Int32));
                 }
             },
             ActiveNumber: {
                 get: function () {
-                    return System.Nullable.getValue(Bridge.cast(Bridge.unbox(this.GetValue$1(TicketWebsite.Views.ui_pagination_menu.ActiveNumberProperty)), System.Int32));
+                    return System.Nullable.getValue(Bridge.cast(Bridge.unbox(this.GetValue$1(TicketWebsite.Views.Controls.PaginationMenu.View.ActiveNumberProperty)), System.Int32));
                 },
                 set: function (value) {
-                    this.SetValue$1(TicketWebsite.Views.ui_pagination_menu.ActiveNumberProperty, Bridge.box(value, System.Int32));
+                    this.SetValue$1(TicketWebsite.Views.Controls.PaginationMenu.View.ActiveNumberProperty, Bridge.box(value, System.Int32));
                 }
             }
         },
@@ -241,14 +182,6 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
             }
         },
         methods: {
-            SetActive: function (index) {
-
-                this._numbers.forEach(function (x) {
-                    x.removeClass("active");
-                });
-                this._numbers.getItem(((index - 1) | 0)).addClass("active");
-
-            },
             CreateSubElements: function () {
                 //<div class='ui pagination menu' >
                 //   <a class='item'  >1</a> 
@@ -267,7 +200,12 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
                 }
 
                 System.Windows.DOM.a("next icon item").appendTo(this._root).append(System.Windows.DOM.i("right chevron icon"));
-
+            },
+            SetActive: function (index) {
+                this._numbers.forEach(function (x) {
+                    x.removeClass("active");
+                });
+                this._numbers.getItem(((index - 1) | 0)).addClass("active");
             }
         }
     });
@@ -382,6 +320,17 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
         }
     });
 
+    Bridge.define("TicketWebsite.Views.Pages.Shop.MainContent.View", {
+        inherits: [TicketWebsite.Common.TemplateComponent],
+        ctors: {
+            ctor: function () {
+                this.$initialize();
+                TicketWebsite.Common.TemplateComponent.ctor.call(this);
+                this.Template = TicketWebsite.Common.FileService.GetFileContent("Views/Pages/Shop/MainContent/View.xml");
+            }
+        }
+    });
+
     Bridge.define("TicketWebsite.Views.Pages.Shop.ProductsContainer.View", {
         inherits: [TicketWebsite.Common.TemplateComponent],
         props: {
@@ -440,6 +389,16 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
 
     Bridge.define("TicketWebsite.Views.Pages.Shop.View", {
         inherits: [TicketWebsite.Common.TemplateComponent],
+        statics: {
+            methods: {
+                RenderInBody: function (model) {
+                    var $t;
+                    var part = ($t = new TicketWebsite.Views.Pages.Shop.View(), $t.DataContext = model, $t);
+                    part.InitDOM();
+                    part.Root.appendTo(System.Windows.DOM.body.empty());
+                }
+            }
+        },
         ctors: {
             ctor: function () {
                 this.$initialize();

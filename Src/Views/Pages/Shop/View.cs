@@ -13,9 +13,14 @@ namespace TicketWebsite.Views.Pages.Shop
             Template = FileService.GetFileContent("Views/Pages/Shop/View.xml");
         }
 
-       
-        
-
-        
+        public static void RenderInBody(TicketWebsite.Models.Pages.Shop.Model model)
+        {
+            var part = new TicketWebsite.Views.Pages.Shop.View
+            {
+                DataContext = model
+            };
+            part.InitDOM();
+            part.Root.AppendTo(DOM.body.Empty());
+        }
     }
 }

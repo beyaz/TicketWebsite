@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="Common\Builder.cs" />
+    <Compile Include="Common\FileService.cs" />
     <Compile Include="Common\TemplateComponent.cs" />
     <Compile Include="Models\Pages\Shop\Model.cs" />
     <Compile Include="Models\SiteModel.cs" />
@@ -45,6 +46,7 @@
     <Compile Include="Models\Pages\Shop\ProductsContainer\Model.cs" />
     <Compile Include="Shared\Labels.cs" />
     <Compile Include="Shared\ModelBase.cs" />
+    <Compile Include="Views\Controls\PaginationMenu\View.cs" />
     <Compile Include="Views\Footer\View.cs" />
     <Compile Include="Views\Pages\Contact\View.cs" />
     <Compile Include="Views\Pages\Shop\HeaderPart\View.cs" />
@@ -52,10 +54,9 @@
     <Compile Include="Views\Pages\Shop\ProductsContainer\View.cs" />
     <Compile Include="Models\Pages\Shop\LeftMenu\Model.cs" />
     <Compile Include="Views\Pages\Shop\LeftMenu\View.cs" />
+    <Compile Include="Views\Pages\Shop\MainContent\View.cs" />
     <Compile Include="Views\Pages\Shop\View.cs" />
-    <Compile Include="Views\ShopPage.cs" />
     <Compile Include="Shared\Field.cs" />
-    <Compile Include="Views\ui_pagination_menu.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="bridge.json" />
@@ -108,9 +109,10 @@
     <Content Include="Views\Pages\Contact\View.xml" />
     <Content Include="Views\Pages\Shop\HeaderPart\View.xml" />
     <Content Include="Views\Pages\Shop\LeftMenu\View.xml" />
-    <Content Include="Views\Pages\Shop\View.xml" />
+    <Content Include="Views\Pages\Shop\MainContent\View.xml" />
     <Content Include="Views\Pages\Shop\ProductsContainerCardItem\View.xml" />
     <Content Include="img\Card.Product.jpg" />
+    <Content Include="Views\Pages\Shop\View.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

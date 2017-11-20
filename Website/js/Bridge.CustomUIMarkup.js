@@ -2292,6 +2292,11 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                     get: function () {
                         return $("head");
                     }
+                },
+                body: {
+                    get: function () {
+                        return $("body");
+                    }
                 }
             },
             methods: {
