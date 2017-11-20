@@ -8,9 +8,12 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
 
     Bridge.define("TicketWebsite.App", {
         main: function Main () {
-            $(TicketWebsite.App.RenderUIEditor);
+            $(Bridge.fn.cacheBind(TicketWebsite.App.Router, TicketWebsite.App.Router.NavigateToShopPage));
         },
         statics: {
+            fields: {
+                Router: null
+            },
             props: {
                 SiteModel: {
                     get: function () {
@@ -18,9 +21,9 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
                     }
                 }
             },
-            methods: {
-                RenderUIEditor: function () {
-                    TicketWebsite.Views.Pages.Shop.View.RenderInBody(TicketWebsite.App.SiteModel.ShopPage);
+            ctors: {
+                init: function () {
+                    this.Router = new TicketWebsite.Router();
                 }
             }
         }
@@ -94,6 +97,14 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
                 this.$initialize();
                 System.ComponentModel.Bag.ctor.call(this);
                 this.Labels = new TicketWebsite.Shared.Labels();
+            }
+        }
+    });
+
+    Bridge.define("TicketWebsite.Router", {
+        methods: {
+            NavigateToShopPage: function () {
+                TicketWebsite.Views.Pages.Shop.View.RenderInBody(TicketWebsite.App.SiteModel.ShopPage);
             }
         }
     });

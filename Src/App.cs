@@ -1,26 +1,22 @@
 ﻿using Bridge.jQuery2;
 using TicketWebsite.Models;
-using TicketWebsite.Views.Pages.Shop;
 
 namespace TicketWebsite
 {
     public class App
     {
+        #region Static Fields
+        static readonly Router Router = new Router();
+        #endregion
+
         #region Properties
-        static SiteModel SiteModel => new SiteModelFake();
+        internal static SiteModel SiteModel => new SiteModelFake();
         #endregion
 
         #region Public Methods
         public static void Main()
         {
-            jQuery.Ready(RenderUIEditor);
-        }
-        #endregion
-
-        #region Methods
-        static void RenderUIEditor()
-        {
-            View.RenderInBody(SiteModel.ShopPage);
+            jQuery.Ready(Router.NavigateToShopPage);
         }
         #endregion
     }

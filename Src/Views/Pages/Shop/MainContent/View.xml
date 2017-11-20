@@ -1,4 +1,4 @@
-﻿<div class='ui stackable grid container'>
+﻿<div class='ui stackable grid container' MarginTop="15" MarginBottom="15">
 
   <aside id='chap-primary-sidebar' class='four wide sidebar column'>
     <Views.Pages.Shop.LeftMenu.View />
