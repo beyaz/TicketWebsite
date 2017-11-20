@@ -32,9 +32,69 @@
     </div>
   </div>
   <div class="ui mainmenu container">
+    
     <nav id="primary_menu" class="ui large primary pointing menu chap-menu">
+      <style type="text/css">
+        #primary_menu.secondary {
+        border: 0;
+        background: none;
+        box-shadow: none;
+        }
+
+        #primary_menu.compact .right.item::before,#primary_menu.compact .right.menu > .item::before {
+        right: 0;
+        left: auto;
+        }
+
+        #primary_menu .toc.item {
+        display: none;
+        align-items: baseline;
+        align-self: center;
+        flex-wrap: nowrap;
+        }
+
+        #primary_menu .toc.item:before {
+        width: 0;
+        }
+
+        #primary_menu.secondary .toc.item {
+        font-size: 1.3em;
+        margin: 0;
+        }
+
+        @media only screen and (max-width: 991px) {
+        #primary_menu {
+        flex-direction:column;
+        justify-content: center;
+        }
+
+        #primary_menu .item {
+        display: none;
+        }
+
+        #primary_menu .toc.item {
+        display: inline-flex;
+        }
+
+        #primary_menu:not(.secondary) {
+        display: inline-flex;
+        margin: 0;
+        vertical-align: middle;
+        }
+        }
+
+        @media only screen and (max-width: 767px) {
+        #primary_menu.floated {
+        float:none;
+        }
+        }
+
+
+      </style>
+      
       <a class="toc item">
-        <i class="sidebar icon"></i> Menu
+        <i class="sidebar icon"/>
+        <span>Menu</span>
       </a>
       <a class="item">Home</a>
       <a  class="item active" on.click ="this.Notify(OnShopClicked)" >Shop</a>
@@ -50,6 +110,7 @@
 
       </div>
     </nav>
+    
   </div>
   <div class="ui center aligned massive vertical title segment container">
     <div class="ui large inverted header">Shop</div>

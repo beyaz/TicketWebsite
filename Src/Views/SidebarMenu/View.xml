@@ -1,0 +1,14 @@
+﻿<nav id="sidebar_menu" class="ui large vertical inverted sidebar menu chap-menu left">
+  <a class="ui inverted header item" href="https://chap.website/shop1/">Chap shop</a>
+  <a id="menu-item-14" href="https://chap.website/shop1" class="single item menu-item menu-item-type-custom menu-item-object-custom menu-item-14" role="menuitem">Home</a>
+  <a id="menu-item-15" href="https://chap.website/shop1/shop/" class="single item menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item menu-item-15 active" role="menuitem">Shop</a>
+  <a id="menu-item-20" href="https://chap.website/shop1/sale/" class="single item menu-item menu-item-type-post_type menu-item-object-page menu-item-20" role="menuitem">
+    Sale
+    <div class="ui tiny red floating label">Hot</div>
+  </a>
+  <div id="menu-item-190" href="https://chap.website/shop1/terms-and-conditions/" class="item " role="menuitem">Terms and conditions</div>
+  <a id="menu-item-181" href="https://chap.website/shop1/contact/" class="single item menu-item menu-item-type-post_type menu-item-object-page menu-item-181" role="menuitem">Contact</a>
+  <a id="menu-item-137" href="https://chap.website/shop1/order-tracking/" class="single item right icon menu-item menu-item-type-post_type menu-item-object-page menu-item-137" role="menuitem">
+    <i class="truck icon"></i>
+  </a>
+</nav>

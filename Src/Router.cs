@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows;
+using Bridge;
 using Bridge.jQuery2;
+using Retyped;
 using TicketWebsite.Common;
 using TicketWebsite.Views.Pages.Contact;
 
@@ -10,11 +12,36 @@ namespace TicketWebsite
     {
         jQuery MainContentContainer => DOM.ById("MainContentContainer");
 
+        jQuery SidebarMenu => DOM.ById("sidebar_menu");
+        jQuery pusher => jQuery.Select(".pusher");
+        
+
         #region Public Methods
+
+        void OpenSideBarMenu()
+        {
+
+            SidebarMenu.AddClass("uncover visible");
+            pusher.AddClass("dimmed");
+
+
+            //var a = DOM.ById("sidebar_menu").First().As<Retyped.semantic_ui.JQuery>();
+
+            //a.sidebar(new semantic_ui.SemanticUI.SidebarSettings
+            //{
+            //    context = semantic_ui.SemanticUI.Selector.Create("")
+            //});
+
+        }
         public void HandleNotifiaction(string eventName)
         {
             if (eventName == EventName.OnContactClicked.ToString())
             {
+                OpenSideBarMenu();
+                return;
+
+
+
                 MainContentContainer.Empty();
 
                 var view = new View();

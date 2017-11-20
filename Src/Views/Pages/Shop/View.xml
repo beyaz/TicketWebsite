@@ -1,12 +1,15 @@
-﻿<div  >
+﻿<div>
 
-  <Views.Pages.Shop.HeaderPart.View />
+  <Views.SidebarMenu.View />
+  
+  <div class="pusher">
 
-  <div id="MainContentContainer" PaddingTop="15" PaddingBottom="15">
-    <Views.Pages.Shop.MainContent.View   />
+    <Views.Pages.Shop.HeaderPart.View />
+
+    <div id="MainContentContainer" PaddingTop="15" PaddingBottom="15">
+      <Views.Pages.Shop.MainContent.View />
+    </div>
+    <Views.Footer.View />
+
   </div>
-  <Views.Footer.View />
-  
-  
 </div>
-
