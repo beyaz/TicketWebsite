@@ -1,4 +1,4 @@
-﻿<div class="ui two column stackable grid">
+﻿<div class="ui two column stackable grid container">
   <div class="column">
     <form method="get" class="ui padded segment form">
 

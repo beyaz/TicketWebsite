@@ -2,8 +2,9 @@
 
   <Views.Pages.Shop.HeaderPart.View />
 
-  <Views.Pages.Shop.MainContent.View />
-
+  <div id="MainContentContainer" PaddingTop="15" PaddingBottom="15">
+    <Views.Pages.Shop.MainContent.View   />
+  </div>
   <Views.Footer.View />
   
   

@@ -37,7 +37,7 @@
         <i class="sidebar icon"></i> Menu
       </a>
       <a class="item">Home</a>
-      <a  class="item active">Shop</a>
+      <a  class="item active" on.click ="this.Notify(OnShopClicked)" >Shop</a>
       <a  class="item">Sale </a>
       <a  class="item">Terms and conditions</a>
 

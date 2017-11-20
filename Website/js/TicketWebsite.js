@@ -49,6 +49,16 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
         }
     });
 
+    Bridge.define("TicketWebsite.Common.EventName", {
+        $kind: "enum",
+        statics: {
+            fields: {
+                OnContactClicked: 0,
+                OnShopClicked: 1
+            }
+        }
+    });
+
     Bridge.define("TicketWebsite.Common.FileService", {
         statics: {
             methods: {
@@ -66,6 +76,9 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
             Template: null
         },
         methods: {
+            Notify: function (eventName) {
+                TicketWebsite.App.Router.HandleNotifiaction(eventName);
+            },
             InitDOM: function () {
                 var $t;
                 var builder = ($t = new TicketWebsite.Common.Builder(), $t.Caller = this, $t.DataContext = this.DataContext, $t.XmlString = this.Template, $t);
@@ -102,7 +115,38 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
     });
 
     Bridge.define("TicketWebsite.Router", {
+        props: {
+            MainContentContainer: {
+                get: function () {
+                    return System.Windows.DOM.ById("MainContentContainer");
+                }
+            }
+        },
         methods: {
+            HandleNotifiaction: function (eventName) {
+                if (Bridge.referenceEquals(eventName, System.Enum.toString(TicketWebsite.Common.EventName, TicketWebsite.Common.EventName.OnContactClicked))) {
+                    this.MainContentContainer.empty();
+
+                    var view = new TicketWebsite.Views.Pages.Contact.View();
+                    view.InitDOM();
+                    view.Root.appendTo(this.MainContentContainer);
+
+                    return;
+                }
+
+                if (Bridge.referenceEquals(eventName, System.Enum.toString(TicketWebsite.Common.EventName, TicketWebsite.Common.EventName.OnShopClicked))) {
+                    this.MainContentContainer.empty();
+
+                    var view1 = new TicketWebsite.Views.Pages.Shop.MainContent.View();
+                    view1.DataContext = TicketWebsite.App.SiteModel.ShopPage;
+                    view1.InitDOM();
+                    view1.Root.appendTo(this.MainContentContainer);
+
+                    return;
+                }
+
+                throw new System.Exception(eventName);
+            },
             NavigateToShopPage: function () {
                 TicketWebsite.Views.Pages.Shop.View.RenderInBody(TicketWebsite.App.SiteModel.ShopPage);
             }

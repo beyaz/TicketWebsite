@@ -36,7 +36,7 @@
               <a href="https://chap.website/software/download/" class="single item menu-item menu-item-type-post_type menu-item-object-page menu-item-2008" role="menuitem">Download</a>
               <a href="https://chap.website/software/category/changelog/" class="single item menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2005" role="menuitem">Changelog</a>
               <a href="https://chap.website/software/faq/" class="single item menu-item menu-item-type-post_type menu-item-object-page menu-item-2072" role="menuitem">FAQ</a>
-              <a href="https://chap.website/software/contact/" class="single item menu-item menu-item-type-post_type menu-item-object-page menu-item-2073" role="menuitem">Contact</a>
+              <a class="single item menu-item menu-item-type-post_type menu-item-object-page menu-item-2073" on.click='this.Notify(OnContactClicked)'>Contact</a>
             </nav>
           </div>
         </section>

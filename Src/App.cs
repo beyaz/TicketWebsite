@@ -6,7 +6,7 @@ namespace TicketWebsite
     public class App
     {
         #region Static Fields
-        static readonly Router Router = new Router();
+        internal static readonly Router Router = new Router();
         #endregion
 
         #region Properties

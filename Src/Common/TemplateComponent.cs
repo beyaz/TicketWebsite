@@ -6,6 +6,11 @@ namespace TicketWebsite.Common
 {
     public class TemplateComponent : FrameworkElement
     {
+        public virtual void Notify(string eventName)
+        {
+            App.Router.HandleNotifiaction(eventName);
+        }
+
         #region Public Properties
         public string Template { get; set; }
         #endregion

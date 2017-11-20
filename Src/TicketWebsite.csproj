@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="Common\Builder.cs" />
+    <Compile Include="Common\EventName.cs" />
     <Compile Include="Common\FileService.cs" />
     <Compile Include="Common\TemplateComponent.cs" />
     <Compile Include="Models\Pages\Shop\Model.cs" />
