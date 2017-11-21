@@ -12,7 +12,8 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
         },
         statics: {
             fields: {
-                Router: null
+                Router: null,
+                Controller: null
             },
             props: {
                 SiteModel: {
@@ -24,7 +25,44 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
             ctors: {
                 init: function () {
                     this.Router = new TicketWebsite.Router();
+                    this.Controller = new TicketWebsite.AppController();
                 }
+            },
+            methods: {
+                HideSidebar: function () {
+                    $('#mySidebar').sidebar('hide');
+                }
+            }
+        }
+    });
+
+    Bridge.define("TicketWebsite.AppController", {
+        statics: {
+            props: {
+                MainContentContainer: {
+                    get: function () {
+                        return System.Windows.DOM.ById("MainContentContainer");
+                    }
+                }
+            }
+        },
+        methods: {
+            OnContactClicked: function () {
+                TicketWebsite.App.HideSidebar();
+
+                TicketWebsite.AppController.MainContentContainer.empty();
+
+                var view = new TicketWebsite.Views.Pages.Contact.View();
+                view.InitDOM();
+                view.Root.appendTo(TicketWebsite.AppController.MainContentContainer);
+            },
+            OnShopClicked: function () {
+                var $t;
+                TicketWebsite.AppController.MainContentContainer.empty();
+
+                var view = ($t = new TicketWebsite.Views.Pages.Shop.MainContent.View(), $t.DataContext = TicketWebsite.App.SiteModel.ShopPage, $t);
+                view.InitDOM();
+                view.Root.appendTo(TicketWebsite.AppController.MainContentContainer);
             }
         }
     });
@@ -45,16 +83,6 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
                 }
 
                 return Bridge.CustomUIMarkup.SemanticUI.Builder.prototype.CreateType.call(this, tag);
-            }
-        }
-    });
-
-    Bridge.define("TicketWebsite.Common.EventName", {
-        $kind: "enum",
-        statics: {
-            fields: {
-                OnContactClicked: 0,
-                OnShopClicked: 1
             }
         }
     });
@@ -115,61 +143,9 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
     });
 
     Bridge.define("TicketWebsite.Router", {
-        props: {
-            MainContentContainer: {
-                get: function () {
-                    return System.Windows.DOM.ById("MainContentContainer");
-                }
-            },
-            SidebarMenu: {
-                get: function () {
-                    return System.Windows.DOM.ById("sidebar_menu");
-                }
-            },
-            pusher: {
-                get: function () {
-                    return $(".pusher");
-                }
-            }
-        },
         methods: {
-            OpenSideBarMenu: function () {
-
-                this.SidebarMenu.addClass("uncover visible");
-                this.pusher.addClass("dimmed");
-
-
-                //var a = DOM.ById("sidebar_menu").First().As<Retyped.semantic_ui.JQuery>();
-
-                //a.sidebar(new semantic_ui.SemanticUI.SidebarSettings
-                //{
-                //    context = semantic_ui.SemanticUI.Selector.Create("")
-                //});
-
-            },
             HandleNotifiaction: function (eventName) {
-                if (Bridge.referenceEquals(eventName, System.Enum.toString(TicketWebsite.Common.EventName, TicketWebsite.Common.EventName.OnContactClicked))) {
-                    this.OpenSideBarMenu();
-                    return;
-
-
-
-
-
-                }
-
-                if (Bridge.referenceEquals(eventName, System.Enum.toString(TicketWebsite.Common.EventName, TicketWebsite.Common.EventName.OnShopClicked))) {
-                    this.MainContentContainer.empty();
-
-                    var view = new TicketWebsite.Views.Pages.Shop.MainContent.View();
-                    view.DataContext = TicketWebsite.App.SiteModel.ShopPage;
-                    view.InitDOM();
-                    view.Root.appendTo(this.MainContentContainer);
-
-                    return;
-                }
-
-                throw new System.Exception(eventName);
+                System.ComponentModel.ReflectionHelper.Invoke(TicketWebsite.App.Controller, eventName);
             },
             NavigateToShopPage: function () {
                 TicketWebsite.Views.Pages.Shop.View.RenderInBody(TicketWebsite.App.SiteModel.ShopPage);
@@ -382,7 +358,6 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
                 this.$initialize();
                 TicketWebsite.Common.TemplateComponent.ctor.call(this);
                 this.Template = TicketWebsite.Common.FileService.GetFileContent("Views/Pages/Shop/HeaderPart/View.xml");
-
             }
         }
     });

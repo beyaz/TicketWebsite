@@ -1,5 +1,5 @@
 ﻿<div class="ui vertical inverted footer segment" css.backgroundColor='#293b4c'>
-  <div class="ui center aligned container">
+  <div class="ui center aligned container" MarginTop="50">
     <div class="ui stackable inverted divided very relaxed equal width grid">
       <div class="row">
         <section class="footer-widget widget text-4 widget_text column">

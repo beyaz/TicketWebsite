@@ -8,7 +8,6 @@ namespace TicketWebsite.Views.Pages.Shop.HeaderPart
         public View()
         {
             Template = FileService.GetFileContent("Views/Pages/Shop/HeaderPart/View.xml");
-          
         }
         #endregion
     }

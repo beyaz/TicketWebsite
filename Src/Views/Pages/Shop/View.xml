@@ -1,7 +1,7 @@
-﻿<div>
+﻿<div id='mySidebarContainer' class='pushable'>
 
-  <Views.SidebarMenu.View />
-  
+  <Views.SidebarMenu.View id='mySidebar' />
+
   <div class="pusher">
 
     <Views.Pages.Shop.HeaderPart.View />
@@ -12,4 +12,12 @@
     <Views.Footer.View />
 
   </div>
+
+  <script>
+
+    $(function(){
+    $('#mySidebar').sidebar({context: $('#mySidebarContainer')}).sidebar('attach events', '#primary_menu');
+    });
+
+  </script>
 </div>

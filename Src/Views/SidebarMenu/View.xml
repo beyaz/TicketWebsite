@@ -7,7 +7,9 @@
     <div class="ui tiny red floating label">Hot</div>
   </a>
   <div id="menu-item-190" href="https://chap.website/shop1/terms-and-conditions/" class="item " role="menuitem">Terms and conditions</div>
-  <a id="menu-item-181" href="https://chap.website/shop1/contact/" class="single item menu-item menu-item-type-post_type menu-item-object-page menu-item-181" role="menuitem">Contact</a>
+  
+  <a class="item" on.click='this.Notify(OnContactClicked)' >Contact</a>
+  
   <a id="menu-item-137" href="https://chap.website/shop1/order-tracking/" class="single item right icon menu-item menu-item-type-post_type menu-item-object-page menu-item-137" role="menuitem">
     <i class="truck icon"></i>
   </a>

@@ -1,26 +1,28 @@
-﻿using System.ComponentModel;
-using System.Windows;
+﻿using System.Windows;
 using TicketWebsite.Common;
-using TicketWebsite.Models.Pages.Shop.ProductsContainer;
+using TicketWebsite.Models.Pages.Shop;
 
 namespace TicketWebsite.Views.Pages.Shop
 {
     class View : TemplateComponent
     {
-        
+        #region Constructors
         public View()
         {
             Template = FileService.GetFileContent("Views/Pages/Shop/View.xml");
         }
+        #endregion
 
-        public static void RenderInBody(TicketWebsite.Models.Pages.Shop.Model model)
+        #region Public Methods
+        public static void RenderInBody(Model model)
         {
-            var part = new TicketWebsite.Views.Pages.Shop.View
+            var part = new View
             {
                 DataContext = model
             };
             part.InitDOM();
             part.Root.AppendTo(DOM.body.Empty());
         }
+        #endregion
     }
 }

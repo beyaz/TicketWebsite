@@ -92,7 +92,7 @@
 
       </style>
       
-      <a class="toc item">
+      <a class="toc item" id="touchItemMenu" >
         <i class="sidebar icon"/>
         <span>Menu</span>
       </a>
