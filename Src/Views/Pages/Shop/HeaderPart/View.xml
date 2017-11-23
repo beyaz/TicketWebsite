@@ -113,7 +113,33 @@
     
   </div>
   <div class="ui center aligned massive vertical title segment container">
-    <div class="ui large inverted header">Shop</div>
+    
+
+    <swiper.slider Delay='5000'>
+      <div class="ui large inverted header">Burada 6-7 saniyede kayan yazılar olabilir</div>
+      <div class="ui large inverted header">Çok da kullanıcının gözünü tırmalamadan olması gerekiyor</div>
+      
+      <div>
+
+
+        <div class="ui large  inverted header"
+             FontSize='48'
+             FontWeight='400'
+             Color='rgba(255,255,255,0.9)' > veya bunu sadece anasayfaya koymalıyız detay sayfada kullanıcının dikkatini dağıtmasın
+             Maceranın yeni adresi burası!</div>
+
+        <div class='inverted' Color='rgba(255,255,255,0.9)'
+             css.line-height='1.4285em' FontSize='28'>
+
+          Tüm bilet alışverişlerinizi buradan yapabilirsiniz. Her ne aktivite isterseniz herşey burada vesaire vesaire...
+        </div>
+        
+        
+      </div>
+      
+      
+    </swiper.slider>
+    
   </div>
 </div>
 

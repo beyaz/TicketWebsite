@@ -99,6 +99,15 @@
 		}
 		,
 		{
+			"FullClassName": "WhiteStone.Tasks.CopyDirectory",
+			"Keys":
+			{	
+				"Source" : "$(Bridge.CustomUIMarkup)bin\\Lib\\Swiper\\",
+				"Target" : "$(SolutionDir)\\WebSite\\Lib\\Swiper\\"
+			}
+		}
+		,
+		{
 			"FullClassName": "WhiteStone.Tasks.CombineFilesIntoJsFile",
 			"Keys":
 			{	

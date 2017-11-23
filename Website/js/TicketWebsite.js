@@ -188,8 +188,8 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
             },
             ctors: {
                 init: function () {
-                    this["ItemCountProperty"] = System.Windows.DependencyProperty.Register$1("ItemCount", System.String, TicketWebsite.Views.Controls.PaginationMenu.View, new System.Windows.PropertyMetadata.$ctor1(TicketWebsite.Views.Controls.PaginationMenu.View.OnItemCountChanged));
-                    this.ActiveNumberProperty = System.Windows.DependencyProperty.Register$1("ActiveNumber", System.String, TicketWebsite.Views.Controls.PaginationMenu.View, new System.Windows.PropertyMetadata.$ctor1(TicketWebsite.Views.Controls.PaginationMenu.View.OnActiveNumberChanged));
+                    this["ItemCountProperty"] = System.Windows.DependencyProperty.Register$1("ItemCount", System.String, TicketWebsite.Views.Controls.PaginationMenu.View, new System.Windows.PropertyMetadata.$ctor2(TicketWebsite.Views.Controls.PaginationMenu.View.OnItemCountChanged));
+                    this.ActiveNumberProperty = System.Windows.DependencyProperty.Register$1("ActiveNumber", System.String, TicketWebsite.Views.Controls.PaginationMenu.View, new System.Windows.PropertyMetadata.$ctor2(TicketWebsite.Views.Controls.PaginationMenu.View.OnActiveNumberChanged));
                 }
             },
             methods: {
