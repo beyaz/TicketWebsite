@@ -33,6 +33,18 @@ namespace TicketWebsite
             view.InitDOM();
             view.Root.AppendTo(MainContentContainer);
         }
+
+        public void OnPaymentClicked()
+        {
+            MainContentContainer.Empty();
+
+            var view = new Views.Pages.PaymentPageBody.View
+            {
+                DataContext = App.SiteModel
+            };
+            view.InitDOM();
+            view.Root.AppendTo(MainContentContainer);
+        }
         #endregion
     }
 }

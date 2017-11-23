@@ -63,6 +63,14 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
                 var view = ($t = new TicketWebsite.Views.Pages.Shop.MainContent.View(), $t.DataContext = TicketWebsite.App.SiteModel.ShopPage, $t);
                 view.InitDOM();
                 view.Root.appendTo(TicketWebsite.AppController.MainContentContainer);
+            },
+            OnPaymentClicked: function () {
+                var $t;
+                TicketWebsite.AppController.MainContentContainer.empty();
+
+                var view = ($t = new TicketWebsite.Views.Pages.PaymentPageBody.View(), $t.DataContext = TicketWebsite.App.SiteModel, $t);
+                view.InitDOM();
+                view.Root.appendTo(TicketWebsite.AppController.MainContentContainer);
             }
         }
     });
@@ -347,6 +355,17 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
                 this.$initialize();
                 TicketWebsite.Common.TemplateComponent.ctor.call(this);
                 this.Template = TicketWebsite.Common.FileService.GetFileContent("Views/Pages/Contact/View.xml");
+            }
+        }
+    });
+
+    Bridge.define("TicketWebsite.Views.Pages.PaymentPageBody.View", {
+        inherits: [TicketWebsite.Common.TemplateComponent],
+        ctors: {
+            ctor: function () {
+                this.$initialize();
+                TicketWebsite.Common.TemplateComponent.ctor.call(this);
+                this.Template = TicketWebsite.Common.FileService.GetFileContent("Views/Pages/PaymentPageBody/View.xml");
             }
         }
     });

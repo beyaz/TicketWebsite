@@ -16,7 +16,7 @@
   <script>
 
     $(function(){
-    $('#mySidebar').sidebar({context: $('#mySidebarContainer')}).sidebar('attach events', '#primary_menu');
+    $('#mySidebar').sidebar({context: $('#mySidebarContainer')}).sidebar('attach events', '#touchItemMenu');
     });
 
   </script>

@@ -49,6 +49,7 @@
     <Compile Include="Shared\Labels.cs" />
     <Compile Include="Shared\ModelBase.cs" />
     <Compile Include="Views\Controls\PaginationMenu\View.cs" />
+    <Compile Include="Views\Pages\PaymentPageBody\View.cs" />
     <Compile Include="Views\SidebarMenu\View.cs" />
     <Compile Include="Views\Footer\View.cs" />
     <Compile Include="Views\Pages\Contact\View.cs" />
@@ -108,6 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="img\ShopPageHeaderBackground.jpg" />
+    <Content Include="Views\Pages\PaymentPageBody\View.xml" />
     <Content Include="Views\SidebarMenu\View.xml" />
     <Content Include="Views\Footer\View.xml" />
     <Content Include="Views\Pages\Contact\View.xml" />

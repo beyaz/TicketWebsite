@@ -21,8 +21,8 @@
         <div class="ui big basic brand segment">
           <a href="https://chap.website/shop1/" class="ui large inverted brand header">
             <div class="content">
-              Chap shop										<div class="sub header">
-                Just another Chap Demos site
+              Enjoy										<div class="sub header">
+                Eğlencenin yeni adresi
               </div>
             </div>
           </a>
@@ -100,6 +100,8 @@
       <a  class="item active" on.click ="this.Notify(OnShopClicked)" >Shop</a>
       <a  class="item">Sale </a>
       <a  class="item">Terms and conditions</a>
+      <a  class="item" on.click ="this.Notify(OnPaymentClicked)" >Ödeme Sayfası</a>
+      
 
 
       <div class="right menu">
