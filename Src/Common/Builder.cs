@@ -1,26 +1,40 @@
 ﻿using System;
 using System.Linq;
-using TicketWebsite.Views;
+using Bridge.CustomUIMarkup.UI;
 
 namespace TicketWebsite.Common
 {
-    public class Builder : Bridge.CustomUIMarkup.SemanticUI.Builder
+    class TypeFinder2 : TypeFinder
     {
-        protected override Type CreateType(string tag)
+        #region Public Methods
+        public override Type FindType(string tag)
         {
-
-            var fullName = "TicketWebsite." + tag;
-
-            var type = GetType().Assembly.GetTypes().FirstOrDefault(x => x.FullName.ToUpper() == fullName.ToUpper());
+            var type = base.FindType(tag);
 
             if (type != null)
             {
                 return type;
             }
 
-            return base.CreateType(tag);
-        }
+            type = SearchInThisAssembly(tag);
 
-       
+            if (type != null)
+            {
+                TagTypeMap[tag] = type;
+                return type;
+            }
+
+            return null;
+        }
+        #endregion
+
+        #region Methods
+        static Type SearchInThisAssembly(string tag)
+        {
+            var fullName = "TicketWebsite." + tag;
+
+            return typeof(TypeFinder2).Assembly.GetTypes().FirstOrDefault(x => x.FullName.ToUpper() == fullName.ToUpper());
+        }
+        #endregion
     }
 }

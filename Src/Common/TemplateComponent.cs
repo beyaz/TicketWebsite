@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows;
+using Bridge.CustomUIMarkup.UI;
 using TicketWebsite.Shared;
 
 namespace TicketWebsite.Common
@@ -20,6 +21,7 @@ namespace TicketWebsite.Common
         {
             var builder = new Builder
             {
+                TypeFinder = new TypeFinder2(),
                 Caller = this,
                 DataContext = DataContext,
                 XmlString = Template

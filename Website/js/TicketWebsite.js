@@ -75,26 +75,6 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
         }
     });
 
-    Bridge.define("TicketWebsite.Common.Builder", {
-        inherits: [Bridge.CustomUIMarkup.SemanticUI.Builder],
-        methods: {
-            CreateType: function (tag) {
-
-                var fullName = "TicketWebsite." + (tag || "");
-
-                var type = System.Linq.Enumerable.from(Bridge.Reflection.getAssemblyTypes(Bridge.Reflection.getTypeAssembly(Bridge.getType(this)))).firstOrDefault(function (x) {
-                        return Bridge.referenceEquals(Bridge.Reflection.getTypeFullName(x).toUpperCase(), fullName.toUpperCase());
-                    }, null);
-
-                if (type != null) {
-                    return type;
-                }
-
-                return Bridge.CustomUIMarkup.SemanticUI.Builder.prototype.CreateType.call(this, tag);
-            }
-        }
-    });
-
     Bridge.define("TicketWebsite.Common.FileService", {
         statics: {
             methods: {
@@ -117,8 +97,41 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
             },
             InitDOM: function () {
                 var $t;
-                var builder = ($t = new TicketWebsite.Common.Builder(), $t.Caller = this, $t.DataContext = this.DataContext, $t.XmlString = this.Template, $t);
+                var builder = ($t = new Bridge.CustomUIMarkup.UI.Builder(), $t.TypeFinder = new TicketWebsite.Common.TypeFinder2(), $t.Caller = this, $t.DataContext = this.DataContext, $t.XmlString = this.Template, $t);
                 this._root = builder.Build().Root;
+            }
+        }
+    });
+
+    Bridge.define("TicketWebsite.Common.TypeFinder2", {
+        inherits: [Bridge.CustomUIMarkup.UI.TypeFinder],
+        statics: {
+            methods: {
+                SearchInThisAssembly: function (tag) {
+                    var fullName = "TicketWebsite." + (tag || "");
+
+                    return System.Linq.Enumerable.from(Bridge.Reflection.getAssemblyTypes(Bridge.Reflection.getTypeAssembly(TicketWebsite.Common.TypeFinder2))).firstOrDefault(function (x) {
+                            return Bridge.referenceEquals(Bridge.Reflection.getTypeFullName(x).toUpperCase(), fullName.toUpperCase());
+                        }, null);
+                }
+            }
+        },
+        methods: {
+            FindType: function (tag) {
+                var type = Bridge.CustomUIMarkup.UI.TypeFinder.prototype.FindType.call(this, tag);
+
+                if (type != null) {
+                    return type;
+                }
+
+                type = TicketWebsite.Common.TypeFinder2.SearchInThisAssembly(tag);
+
+                if (type != null) {
+                    Bridge.CustomUIMarkup.UI.TypeFinder.TagTypeMap.set(tag, type);
+                    return type;
+                }
+
+                return null;
             }
         }
     });
