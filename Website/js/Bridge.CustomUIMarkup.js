@@ -606,12 +606,753 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
         $kind: "enum",
         statics: {
             fields: {
-                Add_to_Calendar: 0,
-                Map: 1,
-                Delete_Calendar: 2,
-                Marker: 3,
-                Setting: 4,
-                Check_Circle_Outline: 5
+                content: 0,
+                edit: 1,
+                bug: 2,
+                alternate_github: 3,
+                music: 4,
+                world: 5,
+                search: 6,
+                green_check: 7,
+                large_red_delete_link: 8,
+                disabled_warning_sign: 9,
+                add_to_calendar: 10,
+                address_book: 11,
+                address_book_outline: 12,
+                address_card: 13,
+                address_card_outline: 14,
+                alarm: 15,
+                alarm_mute: 16,
+                alarm_mute_outline: 17,
+                alarm_outline: 18,
+                at: 19,
+                browser: 20,
+                calendar: 21,
+                calendar_outline: 22,
+                checked_calendar: 23,
+                cloud: 24,
+                code: 25,
+                comment: 26,
+                comment_outline: 27,
+                comments: 28,
+                comments_outline: 29,
+                copyright: 30,
+                creative_commons: 31,
+                dashboard: 32,
+                delete_calendar: 33,
+                external: 34,
+                external_square: 35,
+                eyedropper: 36,
+                feed: 37,
+                find: 38,
+                hand_pointer: 39,
+                handshake: 40,
+                hashtag: 41,
+                heartbeat: 42,
+                history: 43,
+                home: 44,
+                hourglass_empty: 45,
+                hourglass_end: 46,
+                hourglass_full: 47,
+                hourglass_half: 48,
+                hourglass_start: 49,
+                id_badge: 50,
+                id_card: 51,
+                id_card_outline: 52,
+                idea: 53,
+                image: 54,
+                inbox: 55,
+                industry: 56,
+                lab: 57,
+                mail: 58,
+                mail_outline: 59,
+                mail_square: 60,
+                mouse_pointer: 61,
+                open_envelope: 62,
+                open_envelope_outline: 63,
+                options: 64,
+                paint_brush: 65,
+                payment: 66,
+                percent: 67,
+                podcast: 68,
+                privacy: 69,
+                protect: 70,
+                registered: 71,
+                remove_from_calendar: 72,
+                setting: 73,
+                settings: 74,
+                shop: 75,
+                shopping_bag: 76,
+                shopping_basket: 77,
+                sidebar: 78,
+                signal: 79,
+                sitemap: 80,
+                tag: 81,
+                tags: 82,
+                tasks: 83,
+                terminal: 84,
+                text_telephone: 85,
+                ticket: 86,
+                trademark: 87,
+                trophy: 88,
+                window_close: 89,
+                window_close_outline: 90,
+                window_maximize: 91,
+                window_minimize: 92,
+                window_restore: 93,
+                add_to_cart: 94,
+                add_user: 95,
+                adjust: 96,
+                archive: 97,
+                ban: 98,
+                bookmark: 99,
+                call: 100,
+                call_square: 101,
+                clone: 102,
+                cloud_download: 103,
+                cloud_upload: 104,
+                talk: 105,
+                talk_outline: 106,
+                compress: 107,
+                configure: 108,
+                download: 109,
+                erase: 110,
+                exchange: 111,
+                expand: 112,
+                external_share: 113,
+                filter: 114,
+                hide: 115,
+                in_cart: 116,
+                Lock: 117,
+                mail_forward: 118,
+                group_object: 119,
+                ungroup_object: 120,
+                pin: 121,
+                print: 122,
+                random: 123,
+                recycle: 124,
+                refresh: 125,
+                remove_bookmark: 126,
+                remove_user: 127,
+                repeat: 128,
+                reply_all: 129,
+                reply: 130,
+                retweet: 131,
+                send: 132,
+                send_outline: 133,
+                share_alternate: 134,
+                share_alternate_square: 135,
+                share: 136,
+                share_square: 137,
+                sign_in: 138,
+                sign_out: 139,
+                theme: 140,
+                translate: 141,
+                undo: 142,
+                unhide: 143,
+                unlock_alternate: 144,
+                unlock: 145,
+                upload: 146,
+                wait: 147,
+                wizard: 148,
+                write: 149,
+                write_square: 150,
+                object_group: 151,
+                object_ungroup: 152,
+                announcement: 153,
+                birthday: 154,
+                help_circle: 155,
+                help_circle_outline: 156,
+                help: 157,
+                info_circle: 158,
+                info: 159,
+                warning_circle: 160,
+                warning: 161,
+                warning_sign: 162,
+                child: 163,
+                doctor: 164,
+                handicap: 165,
+                spy: 166,
+                student: 167,
+                user: 168,
+                user_circle: 169,
+                user_circle_outline: 170,
+                user_outline: 171,
+                users: 172,
+                female: 173,
+                gay: 174,
+                genderless: 175,
+                heterosexual: 176,
+                intergender: 177,
+                lesbian: 178,
+                male: 179,
+                man: 180,
+                neuter: 181,
+                non_binary_transgender: 182,
+                other_gender_horizontal: 183,
+                other_gender: 184,
+                other_gender_vertical: 185,
+                transgender: 186,
+                woman: 187,
+                block_layout: 188,
+                crop: 189,
+                grid_layout: 190,
+                list_layout: 191,
+                maximize: 192,
+                resize_horizontal: 193,
+                resize_vertical: 194,
+                zoom: 195,
+                zoom_out: 196,
+                anchor: 197,
+                bar: 198,
+                bathtub: 199,
+                bomb: 200,
+                book: 201,
+                bullseye: 202,
+                calculator: 203,
+                cocktail: 204,
+                diamond: 205,
+                fax: 206,
+                fire_extinguisher: 207,
+                fire: 208,
+                flag_checkered: 209,
+                flag: 210,
+                flag_outline: 211,
+                gift: 212,
+                hand_lizard: 213,
+                hand_peace: 214,
+                hand_paper: 215,
+                hand_rock: 216,
+                hand_scissors: 217,
+                hand_spock: 218,
+                law: 219,
+                leaf: 220,
+                legal: 221,
+                lemon: 222,
+                life_ring: 223,
+                lightning: 224,
+                magnet: 225,
+                money: 226,
+                moon: 227,
+                plane: 228,
+                puzzle: 229,
+                road: 230,
+                rocket: 231,
+                shipping: 232,
+                shower: 233,
+                snowflake: 234,
+                soccer: 235,
+                sticky_note: 236,
+                sticky_note_outline: 237,
+                suitcase: 238,
+                sun: 239,
+                thermometer_empty: 240,
+                thermometer_quarter: 241,
+                thermometer_half: 242,
+                thermometer_three_quarters: 243,
+                thermometer_full: 244,
+                travel: 245,
+                treatment: 246,
+                tv: 247,
+                umbrella: 248,
+                asterisk: 249,
+                certificate: 250,
+                circle: 251,
+                circle_notched: 252,
+                circle_thin: 253,
+                crosshairs: 254,
+                cube: 255,
+                cubes: 256,
+                ellipsis_horizontal: 257,
+                ellipsis_vertical: 258,
+                quote_left: 259,
+                quote_right: 260,
+                spinner: 261,
+                square: 262,
+                square_outline: 263,
+                add_circle: 264,
+                add_square: 265,
+                check_circle: 266,
+                check_circle_outline: 267,
+                check_square: 268,
+                checkmark_box: 269,
+                checkmark: 270,
+                minus_circle: 271,
+                minus: 272,
+                minus_square: 273,
+                minus_square_outline: 274,
+                move: 275,
+                plus: 276,
+                plus_square_outline: 277,
+                radio: 278,
+                remove_circle: 279,
+                remove_circle_outline: 280,
+                remove: 281,
+                selected_radio: 282,
+                toggle_off: 283,
+                toggle_on: 284,
+                area_chart: 285,
+                bar_chart: 286,
+                camera_retro: 287,
+                newspaper: 288,
+                film: 289,
+                line_chart: 290,
+                photo: 291,
+                pie_chart: 292,
+                sound: 293,
+                angle_double_down: 294,
+                angle_double_left: 295,
+                angle_double_right: 296,
+                angle_double_up: 297,
+                angle_down: 298,
+                angle_left: 299,
+                angle_right: 300,
+                angle_up: 301,
+                arrow_circle_down: 302,
+                arrow_circle_left: 303,
+                arrow_circle_outline_down: 304,
+                arrow_circle_outline_left: 305,
+                arrow_circle_outline_right: 306,
+                arrow_circle_outline_up: 307,
+                arrow_circle_right: 308,
+                arrow_circle_up: 309,
+                arrow_down: 310,
+                arrow_left: 311,
+                arrow_right: 312,
+                arrow_up: 313,
+                caret_down: 314,
+                caret_left: 315,
+                caret_right: 316,
+                caret_up: 317,
+                chevron_circle_down: 318,
+                chevron_circle_left: 319,
+                chevron_circle_right: 320,
+                chevron_circle_up: 321,
+                chevron_down: 322,
+                chevron_left: 323,
+                chevron_right: 324,
+                chevron_up: 325,
+                long_arrow_down: 326,
+                long_arrow_left: 327,
+                long_arrow_right: 328,
+                long_arrow_up: 329,
+                pointing_down: 330,
+                pointing_left: 331,
+                pointing_right: 332,
+                pointing_up: 333,
+                toggle_down: 334,
+                toggle_left: 335,
+                toggle_right: 336,
+                toggle_up: 337,
+                mobile: 338,
+                tablet: 339,
+                battery_empty: 340,
+                battery_low: 341,
+                battery_medium: 342,
+                battery_high: 343,
+                battery_full: 344,
+                desktop: 345,
+                disk_outline: 346,
+                game: 347,
+                keyboard: 348,
+                laptop: 349,
+                plug: 350,
+                power: 351,
+                file_archive_outline: 352,
+                file_audio_outline: 353,
+                file_code_outline: 354,
+                file_excel_outline: 355,
+                file: 356,
+                file_image_outline: 357,
+                file_outline: 358,
+                file_pdf_outline: 359,
+                file_powerpoint_outline: 360,
+                file_text: 361,
+                file_text_outline: 362,
+                file_video_outline: 363,
+                file_word_outline: 364,
+                folder: 365,
+                folder_open: 366,
+                folder_open_outline: 367,
+                folder_outline: 368,
+                level_down: 369,
+                level_up: 370,
+                trash: 371,
+                trash_outline: 372,
+                barcode: 373,
+                bluetooth_alternative: 374,
+                bluetooth: 375,
+                css3: 376,
+                database: 377,
+                fork: 378,
+                html5: 379,
+                microchip: 380,
+                openid: 381,
+                qrcode: 382,
+                rss: 383,
+                rss_square: 384,
+                server: 385,
+                usb: 386,
+                empty_heart: 387,
+                empty_star: 388,
+                frown: 389,
+                heart: 390,
+                meh: 391,
+                smile: 392,
+                star_half_empty: 393,
+                star_half: 394,
+                star: 395,
+                thumbs_down: 396,
+                thumbs_outline_down: 397,
+                thumbs_outline_up: 398,
+                thumbs_up: 399,
+                backward: 400,
+                closed_captioning: 401,
+                eject: 402,
+                fast_backward: 403,
+                fast_forward: 404,
+                forward: 405,
+                mute: 406,
+                pause_circle: 407,
+                pause_circle_outline: 408,
+                pause: 409,
+                play: 410,
+                record: 411,
+                step_backward: 412,
+                step_forward: 413,
+                stop_circle: 414,
+                stop_circle_outline: 415,
+                stop: 416,
+                unmute: 417,
+                video_play: 418,
+                video_play_outline: 419,
+                volume_down: 420,
+                volume_off: 421,
+                volume_up: 422,
+                bicycle: 423,
+                building: 424,
+                building_outline: 425,
+                bus: 426,
+                car: 427,
+                coffee: 428,
+                compass: 429,
+                emergency: 430,
+                first_aid: 431,
+                food: 432,
+                h: 433,
+                hospital: 434,
+                hotel: 435,
+                location_arrow: 436,
+                map: 437,
+                map_outline: 438,
+                map_pin: 439,
+                map_signs: 440,
+                marker: 441,
+                military: 442,
+                motorcycle: 443,
+                paw: 444,
+                ship: 445,
+                space_shuttle: 446,
+                spoon: 447,
+                street_view: 448,
+                subway: 449,
+                taxi: 450,
+                train: 451,
+                tree: 452,
+                university: 453,
+                television: 454,
+                columns: 455,
+                sort_alphabet_ascending: 456,
+                sort_alphabet_descending: 457,
+                sort_ascending: 458,
+                sort_content_ascending: 459,
+                sort_content_descending: 460,
+                sort_descending: 461,
+                sort: 462,
+                sort_numeric_ascending: 463,
+                sort_numeric_descending: 464,
+                table: 465,
+                align_center: 466,
+                align_justify: 467,
+                align_left: 468,
+                align_right: 469,
+                attach: 470,
+                bold: 471,
+                copy: 472,
+                cut: 473,
+                font: 474,
+                header: 475,
+                indent: 476,
+                italic: 477,
+                linkify: 478,
+                list: 479,
+                ordered_list: 480,
+                outdent: 481,
+                paragraph: 482,
+                paste: 483,
+                save: 484,
+                strikethrough: 485,
+                subscript: 486,
+                superscript: 487,
+                text_cursor: 488,
+                text_height: 489,
+                text_width: 490,
+                underline: 491,
+                unlinkify: 492,
+                unordered_list: 493,
+                bitcoin: 494,
+                dollar: 495,
+                euro: 496,
+                lira: 497,
+                pound: 498,
+                ruble: 499,
+                rupee: 500,
+                shekel: 501,
+                won: 502,
+                yen: 503,
+                american_express: 504,
+                credit_card_alternative: 505,
+                diners_club: 506,
+                discover: 507,
+                google_wallet: 508,
+                japan_credit_bureau: 509,
+                mastercard: 510,
+                paypal_card: 511,
+                paypal: 512,
+                stripe: 513,
+                visa: 514,
+                wheelchair: 515,
+                asl_interpreting: 516,
+                assistive_listening_systems: 517,
+                audio_description: 518,
+                blind: 519,
+                braille: 520,
+                deafness: 521,
+                low_vision: 522,
+                sign_language: 523,
+                universal_access: 524,
+                volume_control_phone: 525,
+                adn: 526,
+                amazon: 527,
+                android: 528,
+                angellist: 529,
+                apple: 530,
+                bandcamp: 531,
+                behance: 532,
+                behance_square: 533,
+                bitbucket: 534,
+                bitbucket_square: 535,
+                black_tie: 536,
+                buysellads: 537,
+                chrome: 538,
+                codepen: 539,
+                codiepie: 540,
+                connectdevelop: 541,
+                contao: 542,
+                dashcube: 543,
+                delicious: 544,
+                deviantart: 545,
+                digg: 546,
+                dribble: 547,
+                dropbox: 548,
+                drupal: 549,
+                eercast: 550,
+                empire: 551,
+                envira_gallery: 552,
+                etsy: 553,
+                expeditedssl: 554,
+                facebook_f: 555,
+                facebook: 556,
+                facebook_square: 557,
+                firefox: 558,
+                first_order: 559,
+                flickr: 560,
+                font_awesome: 561,
+                fonticons: 562,
+                fort_awesome: 563,
+                forumbee: 564,
+                foursquare: 565,
+                free_code_camp: 566,
+                gg_circle: 567,
+                gg: 568,
+                git: 569,
+                git_square: 570,
+                github_alternate: 571,
+                github: 572,
+                github_square: 573,
+                gitlab: 574,
+                gittip: 575,
+                glide_g: 576,
+                glide: 577,
+                google: 578,
+                google_plus_circle: 579,
+                google_plus: 580,
+                google_plus_square: 581,
+                grav: 582,
+                hacker_news: 583,
+                houzz: 584,
+                imdb: 585,
+                instagram: 586,
+                internet_explorer: 587,
+                ioxhost: 588,
+                joomla: 589,
+                jsfiddle: 590,
+                lastfm: 591,
+                lastfm_square: 592,
+                leanpub: 593,
+                linkedin: 594,
+                linkedin_square: 595,
+                linode: 596,
+                linux: 597,
+                maxcdn: 598,
+                meanpath: 599,
+                medium: 600,
+                meetup: 601,
+                microsoft_edge: 602,
+                mixcloud: 603,
+                modx: 604,
+                odnoklassniki: 605,
+                odnoklassniki_square: 606,
+                opencart: 607,
+                opera: 608,
+                optinmonster: 609,
+                pagelines: 610,
+                pied_piper_alternate: 611,
+                pied_piper_hat: 612,
+                pied_piper: 613,
+                pinterest: 614,
+                pinterest_square: 615,
+                pocket: 616,
+                product_hunt: 617,
+                qq: 618,
+                quora: 619,
+                ravelry: 620,
+                rebel: 621,
+                reddit_alien: 622,
+                reddit: 623,
+                reddit_square: 624,
+                renren: 625,
+                safari: 626,
+                scribd: 627,
+                sellsy: 628,
+                shirtsinbulk: 629,
+                simplybuilt: 630,
+                skyatlas: 631,
+                skype: 632,
+                slack: 633,
+                slideshare: 634,
+                snapchat_ghost: 635,
+                snapchat: 636,
+                snapchat_square: 637,
+                soundcloud: 638,
+                spotify: 639,
+                stack_exchange: 640,
+                stack_overflow: 641,
+                steam: 642,
+                steam_square: 643,
+                stumbleupon_circle: 644,
+                stumbleupon: 645,
+                superpowers: 646,
+                telegram: 647,
+                tencent_weibo: 648,
+                themeisle: 649,
+                trello: 650,
+                tripadvisor: 651,
+                tumblr: 652,
+                tumblr_square: 653,
+                twitch: 654,
+                twitter: 655,
+                twitter_square: 656,
+                viacoin: 657,
+                viadeo: 658,
+                viadeo_square: 659,
+                vimeo: 660,
+                vimeo_square: 661,
+                vine: 662,
+                vk: 663,
+                wechat: 664,
+                weibo: 665,
+                whatsapp: 666,
+                wikipedia: 667,
+                windows: 668,
+                wordpress: 669,
+                wpbeginner: 670,
+                wpexplorer: 671,
+                wpforms: 672,
+                xing: 673,
+                xing_square: 674,
+                y_combinator: 675,
+                yahoo: 676,
+                yelp: 677,
+                yoast: 678,
+                youtube: 679,
+                youtube_play: 680,
+                youtube_square: 681,
+                dribbble: 682,
+                disabled_users: 683,
+                spinner_loading: 684,
+                notched_circle_loading: 685,
+                asterisk_loading: 686,
+                fitted_help: 687,
+                mini_home: 688,
+                tiny_home: 689,
+                small_home: 690,
+                large_home: 691,
+                big_home: 692,
+                huge_home: 693,
+                massive_home: 694,
+                close_link: 695,
+                help_link: 696,
+                horizontally_flipped_cloud: 697,
+                vertically_flipped_cloud: 698,
+                clockwise_rotated_cloud: 699,
+                counterclockwise_rotated_cloud: 700,
+                circular_users: 701,
+                circular_teal_users: 702,
+                circular_inverted_users: 703,
+                circular_inverted_teal_users: 704,
+                bordered_users: 705,
+                bordered_teal_users: 706,
+                bordered_inverted_black_users: 707,
+                bordered_inverted_teal_users: 708,
+                red_users: 709,
+                orange_users: 710,
+                yellow_users: 711,
+                olive_users: 712,
+                green_users: 713,
+                teal_users: 714,
+                blue_users: 715,
+                violet_users: 716,
+                purple_users: 717,
+                pink_users: 718,
+                brown_users: 719,
+                grey_users: 720,
+                black_users: 721,
+                inverted_users: 722,
+                inverted_red_users: 723,
+                inverted_orange_users: 724,
+                inverted_yellow_users: 725,
+                inverted_olive_users: 726,
+                inverted_green_users: 727,
+                inverted_teal_users: 728,
+                inverted_blue_users: 729,
+                inverted_violet_users: 730,
+                inverted_purple_users: 731,
+                inverted_pink_users: 732,
+                inverted_brown_users: 733,
+                inverted_grey_users: 734,
+                big_thin_circle: 735,
+                big_red_dont: 736,
+                black_user: 737,
+                big_loading_sun: 738,
+                corner_add: 739,
+                top_left_corner_add: 740,
+                top_right_corner_add: 741,
+                bottom_left_corner_add: 742,
+                bottom_right_corner_add: 743,
+                inverted_corner_add: 744,
+                close: 745,
+                question: 746
             }
         }
     });
@@ -671,8 +1412,263 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
         }
     });
 
+    Bridge.define("Bridge.CustomUIMarkup.Tokenizers.BindingExpressionTokenDefinitions", {
+        statics: {
+            props: {
+                Value: {
+                    get: function () {
+                        return function (_o1) {
+                                _o1.add(new Bridge.CustomUIMarkup.Tokenizers.TokenDefinition(Bridge.CustomUIMarkup.Tokenizers.TokenType.Binding, "binding", 1));
+                                _o1.add(new Bridge.CustomUIMarkup.Tokenizers.TokenDefinition(Bridge.CustomUIMarkup.Tokenizers.TokenType.Mode, "mode", 1));
+                                _o1.add(new Bridge.CustomUIMarkup.Tokenizers.TokenDefinition(Bridge.CustomUIMarkup.Tokenizers.TokenType.TwoWay, "twoway", 1));
+                                _o1.add(new Bridge.CustomUIMarkup.Tokenizers.TokenDefinition(Bridge.CustomUIMarkup.Tokenizers.TokenType.LeftBracket, "\\{", 1));
+                                _o1.add(new Bridge.CustomUIMarkup.Tokenizers.TokenDefinition(Bridge.CustomUIMarkup.Tokenizers.TokenType.RightBracket, "\\}", 1));
+                                _o1.add(new Bridge.CustomUIMarkup.Tokenizers.TokenDefinition(Bridge.CustomUIMarkup.Tokenizers.TokenType.OpenParenthesis, "\\(", 1));
+                                _o1.add(new Bridge.CustomUIMarkup.Tokenizers.TokenDefinition(Bridge.CustomUIMarkup.Tokenizers.TokenType.CloseParenthesis, "\\)", 1));
+                                _o1.add(new Bridge.CustomUIMarkup.Tokenizers.TokenDefinition(Bridge.CustomUIMarkup.Tokenizers.TokenType.Equals, "=", 1));
+                                _o1.add(new Bridge.CustomUIMarkup.Tokenizers.TokenDefinition(Bridge.CustomUIMarkup.Tokenizers.TokenType.This, "this", 1));
+                                _o1.add(new Bridge.CustomUIMarkup.Tokenizers.TokenDefinition(Bridge.CustomUIMarkup.Tokenizers.TokenType.NotEquals, "!=", 1));
+                                _o1.add(new Bridge.CustomUIMarkup.Tokenizers.TokenDefinition(Bridge.CustomUIMarkup.Tokenizers.TokenType["Identifier"], "[a-zA-Z_$][a-zA-Z0-9_$]*", 1));
+                                _o1.add(new Bridge.CustomUIMarkup.Tokenizers.TokenDefinition(Bridge.CustomUIMarkup.Tokenizers.TokenType.StringValue, "'([^']*)'", 1));
+                                _o1.add(new Bridge.CustomUIMarkup.Tokenizers.TokenDefinition(Bridge.CustomUIMarkup.Tokenizers.TokenType.NumberValue, "\\d+", 1));
+                                _o1.add(new Bridge.CustomUIMarkup.Tokenizers.TokenDefinition(Bridge.CustomUIMarkup.Tokenizers.TokenType.Comma, ",", 1));
+                                _o1.add(new Bridge.CustomUIMarkup.Tokenizers.TokenDefinition(Bridge.CustomUIMarkup.Tokenizers.TokenType.Dot, ".", 1));
+                                return _o1;
+                            }(new (System.Collections.Generic.List$1(Bridge.CustomUIMarkup.Tokenizers.TokenDefinition)).ctor());
+                    }
+                }
+            }
+        }
+    });
+
+    Bridge.define("Bridge.CustomUIMarkup.Tokenizers.InvocationExpressionTokenDefinitions", {
+        statics: {
+            props: {
+                Value: {
+                    get: function () {
+                        return function (_o1) {
+                                _o1.add(new Bridge.CustomUIMarkup.Tokenizers.TokenDefinition(Bridge.CustomUIMarkup.Tokenizers.TokenType.Binding, "this", 1));
+                                _o1.add(new Bridge.CustomUIMarkup.Tokenizers.TokenDefinition(Bridge.CustomUIMarkup.Tokenizers.TokenType.OpenParenthesis, "\\(", 1));
+                                _o1.add(new Bridge.CustomUIMarkup.Tokenizers.TokenDefinition(Bridge.CustomUIMarkup.Tokenizers.TokenType.CloseParenthesis, "\\)", 1));
+                                _o1.add(new Bridge.CustomUIMarkup.Tokenizers.TokenDefinition(Bridge.CustomUIMarkup.Tokenizers.TokenType["Identifier"], "[a-zA-Z_$][a-zA-Z0-9_$]*", 1));
+                                _o1.add(new Bridge.CustomUIMarkup.Tokenizers.TokenDefinition(Bridge.CustomUIMarkup.Tokenizers.TokenType.Comma, ",", 1));
+                                _o1.add(new Bridge.CustomUIMarkup.Tokenizers.TokenDefinition(Bridge.CustomUIMarkup.Tokenizers.TokenType.Dot, ".", 1));
+                                return _o1;
+                            }(new (System.Collections.Generic.List$1(Bridge.CustomUIMarkup.Tokenizers.TokenDefinition)).ctor());
+                    }
+                }
+            }
+        }
+    });
+
+    Bridge.define("Bridge.CustomUIMarkup.Tokenizers.Token", {
+        fields: {
+            TokenType: 0,
+            Value: null
+        },
+        ctors: {
+            ctor: function (tokenType) {
+                this.$initialize();
+                this.TokenType = tokenType;
+                this.Value = "";
+            },
+            $ctor1: function (tokenType, value) {
+                this.$initialize();
+                this.TokenType = tokenType;
+                this.Value = value;
+            }
+        },
+        methods: {
+            Clone: function () {
+                return new Bridge.CustomUIMarkup.Tokenizers.Token.$ctor1(this.TokenType, this.Value);
+            },
+            toString: function () {
+                return "{" + System.Enum.toString(Bridge.CustomUIMarkup.Tokenizers.TokenType, this.TokenType) + ":" + (this.Value || "") + "}";
+            }
+        }
+    });
+
+    Bridge.define("Bridge.CustomUIMarkup.Tokenizers.TokenDefinition", {
+        fields: {
+            _precedence: 0,
+            _regex: null,
+            _tokenType: 0
+        },
+        ctors: {
+            ctor: function (tokenType, regexPattern, precedence) {
+                this.$initialize();
+                this._regex = new System.Text.RegularExpressions.Regex.ctor(regexPattern, 1);
+                this._tokenType = tokenType;
+                this._precedence = precedence;
+            }
+        },
+        methods: {
+            FindMatches: function (inputString) {
+                return new (Bridge.GeneratorEnumerable$1(Bridge.CustomUIMarkup.Tokenizers.TokenMatch))(Bridge.fn.bind(this, function (inputString) {
+                    var $step = 0,
+                        $jumpFromFinally,
+                        $returnValue,
+                        matches,
+                        len,
+                        i,
+                        match,
+                        $t,
+                        $async_e;
+
+                    var $enumerator = new (Bridge.GeneratorEnumerator$1(Bridge.CustomUIMarkup.Tokenizers.TokenMatch))(Bridge.fn.bind(this, function () {
+                        try {
+                            for (;;) {
+                                switch ($step) {
+                                    case 0: {
+                                        matches = this._regex.matches(inputString);
+                                            len = matches.getCount();
+                                            i = 0;
+                                            $step = 1;
+                                            continue;
+                                    }
+                                    case 1: {
+                                        if ( i < len ) {
+                                                $step = 2;
+                                                continue;
+                                            }
+                                        $step = 5;
+                                        continue;
+                                    }
+                                    case 2: {
+                                        match = matches.get(i);
+
+                                            $enumerator.current = ($t = new Bridge.CustomUIMarkup.Tokenizers.TokenMatch(), $t["StartIndex"] = match.getIndex(), $t["EndIndex"] = ((match.getIndex() + match.getLength()) | 0), $t.TokenType = this._tokenType, $t.Value = match.getValue(), $t.Precedence = this._precedence, $t);
+                                            $step = 3;
+                                            return true;
+                                    }
+                                    case 3: {
+                                        $step = 4;
+                                        continue;
+                                    }
+                                    case 4: {
+                                        i = (i + 1) | 0;
+                                        $step = 1;
+                                        continue;
+                                    }
+                                    case 5: {
+
+                                    }
+                                    default: {
+                                        return false;
+                                    }
+                                }
+                            }
+                        } catch($async_e1) {
+                            $async_e = System.Exception.create($async_e1);
+                            throw $async_e;
+                        }
+                    }));
+                    return $enumerator;
+                }, arguments));
+            }
+        }
+    });
+
+    Bridge.define("Bridge.CustomUIMarkup.Tokenizers.Tokenizer", {
+        fields: {
+            TokenDefinitions: null
+        },
+        methods: {
+            Tokenize: function (data) {
+                var $t;
+                var tokenDefinitions = this.TokenDefinitions;
+
+                if (tokenDefinitions == null) {
+                    throw new System.ArgumentException("TokenDefinitions");
+                }
+
+                var tokenMatches = new (System.Collections.Generic.List$1(Bridge.CustomUIMarkup.Tokenizers.TokenMatch)).ctor();
+
+                $t = Bridge.getEnumerator(tokenDefinitions, Bridge.CustomUIMarkup.Tokenizers.TokenDefinition);
+                try {
+                    while ($t.moveNext()) {
+                        var tokenDefinition = $t.Current;
+                        tokenMatches.addRange(System.Linq.Enumerable.from(tokenDefinition.FindMatches(data)).toList(Bridge.CustomUIMarkup.Tokenizers.TokenMatch));
+                    }
+                } finally {
+                    if (Bridge.is($t, System.IDisposable)) {
+                        $t.System$IDisposable$dispose();
+                    }
+                }
+                var items = new (System.Collections.Generic.List$1(Bridge.CustomUIMarkup.Tokenizers.Token)).ctor();
+
+                var groupedByIndex = System.Linq.Enumerable.from(tokenMatches).groupBy(function (x) {
+                        return x["StartIndex"];
+                    }).orderBy(function (x) {
+                    return x.key();
+                }).toList(System.Linq.Grouping$2);
+
+                var lastMatch = null;
+
+                var len = groupedByIndex.Count;
+                for (var i = 0; i < len; i = (i + 1) | 0) {
+                    var bestMatch = groupedByIndex.getItem(i).orderBy(function (x) {
+                        return x.Precedence;
+                    }).first();
+                    if (lastMatch != null && bestMatch["StartIndex"] < lastMatch["EndIndex"]) {
+                        continue;
+                    }
+
+                    items.add(new Bridge.CustomUIMarkup.Tokenizers.Token.$ctor1(bestMatch.TokenType, bestMatch.Value));
+
+                    lastMatch = bestMatch;
+                }
+
+                return items;
+            }
+        }
+    });
+
+    Bridge.define("Bridge.CustomUIMarkup.Tokenizers.TokenMatch", {
+        fields: {
+            "EndIndex": 0,
+            Precedence: 0,
+            "StartIndex": 0,
+            TokenType: 0,
+            Value: null
+        }
+    });
+
+    Bridge.define("Bridge.CustomUIMarkup.Tokenizers.TokenType", {
+        $kind: "enum",
+        statics: {
+            fields: {
+                Binding: 0,
+                Mode: 1,
+                TwoWay: 2,
+                LeftBracket: 3,
+                RightBracket: 4,
+                OpenParenthesis: 5,
+                CloseParenthesis: 6,
+                "Identifier": 7,
+                Comma: 8,
+                Dot: 9,
+                Equals: 10,
+                This: 11,
+                NotEquals: 12,
+                StringValue: 13,
+                SequenceTerminator: 14,
+                NumberValue: 15
+            }
+        }
+    });
+
     Bridge.define("Bridge.CustomUIMarkup.UI.Builder", {
         statics: {
+            fields: {
+                "InvocationExpressionTokenizer": null
+            },
+            ctors: {
+                init: function () {
+                    var $t;
+                    this["InvocationExpressionTokenizer"] = ($t = new Bridge.CustomUIMarkup.Tokenizers.Tokenizer(), $t.TokenDefinitions = Bridge.CustomUIMarkup.Tokenizers.InvocationExpressionTokenDefinitions.Value, $t);
+                }
+            },
             methods: {
                 GetRootNode: function (xmlString) {
                     var $t;
@@ -697,8 +1693,8 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
             DataContext: null,
             "IsDesignMode": false,
             Result: null,
-            XmlDocument: null,
-            TypeFinder: null
+            TypeFinder: null,
+            XmlDocument: null
         },
         props: {
             LineNumberToControlMap: {
@@ -754,21 +1750,23 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
 
                 instance.InvokeAfterInitDOM();
 
-                $t = Bridge.getEnumerator(xmlNode.attributes);
+                var attributes = xmlNode.attributes;
+
+                var len = attributes.length;
+                for (var i = 0; i < len; i = (i + 1) | 0) {
+                    var nodeAttribute = attributes[i];
+
+                    if (Bridge.referenceEquals(nodeAttribute.nodeName, "DataContext")) {
+                        continue;
+                    }
+
+                    this.ProcessAttribute(instance, nodeAttribute.nodeName, nodeAttribute.nodeValue);
+                }
+
+                $t = Bridge.getEnumerator(xmlNode.childNodes);
                 try {
                     while ($t.moveNext()) {
-                        var nodeAttribute = $t.Current;
-                        this.ProcessAttribute(instance, nodeAttribute.nodeName, nodeAttribute.nodeValue);
-                    }
-                } finally {
-                    if (Bridge.is($t, System.IDisposable)) {
-                        $t.System$IDisposable$dispose();
-                    }
-                }
-                $t1 = Bridge.getEnumerator(xmlNode.childNodes);
-                try {
-                    while ($t1.moveNext()) {
-                        var childNode = $t1.Current;
+                        var childNode = $t.Current;
                         if (childNode.nodeType === 8) {
                             continue;
                         }
@@ -783,7 +1781,11 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                             // maybe <div> {LastName} </div>
                             var bindingInfo = System.Windows.Data.BindingInfo.TryParseExpression(html);
                             if (bindingInfo != null) {
-                                bindingInfo.Source = this.DataContext;
+                                bindingInfo.BindingMode = System.Windows.Data.BindingMode.OneWay;
+
+                                bindingInfo.Source = instance;
+                                bindingInfo.SourcePath = System.Windows.PropertyPath.op_Implicit("DataContext." + (bindingInfo.SourcePath.Path || ""));
+
                                 bindingInfo.Target = instance;
                                 bindingInfo.TargetPath = System.Windows.PropertyPath.op_Implicit("InnerHTML");
 
@@ -797,11 +1799,28 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
 
                         var subControl = this.BuildNode(childNode);
 
+                        var subControlDataContextAttribute = childNode.attributes.DataContext;
+                        if (subControlDataContextAttribute == null) {
+                            ($t1 = new System.Windows.Data.BindingInfo(), $t1.BindingMode = System.Windows.Data.BindingMode.OneWay, $t1.Source = instance, $t1.SourcePath = System.Windows.PropertyPath.op_Implicit("DataContext"), $t1.Target = subControl, $t1.TargetPath = System.Windows.PropertyPath.op_Implicit("DataContext"), $t1).Connect();
+                        } else {
+                            var bi = System.Windows.Data.BindingInfo.TryParseExpression(subControlDataContextAttribute.nodeValue);
+                            if (bi == null) {
+                                throw new System.InvalidOperationException("InvalidBindingExpression:" + (subControlDataContextAttribute.nodeValue || ""));
+                            }
+                            bi.BindingMode = System.Windows.Data.BindingMode.OneWay;
+                            bi.Source = instance;
+                            bi.SourcePath = System.Windows.PropertyPath.op_Implicit("DataContext." + (bi.SourcePath.Path || ""));
+                            bi.Target = subControl;
+                            bi.TargetPath = System.Windows.PropertyPath.op_Implicit("DataContext");
+                            bi.Connect();
+                        }
+
+
                         instance.Add(subControl);
                     }
                 } finally {
-                    if (Bridge.is($t1, System.IDisposable)) {
-                        $t1.System$IDisposable$dispose();
+                    if (Bridge.is($t, System.IDisposable)) {
+                        $t.System$IDisposable$dispose();
                     }
                 }
                 return instance;
@@ -853,7 +1872,11 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                         }
                     }
 
-                    bi.Source = this.DataContext;
+
+                    bi.SourcePath = new System.Windows.PropertyPath("DataContext." + (bi.SourcePath.Path || ""));
+                    bi.Source = instance;
+
+                    // bi.Source = DataContext;
                     bi.Target = instance;
                     bi.TargetPath = System.Windows.PropertyPath.op_Implicit(name);
 
@@ -888,19 +1911,24 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
 
                     // support this format: this.Notify(OnContactClicked)
                     if (System.String.startsWith(value, "this.")) {
-                        var invocationInfo = Bridge.CustomUIMarkup.UI.Builder.InvocationInfo.ParseFromString(value);
+                        var tokens = Bridge.CustomUIMarkup.UI.Builder["InvocationExpressionTokenizer"].Tokenize(value);
 
-                        if (System.Nullable.gt((invocationInfo.Parameters != null ? invocationInfo.Parameters.Count : null), 1)) {
-                            throw new System.ArgumentException(value);
-                        }
 
-                        var mi = Bridge.Reflection.getMembers(Bridge.getType(this.Caller), 8, 284, invocationInfo.MethodName);
+                        var i = 0;
+                        i = (i + 1) | 0; // skip this
+                        i = (i + 1) | 0; // skip .
+                        var methodName = System.Array.getItem(tokens, i, Bridge.CustomUIMarkup.Tokenizers.Token).Value;
+                        i = (i + 1) | 0; // skip methodName
+                        i = (i + 1) | 0; // skip (
+                        var firstParameter = System.Array.getItem(tokens, i, Bridge.CustomUIMarkup.Tokenizers.Token).Value;
+
+
+                        var mi = Bridge.Reflection.getMembers(Bridge.getType(this.Caller), 8, 284, methodName);
 
                         instance.On(eventName, Bridge.fn.bind(this, function () {
-                            Bridge.Reflection.midel(mi, Bridge.unbox(this.Caller))(System.Linq.Enumerable.from(invocationInfo.Parameters).first());
+                            Bridge.Reflection.midel(mi, Bridge.unbox(this.Caller))(firstParameter);
                         }));
                         return;
-
                     }
 
                     var methodInfo1 = Bridge.Reflection.getMembers(Bridge.getType(this.Caller), 8, 284, value);
@@ -919,11 +1947,11 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
 
                 // css.Pseudo.backgroundImage
                 if (System.String.startsWith(nameUpperCase, "CSS.PSEUDO.")) {
-                    var pseudoAttributeName = name.substr(11);
-                    System.Windows.DOM.head.append("<style>#" + (instance["Id"] || "") + "::" + (pseudoAttributeName || "") + "{ content:'bar' }</style>");
-                    return;
+                    throw new System.ArgumentException();
+                    // var pseudoAttributeName = name.Substring(11);
+                    // DOM.head.Append("<style>#" + instance.Id + "::" + pseudoAttributeName + "{ content:'bar' }</style>");
+                    // return;
                 }
-
 
                 if (Bridge.referenceEquals(name, "x.Name")) {
                     var fi = Bridge.Reflection.getMembers(Bridge.getType(this.Caller), 4, 284, value);
@@ -934,75 +1962,6 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
 
                 instance._root.attr(name, value);
             }
-        }
-    });
-
-    Bridge.define("Bridge.CustomUIMarkup.UI.Builder.InvocationInfo", {
-        statics: {
-            methods: {
-                /**
-                 * Parses from string.
-                 <p>Example: this.Notify(OnContactClicked)</p>
-                 *
-                 * @static
-                 * @public
-                 * @this Bridge.CustomUIMarkup.UI.Builder.InvocationInfo
-                 * @memberof Bridge.CustomUIMarkup.UI.Builder.InvocationInfo
-                 * @param   {string}                                             value
-                 * @return  {Bridge.CustomUIMarkup.UI.Builder.InvocationInfo}
-                 */
-                ParseFromString: function (value) {
-                    var $t;
-
-                    var invocationInfo = new Bridge.CustomUIMarkup.UI.Builder.InvocationInfo();
-
-                    var arr = System.String.split(value, [46, 40, 41].map(function(i) {{ return String.fromCharCode(i); }}));
-
-                    $t = Bridge.getEnumerator(arr);
-                    try {
-                        while ($t.moveNext()) {
-                            var token = $t.Current;
-                            if (System.String.isNullOrWhiteSpace(token)) {
-                                continue;
-
-                            }
-                            if (Bridge.referenceEquals(token.trim(), "this")) {
-                                invocationInfo.HasThis = true;
-                                continue;
-                            }
-
-                            if (invocationInfo.MethodName == null) {
-                                invocationInfo.MethodName = token.trim();
-                                continue;
-                            }
-
-                            if (invocationInfo.Parameters == null) {
-                                invocationInfo.Parameters = new (System.Collections.Generic.List$1(System.String)).ctor();
-
-                            }
-
-                            invocationInfo.Parameters.add(token);
-
-
-                        }
-                    } finally {
-                        if (Bridge.is($t, System.IDisposable)) {
-                            $t.System$IDisposable$dispose();
-                        }
-                    }
-
-
-
-
-
-                    return invocationInfo;
-                }
-            }
-        },
-        fields: {
-            HasThis: false,
-            MethodName: null,
-            Parameters: null
         }
     });
 
@@ -1121,7 +2080,7 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
             props: {
                 "TestUI": {
                     get: function () {
-                        return "\r\n\r\n<div class='ui two row grid' HeightPercent = '100' WidthPercent = '100' >\r\n    <row>\r\n        <column Align='Center'>\r\n             <ComboBox \r\n                ItemsSource = '{Binding Examples}' \r\n                DisplayMemberPath = 'Name'\r\n                SelectedValuePath = 'XmlTemplate' \r\n\t\t        SelectedValue = '{Binding CurrentTemplate}' />\r\n        </column>\r\n    </row>\r\n    \r\n    <row HeightPercent = '100'>\r\n        <UIEditor SourceText = '{CurrentTemplate}'  />\r\n    </row>\r\n        \r\n</div>\r\n\r\n\r\n";
+                        return "\r\n\r\n<div class='ui two row grid' HeightPercent = '100' WidthPercent = '100' >\r\n    <row>\r\n        <column Align='Center'>\r\n             <ComboBox \r\n                ItemsSource = '{Binding Examples}' \r\n                DisplayMemberPath = 'Name'\r\n                SelectedValuePath = 'XmlTemplate' \r\n\t\t        SelectedValue = '{Binding CurrentTemplate}' />\r\n        </column>\r\n    </row>\r\n    \r\n    <row HeightPercent = '100'>\r\n        <UIEditor SourceDataContext='{Inner}'   SourceText = '{CurrentTemplate}'/>\r\n    </row>\r\n        \r\n</div>\r\n\r\n\r\n";
                     }
                 }
             },
@@ -1130,8 +2089,8 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                     $(Bridge.CustomUIMarkup_DesignerSamples.App.RenderUIEditor);
                 },
                 RenderUIEditor: function () {
-                    var $t;
-                    var builder = ($t = new Bridge.CustomUIMarkup.UI.Builder(), $t.DataContext = new Bridge.CustomUIMarkup_DesignerSamples.ExampleDataContext(), $t.XmlString = Bridge.CustomUIMarkup_DesignerSamples.App["TestUI"], $t);
+                    var $t, $t1, $t2;
+                    var builder = ($t = new Bridge.CustomUIMarkup.UI.Builder(), $t.DataContext = ($t1 = new Bridge.CustomUIMarkup_DesignerSamples.ExampleDataContext(), $t1["Inner"] = ($t2 = new Bridge.CustomUIMarkup_DesignerSamples.ExampleDataContext(), $t2.CurrentTemplate = "Write xml code here", $t2), $t1), $t.XmlString = Bridge.CustomUIMarkup_DesignerSamples.App["TestUI"], $t);
 
                     var element = builder.Build();
 
@@ -2147,6 +3106,15 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
 
     Bridge.define("System.Windows.Data.BindingInfo", {
         statics: {
+            fields: {
+                BindingExpressionTokenizer: null
+            },
+            ctors: {
+                init: function () {
+                    var $t;
+                    this.BindingExpressionTokenizer = ($t = new Bridge.CustomUIMarkup.Tokenizers.Tokenizer(), $t.TokenDefinitions = Bridge.CustomUIMarkup.Tokenizers.BindingExpressionTokenDefinitions.Value, $t);
+                }
+            },
             methods: {
                 TryParseExpression: function (value) {
                     var $t;
@@ -2164,11 +3132,43 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                         return null;
                     }
 
-                    var text = value.substr(1, ((value.length - 2) | 0));
 
-                    text = System.Extensions.RemoveFromStart(text, "Binding ");
+                    var sourcePath = null;
+                    var bindingMode = { v : System.Windows.Data.BindingMode.TwoWay };
 
-                    return ($t = new System.Windows.Data.BindingInfo(), $t.SourcePath = System.Windows.PropertyPath.op_Implicit(text), $t);
+                    var tokens = System.Windows.Data.BindingInfo.BindingExpressionTokenizer.Tokenize(value);
+                    var len = System.Array.getCount(tokens, Bridge.CustomUIMarkup.Tokenizers.Token);
+                    for (var i = 0; i < len; i = (i + 1) | 0) {
+                        var token = System.Array.getItem(tokens, i, Bridge.CustomUIMarkup.Tokenizers.Token);
+
+                        if (token.TokenType === Bridge.CustomUIMarkup.Tokenizers.TokenType.Binding || Bridge.referenceEquals(token.Value, " ")) {
+                            continue;
+                        }
+
+                        if (sourcePath == null && token.TokenType === Bridge.CustomUIMarkup.Tokenizers.TokenType["Identifier"]) {
+                            sourcePath = "";
+                            while (i < len) {
+                                token = System.Array.getItem(tokens, i, Bridge.CustomUIMarkup.Tokenizers.Token);
+
+                                if (token.TokenType === Bridge.CustomUIMarkup.Tokenizers.TokenType["Identifier"] || token.TokenType === Bridge.CustomUIMarkup.Tokenizers.TokenType.Dot) {
+                                    sourcePath = (sourcePath || "") + (token.Value || "");
+                                    i = (i + 1) | 0;
+                                } else {
+                                    i = (i - 1) | 0;
+                                    break;
+                                }
+                            }
+
+                            continue;
+                        }
+
+
+                        if (token.TokenType === Bridge.CustomUIMarkup.Tokenizers.TokenType.Mode) {
+                            System.Enum.tryParse(Bridge.global.System.Windows.Data.BindingMode, System.Array.getItem(tokens, ((i + 2) | 0), Bridge.CustomUIMarkup.Tokenizers.Token).Value, bindingMode);
+                        }
+                    }
+
+                    return ($t = new System.Windows.Data.BindingInfo(), $t.SourcePath = System.Windows.PropertyPath.op_Implicit(sourcePath), $t.BindingMode = bindingMode.v, $t);
                 }
             }
         },
@@ -2445,6 +3445,13 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
             Triggers: null,
             Path: null
         },
+        props: {
+            LastTrigger: {
+                get: function () {
+                    return this.Triggers.getItem(((this.Triggers.Count - 1) | 0));
+                }
+            }
+        },
         ctors: {
             init: function () {
                 this.Triggers = new (System.Collections.Generic.List$1(System.Windows.PropertyPath.Trigger)).ctor();
@@ -2461,27 +3468,52 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                 });
                 this.Triggers.clear();
             },
+            GetPropertyValue: function () {
+                if (this.Triggers.Count === 0) {
+                    throw new System.InvalidOperationException("PropertyPathProblem:" + (this.Path || ""));
+                }
+
+                var lastTrigger = this.LastTrigger;
+                var instance = lastTrigger["Instance"];
+                var propertyName = lastTrigger.PropertyName;
+
+                var value = System.ComponentModel.ReflectionHelper.GetPropertyValue(instance, propertyName);
+
+                return value;
+            },
+            Listen: function (instance, onPropertyValueChanged) {
+                this.Walk(instance);
+
+                var len = this.Triggers.Count;
+                var last = (len - 1) | 0;
+
+                for (var i = 0; i < len; i = (i + 1) | 0) {
+                    var trigger = this.Triggers.getItem(i);
+                    if (i === last) {
+                        trigger.OnPropertyValueChanged = onPropertyValueChanged;
+                        trigger.Listen();
+                        continue;
+                    }
+
+                    trigger.OnPropertyValueChanged = Bridge.fn.bind(this, function () {
+                        this.Listen(instance, onPropertyValueChanged);
+                        onPropertyValueChanged();
+                    });
+                    trigger.Listen();
+                }
+            },
+            SetPropertyValue: function (value) {
+                var lastTrigger = this.LastTrigger;
+                var instance = lastTrigger["Instance"];
+                var propertyName = lastTrigger.PropertyName;
+
+                System.ComponentModel.ReflectionHelper.SetPropertyValue(instance, propertyName, value);
+            },
             Walk: function (instance) {
                 this.Clear();
 
                 this.ParsePath(instance, this.Path);
             },
-            Listen: function (instance, onPropertyValueChanged) {
-                var $t;
-                this.Walk(instance);
-
-                $t = Bridge.getEnumerator(this.Triggers);
-                try {
-                    while ($t.moveNext()) {
-                        var trigger = $t.Current;
-                        trigger.OnPropertyValueChanged = onPropertyValueChanged;
-                        trigger.Listen();
-                    }
-                } finally {
-                    if (Bridge.is($t, System.IDisposable)) {
-                        $t.System$IDisposable$dispose();
-                    }
-                }},
             ParsePath: function (instance, path) {
                 var $t;
                 while (true) {
@@ -2504,16 +3536,6 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
 
                     path = path.substr(((firstDat + 1) | 0));
                 }
-            },
-            GetPropertyValue: function () {
-                var lastTrigger = System.Linq.Enumerable.from(this.Triggers).last();
-
-                return System.ComponentModel.ReflectionHelper.GetPropertyValue(lastTrigger["Instance"], lastTrigger.PropertyName);
-            },
-            SetPropertyValue: function (value) {
-                var lastTrigger = System.Linq.Enumerable.from(this.Triggers).last();
-
-                System.ComponentModel.ReflectionHelper.SetPropertyValue(lastTrigger["Instance"], lastTrigger.PropertyName, value);
             }
         }
     });
@@ -2543,6 +3565,9 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                     return;
                 }
                 this["InstanceAsNotifyPropertyChanged"].System$ComponentModel$INotifyPropertyChanged$removePropertyChanged(Bridge.fn.cacheBind(this, this.OnChange));
+            },
+            toString: function () {
+                return System.String.concat(this["Instance"], "->") + (this.PropertyName || "");
             },
             OnChange: function (sender, e) {
                 if (Bridge.referenceEquals(e.propertyName, this.PropertyName)) {
@@ -2587,6 +3612,67 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
 
     Bridge.define("System.Windows.DependencyObject", {
         inherits: [System.ComponentModel.Bag]
+    });
+
+    Bridge.define("Bridge.CustomUIMarkup_DesignerSamples.ExampleDataContext", {
+        inherits: [System.ComponentModel.Bag],
+        fields: {
+            _inner: null,
+            _examples: null,
+            _currentTemplate: null
+        },
+        props: {
+            "Inner": {
+                get: function () {
+                    return this._inner;
+                },
+                set: function (value) {
+                    if (!Bridge.referenceEquals(this._inner, value)) {
+                        this._inner = value;
+                        this.OnPropertyChanged("Inner");
+                    }
+                }
+            },
+            Examples: {
+                get: function () {
+                    return this._examples;
+                },
+                set: function (value) {
+                    if (!Bridge.referenceEquals(this._examples, value)) {
+                        this._examples = value;
+                        this.OnPropertyChanged("Examples");
+                    }
+                }
+            },
+            CurrentTemplate: {
+                get: function () {
+                    return this._currentTemplate;
+                },
+                set: function (value) {
+                    if (!Bridge.referenceEquals(this._currentTemplate, value)) {
+                        this._currentTemplate = value;
+                        this.OnPropertyChanged("CurrentTemplate");
+                    }
+                }
+            }
+        },
+        ctors: {
+            ctor: function () {
+                this.$initialize();
+                System.ComponentModel.Bag.ctor.call(this);
+                this.Examples = function (_o1) {
+                        var $t;
+                        _o1.add(($t = new Bridge.CustomUIMarkup_DesignerSamples.ExampleInfo(), $t.Name = "All", $t.XmlTemplate = "\r\n\r\n\r\n\r\n\r\n\r\n<ui.page.grid>\r\n   <ui.container>\r\n      <ui.text.menu.navbar FontSize='18'>\r\n         <left.menu>\r\n            <item>Project Name</item>\r\n         </left.menu>\r\n         <right.menu>\r\n            <item>Home</item>\r\n            <item>About</item>\r\n            <item>Contact</item>\r\n         </right.menu>\r\n      </ui.text.menu.navbar>\r\n      <ui.divider MarginBottom='10' />\r\n      <Carousel DataSource='img/carousel_1.jpg,img/carousel_2.jpg,img/carousel_3.jpg' />\r\n      <ui.divider MarginBottom='10' />\r\n\t  <ui.cards>\r\n\t  \r\n\t\t  <card>\r\n\t\t\t <ui.image Src='http://www.samsunkorkuciftligi.com/upload/20170314__2069208026.jpg' />\r\n\t\t\t <content Align='Center'>\r\n\t\t\t\t<Header Align='Center'>Motor Safari</Header>\r\n\t\t\t\t<description>Macera sizi bekliyor...</description>\r\n\t\t\t\t<ui.basic.button Text='İncele' MarginTop='11' AddClass='yellow' />\r\n\t\t\t </content>\r\n\t\t  </card>\r\n\t\t  \r\n\t\t  <card>\r\n\t\t\t <ui.image Src='http://www.samsunkorkuciftligi.com/upload/20170314__2069208026.jpg' />\r\n\t\t\t <content Align='Center'>\r\n\t\t\t\t<Header Align='Center'>Motor Safari</Header>\r\n\t\t\t\t<description>Macera sizi bekliyor...</description>\r\n\t\t\t\t<ui.basic.button Text='İncele' MarginTop='11' AddClass='yellow' />\r\n\t\t\t </content>\r\n\t\t  </card>\r\n\t\t  \r\n\t  </ui.cards>\r\n   </ui.container>\r\n</ui.page.grid>\r\n\r\n\r\n\r\n", $t));
+                        _o1.add(($t = new Bridge.CustomUIMarkup_DesignerSamples.ExampleInfo(), $t.Name = "Carousel", $t.XmlTemplate = "\r\n\r\n\r\n<ui.container>\r\n    <Carousel DataSource='img/carousel_1.jpg,img/carousel_2.jpg,img/carousel_3.jpg' />\r\n</ui.container>\r\n\r\n", $t));
+                        _o1.add(($t = new Bridge.CustomUIMarkup_DesignerSamples.ExampleInfo(), $t.Name = "Card", $t.XmlTemplate = "\r\n\r\n<ui.cards>\r\n\r\n    <card>\r\n\t    <ui.image Src='http://www.samsunkorkuciftligi.com/upload/20170314__2069208026.jpg'/>\r\n\t    <content Align='Center'>\r\n            <Header Align='Center' >Motor Safari</Header>\r\n            <description> Macera sizi bekliyor...</description>\r\n            <ui.basic.button Text='İncele' MarginTop='11' AddClass='yellow' />\r\n        </content>\t\r\n    </card>\r\n\r\n</ui.cards>\r\n", $t));
+                        _o1.add(($t = new Bridge.CustomUIMarkup_DesignerSamples.ExampleInfo(), $t.Name = "Grid.column", $t.XmlTemplate = "\r\n\r\n\r\n<ui.grid>\r\n  \r\n    <column Width='27' Align='Center'>\r\n        <Icon Type='Setting' Color='#ffbb00' FontSize='17' />\r\n    </column>\r\n  \r\n  \t<Column Width='80'>\r\n        <TextBlock Text='Start Date:' Color='#888888' FontSize='13' FontWeight='600' TextWrapping='NoWrap' />\r\n    </Column>\r\n  \t\r\n  \t<Column   Align='Left' >\r\n        <TextBlock Text='November 1, 2017 15:30' Color='#888888' FontSize='12' FontWeight='600' TextWrapping='NoWrap' />\r\n    </Column>\r\n</ui.grid>\r\n\r\n", $t));
+                        _o1.add(($t = new Bridge.CustomUIMarkup_DesignerSamples.ExampleInfo(), $t.Name = "Form", $t.XmlTemplate = "\r\n\r\n\r\n<ui.segment>\r\n  <ui.page.grid Align='Center' MarginTop='5'>\r\n      <ui.form  Padding='55' Border='1px solid #ddd'>\r\n        <ui.header.3>Input form</ui.header.3>\r\n     <Field Value='A' Label='yy'>\r\n        <TextBox PlaceHolder='Write 1' />\r\n     </Field>\r\n     <ui.stacked>\r\n        <Field Value='A' Label='yy' >\r\n           <TextBox PlaceHolder='Write 1' IsMandatory='True' />\r\n        </Field>\r\n     </ui.stacked>\r\n     <ui.equal.width.grid>\r\n        <column>\r\n           <Field Value='A' Label='yy'>\r\n              <TextBox PlaceHolder='Write 1' />\r\n           </Field>\r\n        </column>\r\n        <column>\r\n           <Field Value='A' Label='yy'>\r\n              <TextBox PlaceHolder='Write 1' />\r\n           </Field>\r\n        </column>\r\n     </ui.equal.width.grid>\r\n        \r\n        <ui.grid>\r\n          <column Align='Right'>\r\n        \t\t<ui.button Text='No'   />\r\n            \t<ui.button Text='Yes'  AddClass='positive'  />\r\n            </column>\r\n        </ui.grid>\r\n  </ui.form>\r\n  </ui.page.grid>\r\n</ui.segment>\r\n\r\n\r\n\r\n\r\n", $t));
+                        return _o1;
+                    }(new (System.Collections.Generic.List$1(Bridge.CustomUIMarkup_DesignerSamples.ExampleInfo)).ctor());
+
+
+            }
+        }
     });
 
     Bridge.define("System.Windows.Controls.BooleanToVisibilityConverter", {
@@ -3076,6 +4162,9 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
         },
         methods: {
             Add: function (element) {
+
+
+
                 !Bridge.staticEquals(element.BeforeConnectToParent, null) ? element.BeforeConnectToParent() : null;
 
                 element._root.appendTo(this._root);
@@ -3912,53 +5001,6 @@ setTimeout(function(){
         }
     });
 
-    Bridge.define("Bridge.CustomUIMarkup_DesignerSamples.ExampleDataContext", {
-        inherits: [System.Windows.FrameworkElement],
-        fields: {
-            _examples: null,
-            _currentTemplate: null
-        },
-        props: {
-            Examples: {
-                get: function () {
-                    return this._examples;
-                },
-                set: function (value) {
-                    if (!Bridge.referenceEquals(this._examples, value)) {
-                        this._examples = value;
-                        this.OnPropertyChanged("Examples");
-                    }
-                }
-            },
-            CurrentTemplate: {
-                get: function () {
-                    return this._currentTemplate;
-                },
-                set: function (value) {
-                    if (!Bridge.referenceEquals(this._currentTemplate, value)) {
-                        this._currentTemplate = value;
-                        this.OnPropertyChanged("CurrentTemplate");
-                    }
-                }
-            }
-        },
-        ctors: {
-            ctor: function () {
-                this.$initialize();
-                System.Windows.FrameworkElement.ctor.call(this);
-                this.Examples = function (_o1) {
-                        var $t;
-                        _o1.add(($t = new Bridge.CustomUIMarkup_DesignerSamples.ExampleInfo(), $t.Name = "All", $t.XmlTemplate = "\r\n\r\n\r\n\r\n\r\n\r\n<ui.page.grid>\r\n   <ui.container>\r\n      <ui.text.menu.navbar FontSize='18'>\r\n         <left.menu>\r\n            <item>Project Name</item>\r\n         </left.menu>\r\n         <right.menu>\r\n            <item>Home</item>\r\n            <item>About</item>\r\n            <item>Contact</item>\r\n         </right.menu>\r\n      </ui.text.menu.navbar>\r\n      <ui.divider MarginBottom='10' />\r\n      <Carousel DataSource='img/carousel_1.jpg,img/carousel_2.jpg,img/carousel_3.jpg' />\r\n      <ui.divider MarginBottom='10' />\r\n\t  <ui.cards>\r\n\t  \r\n\t\t  <card>\r\n\t\t\t <ui.image Src='http://www.samsunkorkuciftligi.com/upload/20170314__2069208026.jpg' />\r\n\t\t\t <content Align='Center'>\r\n\t\t\t\t<Header Align='Center'>Motor Safari</Header>\r\n\t\t\t\t<description>Macera sizi bekliyor...</description>\r\n\t\t\t\t<ui.basic.button Text='İncele' MarginTop='11' AddClass='yellow' />\r\n\t\t\t </content>\r\n\t\t  </card>\r\n\t\t  \r\n\t\t  <card>\r\n\t\t\t <ui.image Src='http://www.samsunkorkuciftligi.com/upload/20170314__2069208026.jpg' />\r\n\t\t\t <content Align='Center'>\r\n\t\t\t\t<Header Align='Center'>Motor Safari</Header>\r\n\t\t\t\t<description>Macera sizi bekliyor...</description>\r\n\t\t\t\t<ui.basic.button Text='İncele' MarginTop='11' AddClass='yellow' />\r\n\t\t\t </content>\r\n\t\t  </card>\r\n\t\t  \r\n\t  </ui.cards>\r\n   </ui.container>\r\n</ui.page.grid>\r\n\r\n\r\n\r\n", $t));
-                        _o1.add(($t = new Bridge.CustomUIMarkup_DesignerSamples.ExampleInfo(), $t.Name = "Carousel", $t.XmlTemplate = "\r\n\r\n\r\n<ui.container>\r\n    <Carousel DataSource='img/carousel_1.jpg,img/carousel_2.jpg,img/carousel_3.jpg' />\r\n</ui.container>\r\n\r\n", $t));
-                        _o1.add(($t = new Bridge.CustomUIMarkup_DesignerSamples.ExampleInfo(), $t.Name = "Card", $t.XmlTemplate = "\r\n\r\n<ui.cards>\r\n\r\n    <card>\r\n\t    <ui.image Src='http://www.samsunkorkuciftligi.com/upload/20170314__2069208026.jpg'/>\r\n\t    <content Align='Center'>\r\n            <Header Align='Center' >Motor Safari</Header>\r\n            <description> Macera sizi bekliyor...</description>\r\n            <ui.basic.button Text='İncele' MarginTop='11' AddClass='yellow' />\r\n        </content>\t\r\n    </card>\r\n\r\n</ui.cards>\r\n", $t));
-                        _o1.add(($t = new Bridge.CustomUIMarkup_DesignerSamples.ExampleInfo(), $t.Name = "Grid.column", $t.XmlTemplate = "\r\n\r\n\r\n<ui.grid>\r\n  \r\n    <column Width='27' Align='Center'>\r\n        <Icon Type='Setting' Color='#ffbb00' FontSize='17' />\r\n    </column>\r\n  \r\n  \t<Column Width='80'>\r\n        <TextBlock Text='Start Date:' Color='#888888' FontSize='13' FontWeight='600' TextWrapping='NoWrap' />\r\n    </Column>\r\n  \t\r\n  \t<Column   Align='Left' >\r\n        <TextBlock Text='November 1, 2017 15:30' Color='#888888' FontSize='12' FontWeight='600' TextWrapping='NoWrap' />\r\n    </Column>\r\n</ui.grid>\r\n\r\n", $t));
-                        _o1.add(($t = new Bridge.CustomUIMarkup_DesignerSamples.ExampleInfo(), $t.Name = "Form", $t.XmlTemplate = "\r\n\r\n\r\n<ui.segment>\r\n  <ui.page.grid Align='Center' MarginTop='5'>\r\n      <ui.form  Padding='55' Border='1px solid #ddd'>\r\n        <ui.header.3>Input form</ui.header.3>\r\n     <Field Value='A' Label='yy'>\r\n        <TextBox PlaceHolder='Write 1' />\r\n     </Field>\r\n     <ui.stacked>\r\n        <Field Value='A' Label='yy' >\r\n           <TextBox PlaceHolder='Write 1' IsMandatory='True' />\r\n        </Field>\r\n     </ui.stacked>\r\n     <ui.equal.width.grid>\r\n        <column>\r\n           <Field Value='A' Label='yy'>\r\n              <TextBox PlaceHolder='Write 1' />\r\n           </Field>\r\n        </column>\r\n        <column>\r\n           <Field Value='A' Label='yy'>\r\n              <TextBox PlaceHolder='Write 1' />\r\n           </Field>\r\n        </column>\r\n     </ui.equal.width.grid>\r\n        \r\n        <ui.grid>\r\n          <column Align='Right'>\r\n        \t\t<ui.button Text='No'   />\r\n            \t<ui.button Text='Yes'  AddClass='positive'  />\r\n            </column>\r\n        </ui.grid>\r\n  </ui.form>\r\n  </ui.page.grid>\r\n</ui.segment>\r\n\r\n\r\n\r\n\r\n", $t));
-                        return _o1;
-                    }(new (System.Collections.Generic.List$1(Bridge.CustomUIMarkup_DesignerSamples.ExampleInfo)).ctor());
-            }
-        }
-    });
-
     Bridge.define("Bridge.CustomUIMarkup_DesignerSamples.ExampleInfo", {
         inherits: [System.Windows.FrameworkElement],
         fields: {
@@ -4471,7 +5513,7 @@ setTimeout(function(){
                 OnTextChanged: function (d, e) {
                     var me = Bridge.cast(d, Bridge.CustomUIMarkup.Libraries.SemanticUI.InputText);
 
-                    me._inputElement.attr("value", Bridge.cast(e.NewValue, System.String));
+                    me._inputElement.val(Bridge.cast(e.NewValue, System.String));
                 },
                 OnPlaceHolderChanged: function (d, e) {
                     var me = Bridge.cast(d, Bridge.CustomUIMarkup.Libraries.SemanticUI.InputText);
@@ -4491,6 +5533,7 @@ setTimeout(function(){
         },
         fields: {
             _inputElement: null,
+            "AllowOnlyNumericInputs": false,
             _cornerLabelDiv: null
         },
         props: {
@@ -4529,11 +5572,31 @@ setTimeout(function(){
                 this.$initialize();
                 Bridge.CustomUIMarkup.Libraries.SemanticUI.ElementBase.ctor.call(this);
                 this.addAfterInitDOM(Bridge.fn.cacheBind(this, this.CreateInputElement));
+                this.addAfterInitDOM(Bridge.fn.cacheBind(this, this.AttachEvents));
             }
         },
         methods: {
             CreateInputElement: function () {
                 this._inputElement = System.Windows.DOM.input("text").appendTo(this._root);
+            },
+            AttachEvents: function () {
+                this._inputElement.focusout(Bridge.fn.cacheBind(this, this.OnFocusOut));
+                this._inputElement.keypress(Bridge.fn.cacheBind(this, this.OnKeyPress));
+            },
+            DisableNonNumericValues: function (e) {
+                if (e.which !== 8 && e.which !== 0 && (e.which < 48 || e.which > 57)) {
+                    e.preventDefault();
+                }
+            },
+            OnFocusOut: function (e) {
+                this.Text = this._inputElement.val();
+            },
+            OnKeyPress: function (e) {
+                if (this["AllowOnlyNumericInputs"]) {
+                    this.DisableNonNumericValues(e);
+                    if (e.isDefaultPrevented()) {
+                    }
+                }
             },
             InitializeCornerLabelDiv: function () {
                 if (this._cornerLabelDiv == null) {
