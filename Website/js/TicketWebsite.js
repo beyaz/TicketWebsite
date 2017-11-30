@@ -350,6 +350,17 @@ Bridge.assembly("TicketWebsite", function ($asm, globals) {
         }
     });
 
+    Bridge.define("TicketWebsite.Views.Controls.ProductDescriptionFooter.View", {
+        inherits: [TicketWebsite.Common.TemplateComponent],
+        ctors: {
+            ctor: function () {
+                this.$initialize();
+                TicketWebsite.Common.TemplateComponent.ctor.call(this);
+                this.Template = TicketWebsite.Common.FileService.GetFileContent("Views/Controls/ProductDescriptionFooter/View.xml");
+            }
+        }
+    });
+
     Bridge.define("TicketWebsite.Views.Footer.View", {
         inherits: [TicketWebsite.Common.TemplateComponent],
         ctors: {

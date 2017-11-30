@@ -1731,7 +1731,7 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                 Bridge.CustomUIMarkup.Common.Extensions.highlight(query);
             },
             BuildNode: function (xmlNode) {
-                var $t, $t1;
+                var $t;
                 var instance = this.CreateInstance(xmlNode);
 
                 if (this["IsDesignMode"]) {
@@ -1763,66 +1763,64 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                     this.ProcessAttribute(instance, nodeAttribute.nodeName, nodeAttribute.nodeValue);
                 }
 
-                $t = Bridge.getEnumerator(xmlNode.childNodes);
-                try {
-                    while ($t.moveNext()) {
-                        var childNode = $t.Current;
-                        if (childNode.nodeType === 8) {
+
+                var childNodes = xmlNode.childNodes;
+
+                len = childNodes.length;
+                for (var i1 = 0; i1 < len; i1 = (i1 + 1) | 0) {
+                    var childNode = childNodes[i1];
+
+                    if (childNode.nodeType === 8) {
+                        continue;
+                    }
+
+                    if (childNode.nodeType === 3) {
+                        // skip empty spaces
+                        var html = $(childNode).text();
+                        if (System.String.isNullOrWhiteSpace(html)) {
                             continue;
                         }
 
-                        if (childNode.nodeType === 3) {
-                            // skip empty spaces
-                            var html = $(childNode).text();
-                            if (System.String.isNullOrWhiteSpace(html)) {
-                                continue;
-                            }
+                        // maybe <div> {LastName} </div>
+                        var bindingInfo = System.Windows.Data.BindingInfo.TryParseExpression(html);
+                        if (bindingInfo != null) {
+                            bindingInfo.BindingMode = System.Windows.Data.BindingMode.OneWay;
 
-                            // maybe <div> {LastName} </div>
-                            var bindingInfo = System.Windows.Data.BindingInfo.TryParseExpression(html);
-                            if (bindingInfo != null) {
-                                bindingInfo.BindingMode = System.Windows.Data.BindingMode.OneWay;
+                            bindingInfo.Source = instance;
+                            bindingInfo.SourcePath = System.Windows.PropertyPath.op_Implicit("DataContext." + (bindingInfo.SourcePath.Path || ""));
 
-                                bindingInfo.Source = instance;
-                                bindingInfo.SourcePath = System.Windows.PropertyPath.op_Implicit("DataContext." + (bindingInfo.SourcePath.Path || ""));
+                            bindingInfo.Target = instance;
+                            bindingInfo.TargetPath = System.Windows.PropertyPath.op_Implicit("InnerHTML");
 
-                                bindingInfo.Target = instance;
-                                bindingInfo.TargetPath = System.Windows.PropertyPath.op_Implicit("InnerHTML");
-
-                                bindingInfo.Connect();
-                                continue;
-                            }
-
-                            instance["InnerHTML"] = html;
+                            bindingInfo.Connect();
                             continue;
                         }
 
-                        var subControl = this.BuildNode(childNode);
+                        instance["InnerHTML"] = html;
+                        continue;
+                    }
 
-                        var subControlDataContextAttribute = childNode.attributes.DataContext;
-                        if (subControlDataContextAttribute == null) {
-                            ($t1 = new System.Windows.Data.BindingInfo(), $t1.BindingMode = System.Windows.Data.BindingMode.OneWay, $t1.Source = instance, $t1.SourcePath = System.Windows.PropertyPath.op_Implicit("DataContext"), $t1.Target = subControl, $t1.TargetPath = System.Windows.PropertyPath.op_Implicit("DataContext"), $t1).Connect();
-                        } else {
-                            var bi = System.Windows.Data.BindingInfo.TryParseExpression(subControlDataContextAttribute.nodeValue);
-                            if (bi == null) {
-                                throw new System.InvalidOperationException("InvalidBindingExpression:" + (subControlDataContextAttribute.nodeValue || ""));
-                            }
-                            bi.BindingMode = System.Windows.Data.BindingMode.OneWay;
-                            bi.Source = instance;
-                            bi.SourcePath = System.Windows.PropertyPath.op_Implicit("DataContext." + (bi.SourcePath.Path || ""));
-                            bi.Target = subControl;
-                            bi.TargetPath = System.Windows.PropertyPath.op_Implicit("DataContext");
-                            bi.Connect();
+                    var subControl = this.BuildNode(childNode);
+
+                    var subControlDataContextAttribute = childNode.attributes.DataContext;
+                    if (subControlDataContextAttribute == null) {
+                        ($t = new System.Windows.Data.BindingInfo(), $t.BindingMode = System.Windows.Data.BindingMode.OneWay, $t.Source = instance, $t.SourcePath = System.Windows.PropertyPath.op_Implicit("DataContext"), $t.Target = subControl, $t.TargetPath = System.Windows.PropertyPath.op_Implicit("DataContext"), $t).Connect();
+                    } else {
+                        var bi = System.Windows.Data.BindingInfo.TryParseExpression(subControlDataContextAttribute.nodeValue);
+                        if (bi == null) {
+                            throw new System.InvalidOperationException("InvalidBindingExpression:" + (subControlDataContextAttribute.nodeValue || ""));
                         }
-
-
-                        instance.Add(subControl);
+                        bi.BindingMode = System.Windows.Data.BindingMode.OneWay;
+                        bi.Source = instance;
+                        bi.SourcePath = System.Windows.PropertyPath.op_Implicit("DataContext." + (bi.SourcePath.Path || ""));
+                        bi.Target = subControl;
+                        bi.TargetPath = System.Windows.PropertyPath.op_Implicit("DataContext");
+                        bi.Connect();
                     }
-                } finally {
-                    if (Bridge.is($t, System.IDisposable)) {
-                        $t.System$IDisposable$dispose();
-                    }
+
+                    instance.Add(subControl);
                 }
+
                 return instance;
             },
             CreateInstance: function (xmlNode) {
@@ -1866,7 +1864,7 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
 
                     if (System.String.contains(name,".") === false) {
                         if (targetProperty == null) {
-                            ($t = new System.Windows.Data.HTMLBindingInfo(), $t.Source = this.DataContext, $t.SourcePath = System.Windows.PropertyPath.op_Implicit(bi.SourcePath.Path), $t.Target$1 = instance._root, $t.TargetPath = System.Windows.PropertyPath.op_Implicit(name), $t.BindingMode = System.Windows.Data.BindingMode.OneWay, $t).Connect();
+                            ($t = new System.Windows.Data.HTMLBindingInfo(), $t.Source = instance, $t.SourcePath = new System.Windows.PropertyPath("DataContext." + (bi.SourcePath.Path || "")), $t.Target$1 = instance._root, $t.TargetPath = System.Windows.PropertyPath.op_Implicit(name), $t.BindingMode = System.Windows.Data.BindingMode.OneWay, $t).Connect();
 
                             return;
                         }
@@ -1912,7 +1910,6 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                     // support this format: this.Notify(OnContactClicked)
                     if (System.String.startsWith(value, "this.")) {
                         var tokens = Bridge.CustomUIMarkup.UI.Builder["InvocationExpressionTokenizer"].Tokenize(value);
-
 
                         var i = 0;
                         i = (i + 1) | 0; // skip this
@@ -2001,6 +1998,11 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
             ctors: {
                 init: function () {
                     this._tags = function (_o1) {
+                            _o1.add(new Bridge.CustomUIMarkup.Common.XmlIntellisenseInfo("ui_rating", Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_rating));
+                            _o1.add(new Bridge.CustomUIMarkup.Common.XmlIntellisenseInfo("Rating", Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_rating));
+                            _o1.add(new Bridge.CustomUIMarkup.Common.XmlIntellisenseInfo("comment", Bridge.CustomUIMarkup.Libraries.SemanticUI.comment));
+                            _o1.add(new Bridge.CustomUIMarkup.Common.XmlIntellisenseInfo("ui_comments", Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_comments));
+                            _o1.add(new Bridge.CustomUIMarkup.Common.XmlIntellisenseInfo("ImageGalery", Bridge.CustomUIMarkup.Libraries.viewerjs.Viewer));
                             _o1.add(new Bridge.CustomUIMarkup.Common.XmlIntellisenseInfo("swiper.slider", Bridge.CustomUIMarkup.Libraries.Swiper.Slider));
                             _o1.add(new Bridge.CustomUIMarkup.Common.XmlIntellisenseInfo("div", System.Windows.FrameworkElement_div));
                             _o1.add(new Bridge.CustomUIMarkup.Common.XmlIntellisenseInfo("a", System.Windows.FrameworkElement_a));
@@ -2014,7 +2016,7 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                             _o1.add(new Bridge.CustomUIMarkup.Common.XmlIntellisenseInfo("left.menu", Bridge.CustomUIMarkup.Libraries.SemanticUI.left_menu));
                             _o1.add(new Bridge.CustomUIMarkup.Common.XmlIntellisenseInfo("ui.text.menu.navbar", Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_text_menu_navbar));
                             _o1.add(new Bridge.CustomUIMarkup.Common.XmlIntellisenseInfo("ui.button", Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_button));
-                            _o1.add(new Bridge.CustomUIMarkup.Common.XmlIntellisenseInfo("TabPanel", Bridge.CustomUIMarkup.Libraries.SemanticUI.TabPanel));
+                            _o1.add(new Bridge.CustomUIMarkup.Common.XmlIntellisenseInfo("ui_top_attached_tabular_menu", Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_top_attached_tabular_menu));
                             _o1.add(new Bridge.CustomUIMarkup.Common.XmlIntellisenseInfo("Tab", Bridge.CustomUIMarkup.Libraries.SemanticUI.TabItem));
                             _o1.add(new Bridge.CustomUIMarkup.Common.XmlIntellisenseInfo("card", Bridge.CustomUIMarkup.Libraries.SemanticUI.card));
                             _o1.add(new Bridge.CustomUIMarkup.Common.XmlIntellisenseInfo("ui.card", Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_card));
@@ -3344,26 +3346,26 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
     Bridge.define("System.Windows.DOM", {
         statics: {
             props: {
-                head: {
-                    get: function () {
-                        return $("head");
-                    }
-                },
                 body: {
                     get: function () {
                         return $("body");
                     }
+                },
+                head: {
+                    get: function () {
+                        return $("head");
+                    }
                 }
             },
             methods: {
-                ById: function (id) {
-                    return $(document.getElementById(id));
-                },
                 a: function (className) {
                     return System.Windows.DOM.CreateElement$1("a", className);
                 },
                 button: function (className) {
                     return System.Windows.DOM.CreateElement$1("button", className);
+                },
+                ById: function (id) {
+                    return $(document.getElementById(id));
                 },
                 CreateElement: function (tagName) {
                     return $(document.createElement(tagName));
@@ -3403,9 +3405,17 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                     if (className === void 0) { className = null; }
                     return System.Windows.DOM.CreateElement$1("label", className);
                 },
+                li: function (className) {
+                    if (className === void 0) { className = null; }
+                    return System.Windows.DOM.CreateElement$1("li", className);
+                },
                 textarea: function (className) {
                     if (className === void 0) { className = null; }
                     return System.Windows.DOM.CreateElement$1("textarea", className);
+                },
+                ul: function (className) {
+                    if (className === void 0) { className = null; }
+                    return System.Windows.DOM.CreateElement$1("ul", className);
                 }
             }
         }
@@ -3662,6 +3672,10 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                 System.ComponentModel.Bag.ctor.call(this);
                 this.Examples = function (_o1) {
                         var $t;
+                        _o1.add(($t = new Bridge.CustomUIMarkup_DesignerSamples.ExampleInfo(), $t.Name = "Add review", $t.XmlTemplate = "\r\n\r\n\r\n<ui.segment Margin='11'>\r\n\t<ui.form >\r\n\t\t<ui.header.2>Add a review</ui.header.2>\r\n\r\n\t\t<field Label='your Rating'>\r\n\t\t\t<ui_rating  MaxRate='5'  />\r\n\t\t</field>\r\n\r\n\t\t<field Label='Name' >\r\n\t\t\t<textBox  IsMandatory='true' />\r\n\t\t</field>\r\n\r\n\t\t<field Label='Your review'>\r\n\t\t\t<textArea  IsMandatory='true' />\r\n\t\t</field>\r\n\r\n\t\t<ui.basic.button> Gönder\r\n\t\t</ui.basic.button>\r\n\r\n\t</ui.form>\r\n\r\n</ui.segment>\r\n\r\n", $t));
+                        _o1.add(($t = new Bridge.CustomUIMarkup_DesignerSamples.ExampleInfo(), $t.Name = "comments", $t.XmlTemplate = "\r\n\r\n<ui_comments>\r\n\t<comment AvatarImageUrl='img/AvatarImageSample.jpg'  \r\n             Author='adana'\r\n             MetadataTimeInfo='11 agustos Pazar 5:44 AM'\r\n             Text='uzuncana bir comment br  sdfsdfsdfsgggguzuncana bir comment br  sdfsdfsdfsgggguzuncana bir comment br  sdfsdfsdfsgggguzuncana bir comment br  sdfsdfsdfsgggguzuncana bir comment br  sdfsdfsdfsgggguzuncana bir comment br  sdfsdfsdfsgggguzuncana bir comment br  sdfsdfsdfsgggg'\r\n             />\r\n  \r\n  <comment AvatarImageUrl='img/AvatarImageSample.jpg'  \r\n             Author='ahmet'\r\n             MetadataTimeInfo='11 agustos Pazar 5:44 AM'\r\n             Text='uzuncana bir comment br  sdfsdfsdfsgggguzuncana bir comment br  sdfsdfsdfsgggguzuncana bir comment br  sdfsdfsdfsgggguzuncana bir comment br  sdfsdfsdfsgggguzuncana bir comment br  sdfsdfsdfsgggguzuncana bir comment br  sdfsdfsdfsgggguzuncana bir comment br  sdfsdfsdfsgggg'\r\n             />\r\n    \r\n   <comment AvatarImageUrl='img/AvatarImageSample.jpg'  \r\n             Author='xyz'\r\n             MetadataTimeInfo='11 agustos Pazar 5:44 AM'\r\n             Text='uzuncana bir comment br  sdfsdfsdfsgggguzuncana bir comment br  sdfsdfsdfsgggguzuncana bir comment br  sdfsdfsdfsgggguzuncana bir comment br  sdfsdfsdfsgggguzuncana bir comment br  sdfsdfsdfsgggguzuncana bir comment br  sdfsdfsdfsgggguzuncana bir comment br  sdfsdfsdfsgggg'\r\n             />\r\n  \r\n</ui_comments>\r\n\r\n", $t));
+                        _o1.add(($t = new Bridge.CustomUIMarkup_DesignerSamples.ExampleInfo(), $t.Name = "Tabs", $t.XmlTemplate = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n<div Padding='11'>\r\n\t<ui_top_attached_tabular_menu>\r\n\t\t<Tab Header ='Header1' AddClass='active'>\r\n  \t\t\t<ui.header.3> Product description</ui.header.3>\r\n          \t<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>\r\n  \t\t</Tab>  \r\n  \r\n  \t\t<Tab Header ='Header2'> \r\n  \t\t\tWrite Content here 2\r\n  \t\t</Tab> \r\n\t</ui_top_attached_tabular_menu> \r\n</div>\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n", $t));
+                        _o1.add(($t = new Bridge.CustomUIMarkup_DesignerSamples.ExampleInfo(), $t.Name = "Viewverjs", $t.XmlTemplate = "\r\n\r\n\r\n\r\n<div>\r\n  <ImageGalery>\r\n      <img src='img/carousel_1.jpg'  />\r\n      <img src='img/carousel_1.jpg'  />\r\n      <img src='img/carousel_1.jpg'  />\r\n      <img src='img/carousel_1.jpg'  />\r\n      <img src='img/carousel_1.jpg'  />\r\n      <img src='img/carousel_1.jpg'  />\r\n      <img src='img/carousel_1.jpg'  />\r\n      <img src='img/carousel_1.jpg'  />\r\n      <img src='img/carousel_1.jpg'  />\r\n      <img src='img/carousel_1.jpg'  />\r\n      <img src='img/carousel_1.jpg'  />\r\n      <img src='img/carousel_1.jpg'  />\r\n      <img src='img/carousel_1.jpg'  />\r\n      <img src='img/carousel_1.jpg'  />\r\n      <img src='img/carousel_1.jpg'  />\r\n      <img src='img/carousel_1.jpg'  />\r\n      <img src='img/carousel_1.jpg'  />\r\n  </ImageGalery>\r\n</div>\r\n\r\n\r\n\r\n\r\n\r\n", $t));
                         _o1.add(($t = new Bridge.CustomUIMarkup_DesignerSamples.ExampleInfo(), $t.Name = "All", $t.XmlTemplate = "\r\n\r\n\r\n\r\n\r\n\r\n<ui.page.grid>\r\n   <ui.container>\r\n      <ui.text.menu.navbar FontSize='18'>\r\n         <left.menu>\r\n            <item>Project Name</item>\r\n         </left.menu>\r\n         <right.menu>\r\n            <item>Home</item>\r\n            <item>About</item>\r\n            <item>Contact</item>\r\n         </right.menu>\r\n      </ui.text.menu.navbar>\r\n      <ui.divider MarginBottom='10' />\r\n      <Carousel DataSource='img/carousel_1.jpg,img/carousel_2.jpg,img/carousel_3.jpg' />\r\n      <ui.divider MarginBottom='10' />\r\n\t  <ui.cards>\r\n\t  \r\n\t\t  <card>\r\n\t\t\t <ui.image Src='http://www.samsunkorkuciftligi.com/upload/20170314__2069208026.jpg' />\r\n\t\t\t <content Align='Center'>\r\n\t\t\t\t<Header Align='Center'>Motor Safari</Header>\r\n\t\t\t\t<description>Macera sizi bekliyor...</description>\r\n\t\t\t\t<ui.basic.button Text='İncele' MarginTop='11' AddClass='yellow' />\r\n\t\t\t </content>\r\n\t\t  </card>\r\n\t\t  \r\n\t\t  <card>\r\n\t\t\t <ui.image Src='http://www.samsunkorkuciftligi.com/upload/20170314__2069208026.jpg' />\r\n\t\t\t <content Align='Center'>\r\n\t\t\t\t<Header Align='Center'>Motor Safari</Header>\r\n\t\t\t\t<description>Macera sizi bekliyor...</description>\r\n\t\t\t\t<ui.basic.button Text='İncele' MarginTop='11' AddClass='yellow' />\r\n\t\t\t </content>\r\n\t\t  </card>\r\n\t\t  \r\n\t  </ui.cards>\r\n   </ui.container>\r\n</ui.page.grid>\r\n\r\n\r\n\r\n", $t));
                         _o1.add(($t = new Bridge.CustomUIMarkup_DesignerSamples.ExampleInfo(), $t.Name = "Carousel", $t.XmlTemplate = "\r\n\r\n\r\n<ui.container>\r\n    <Carousel DataSource='img/carousel_1.jpg,img/carousel_2.jpg,img/carousel_3.jpg' />\r\n</ui.container>\r\n\r\n", $t));
                         _o1.add(($t = new Bridge.CustomUIMarkup_DesignerSamples.ExampleInfo(), $t.Name = "Card", $t.XmlTemplate = "\r\n\r\n<ui.cards>\r\n\r\n    <card>\r\n\t    <ui.image Src='http://www.samsunkorkuciftligi.com/upload/20170314__2069208026.jpg'/>\r\n\t    <content Align='Center'>\r\n            <Header Align='Center' >Motor Safari</Header>\r\n            <description> Macera sizi bekliyor...</description>\r\n            <ui.basic.button Text='İncele' MarginTop='11' AddClass='yellow' />\r\n        </content>\t\r\n    </card>\r\n\r\n</ui.cards>\r\n", $t));
@@ -3832,9 +3846,10 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
             methods: {
                 CreateHtmlAttributeUpdater: function (htmlAttribute) {
                     return new System.Windows.PropertyMetadata.$ctor2(function (d, e) {
+                        var $t;
                         var me = Bridge.cast(d, System.Windows.FrameworkElement);
 
-                        me._root.attr(htmlAttribute, Bridge.cast(e.NewValue, System.String));
+                        me._root.attr(htmlAttribute, ($t = e.NewValue) != null ? $t.toString() : null);
                     });
                 },
                 CreateJQueryCssUpdater: function (jqueryCssAttribute) {
@@ -3849,6 +3864,18 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                         var me = Bridge.cast(d, System.Windows.FrameworkElement);
 
                         me._root.css(jqueryCssAttribute, Bridge.unbox(valueConverter(e.NewValue)));
+                    });
+                },
+                AddCssClassOnTrueElseRemove: function (cssClass) {
+                    return new System.Windows.PropertyMetadata.$ctor2(function (d, e) {
+                        var me = Bridge.cast(d, System.Windows.FrameworkElement);
+
+                        if (System.Nullable.eq(System.Extensions.ToBooleanNullable(e.NewValue), true)) {
+                            me._root.addClass(cssClass);
+                            return;
+                        }
+
+                        me._root.removeClass(cssClass);
                     });
                 },
                 OnAddClassChanged: function (d, e) {
@@ -4180,11 +4207,13 @@ Bridge.assembly("Bridge.CustomUIMarkup", function ($asm, globals) {
                 !Bridge.staticEquals(this.AfterAddChild, null) ? this.AfterAddChild(element) : null;
             },
             GetValue$1: function (dp) {
+                var $t;
                 var value = this.getItem(dp.Name);
                 if (value == null) {
-                    if (dp.PropertyMetadata.DefaultValue != null) {
+                    if ((($t = dp.PropertyMetadata) != null ? $t.DefaultValue : null) != null) {
                         return dp.PropertyMetadata.DefaultValue;
                     }
+
                     if (Bridge.Reflection.isEnum(dp.PropertyType)) {
                         return System.Enum.parse(dp.PropertyType, "0");
                     }
@@ -4717,105 +4746,6 @@ me._editor.display.wrapper.style.height = '95%';
         }
     });
 
-    Bridge.define("Bridge.CustomUIMarkup.Libraries.SemanticUI.TabItem", {
-        inherits: [System.Windows.FrameworkElement,System.Windows.Markup.IAddChild],
-        fields: {
-            _headerElement: null,
-            _contentElement: null,
-            _header: null
-        },
-        props: {
-            Header: {
-                get: function () {
-                    return this._header;
-                },
-                set: function (value) {
-                    if (!Bridge.referenceEquals(this._header, value)) {
-                        this._header = value;
-                        this.OnPropertyChanged("Header");
-                    }
-                }
-            }
-        },
-        methods: {
-            Add$1: function (element) {
-                element.Root.appendTo(this._contentElement);
-            },
-            InitDOM: function () {
-                this._headerElement = System.Windows.DOM.a("item").attr("data-tab", this["Id"]);
-
-                // BindPropertyToInnerHTML(nameof(Header), _headerElement);
-
-                this._contentElement = System.Windows.DOM.div("ui bottom attached tab segment").attr("data-tab", this["Id"]);
-            }
-        }
-    });
-
-    Bridge.define("Bridge.CustomUIMarkup.Libraries.SemanticUI.TabPanel", {
-        inherits: [System.Windows.FrameworkElement,System.Windows.Markup.IAddChild],
-        statics: {
-            fields: {
-                active: null
-            },
-            ctors: {
-                init: function () {
-                    this.active = "active";
-                }
-            }
-        },
-        fields: {
-            _tabs: null,
-            _menuElement: null
-        },
-        ctors: {
-            init: function () {
-                this._tabs = new (System.Collections.Generic.List$1(Bridge.CustomUIMarkup.Libraries.SemanticUI.TabItem)).ctor();
-            }
-        },
-        methods: {
-            Add$1: function (element) {
-                var tabItem = Bridge.as(element, Bridge.CustomUIMarkup.Libraries.SemanticUI.TabItem);
-                if (tabItem == null) {
-                    throw new System.ArgumentException();
-                }
-
-                this._menuElement.append(tabItem._headerElement);
-
-                this._root.append(tabItem._contentElement);
-
-                tabItem._headerElement.click(Bridge.fn.bind(this, function () {
-                    this.RemoveClassActive();
-
-                    tabItem._headerElement.addClass(Bridge.CustomUIMarkup.Libraries.SemanticUI.TabPanel.active);
-                    tabItem._contentElement.addClass(Bridge.CustomUIMarkup.Libraries.SemanticUI.TabPanel.active);
-                }));
-
-                this._tabs.add(tabItem);
-            },
-            InitDOM: function () {
-                this._root = System.Windows.DOM.div();
-
-                this._menuElement = System.Windows.DOM.div("ui top attached tabular menu").appendTo(this._root);
-
-                this._root.tab();
-            },
-            RemoveClassActive: function () {
-                var $t;
-                $t = Bridge.getEnumerator(this._tabs);
-                try {
-                    while ($t.moveNext()) {
-                        var tabItem = $t.Current;
-                        tabItem._contentElement.removeClass(Bridge.CustomUIMarkup.Libraries.SemanticUI.TabPanel.active);
-                        tabItem._headerElement.removeClass(Bridge.CustomUIMarkup.Libraries.SemanticUI.TabPanel.active);
-                    }
-                } finally {
-                    if (Bridge.is($t, System.IDisposable)) {
-                        $t.System$IDisposable$dispose();
-                    }
-                }}
-        }
-    });
-
     Bridge.define("Bridge.CustomUIMarkup.Libraries.Swiper.Slider", {
         inherits: [System.Windows.FrameworkElement],
         statics: {
@@ -4886,6 +4816,62 @@ setTimeout(function(){
 
 
 },0);
+
+
+
+            }
+        }
+    });
+
+    Bridge.define("Bridge.CustomUIMarkup.Libraries.viewerjs.Viewer", {
+        inherits: [System.Windows.FrameworkElement],
+        fields: {
+            _wrapper: null
+        },
+        ctors: {
+            ctor: function () {
+                this.$initialize();
+                System.Windows.FrameworkElement.ctor.call(this);
+                this.addBeforeConnectToParent(Bridge.fn.cacheBind(this, this.InitWrapper));
+                this.addAfterAddChild(Bridge.fn.cacheBind(this, this.CreateImage));
+            }
+        },
+        methods: {
+            InitDOM: function () {
+                this._root = System.Windows.DOM.ul("pictures");
+            },
+            CreateImage: function (element) {
+                System.Windows.DOM.li().appendTo(this._root).append(element._root);
+            },
+            InitWrapper: function () {
+                // ReSharper disable once UnusedVariable
+                var root = this._root.get(0);
+                // ReSharper disable once UnusedVariable
+                var me = this;
+                var id = this["Id"];
+
+
+                var css = "\r\n.pictures {\r\n      margin: 0;\r\n      padding: 0;\r\n      list-style: none;\r\n      max-width: 30rem;\r\n    }\r\n\r\n    .pictures > li {\r\n      float: left;\r\n      width: 33.3%;\r\n      height: 33.3%;\r\n      margin: 0 -1px -1px 0;\r\n      border: 1px solid transparent;\r\n      overflow: hidden;\r\n    }\r\n\r\n    .pictures > li > img {\r\n      width: 100%;\r\n      cursor: -webkit-zoom-in;\r\n      cursor: zoom-in;\r\n    }\r\n";
+
+                
+
+setTimeout(function(){
+
+    var options = {};
+    me._wrapper = new Viewer(root, options);
+
+
+
+
+
+$( '<style> '+css+'</style>' ).appendTo( 'head' );
+
+},0);
+
+
+
+
+
 
 
 
@@ -5283,6 +5269,81 @@ setTimeout(function(){
                 set: function (value) {
                     this.SetValue$1(Bridge.CustomUIMarkup.Libraries.SemanticUI.column.WideProperty, Bridge.box(value, System.Int32));
                 }
+            }
+        }
+    });
+
+    Bridge.define("Bridge.CustomUIMarkup.Libraries.SemanticUI.comment", {
+        inherits: [Bridge.CustomUIMarkup.Libraries.SemanticUI.ElementBase],
+        statics: {
+            fields: {
+                "AvatarImageUrlProperty": null,
+                AuthorProperty: null,
+                "MetadataTimeInfoProperty": null,
+                TextProperty: null
+            },
+            props: {
+                Template: {
+                    get: function () {
+                        return "\r\n<div class='comment'>\r\n\t<a class='avatar'>\r\n\t\t<img src='{AvatarImageUrl}' />\r\n\t\t</a>\r\n\t\t<div class='content'>\r\n\t\t\t<a class='author'>{Author}</a>\t\r\n\r\n            <div class='metadata'>\r\n\t\t\t\t<span>{MetadataTimeInfo}</span>\r\n\t\t\t</div>\r\n\t\t\t<div class='text' >{Text}</div>\r\n\t\t</div>\r\n\t</div>\r\n";
+                    }
+                }
+            },
+            ctors: {
+                init: function () {
+                    this["AvatarImageUrlProperty"] = System.Windows.DependencyProperty.Register("AvatarImageUrl", System.String, Bridge.CustomUIMarkup.Libraries.SemanticUI.comment);
+                    this.AuthorProperty = System.Windows.DependencyProperty.Register("Author", System.String, Bridge.CustomUIMarkup.Libraries.SemanticUI.comment);
+                    this["MetadataTimeInfoProperty"] = System.Windows.DependencyProperty.Register("MetadataTimeInfo", System.String, Bridge.CustomUIMarkup.Libraries.SemanticUI.comment);
+                    this.TextProperty = System.Windows.DependencyProperty.Register("Text", System.String, Bridge.CustomUIMarkup.Libraries.SemanticUI.comment);
+                }
+            }
+        },
+        props: {
+            HtmlClassName: {
+                get: function () {
+                    return "comment";
+                }
+            },
+            "AvatarImageUrl": {
+                get: function () {
+                    return Bridge.cast(this.GetValue$1(Bridge.CustomUIMarkup.Libraries.SemanticUI.comment["AvatarImageUrlProperty"]), System.String);
+                },
+                set: function (value) {
+                    this.SetValue$1(Bridge.CustomUIMarkup.Libraries.SemanticUI.comment["AvatarImageUrlProperty"], value);
+                }
+            },
+            Author: {
+                get: function () {
+                    return Bridge.cast(this.GetValue$1(Bridge.CustomUIMarkup.Libraries.SemanticUI.comment.AuthorProperty), System.String);
+                },
+                set: function (value) {
+                    this.SetValue$1(Bridge.CustomUIMarkup.Libraries.SemanticUI.comment.AuthorProperty, value);
+                }
+            },
+            "MetadataTimeInfo": {
+                get: function () {
+                    return Bridge.cast(this.GetValue$1(Bridge.CustomUIMarkup.Libraries.SemanticUI.comment["MetadataTimeInfoProperty"]), System.String);
+                },
+                set: function (value) {
+                    this.SetValue$1(Bridge.CustomUIMarkup.Libraries.SemanticUI.comment["MetadataTimeInfoProperty"], value);
+                }
+            },
+            Text: {
+                get: function () {
+                    return Bridge.cast(this.GetValue$1(Bridge.CustomUIMarkup.Libraries.SemanticUI.comment.TextProperty), System.String);
+                },
+                set: function (value) {
+                    this.SetValue$1(Bridge.CustomUIMarkup.Libraries.SemanticUI.comment.TextProperty, value);
+                }
+            }
+        },
+        ctors: {
+            ctor: function () {
+                var $t;
+                this.$initialize();
+                Bridge.CustomUIMarkup.Libraries.SemanticUI.ElementBase.ctor.call(this);
+                var builder = ($t = new Bridge.CustomUIMarkup.UI.Builder(), $t.XmlString = Bridge.CustomUIMarkup.Libraries.SemanticUI.comment.Template, $t.DataContext = this, $t.Caller = this, $t);
+                this._root = builder.Build()._root;
             }
         }
     });
@@ -5730,6 +5791,48 @@ setTimeout(function(){
         }
     });
 
+    Bridge.define("Bridge.CustomUIMarkup.Libraries.SemanticUI.TabItem", {
+        inherits: [Bridge.CustomUIMarkup.Libraries.SemanticUI.ElementBase],
+        statics: {
+            fields: {
+                HeaderProperty: null
+            },
+            ctors: {
+                init: function () {
+                    this.HeaderProperty = System.Windows.DependencyProperty.Register$1("Header", System.String, Bridge.CustomUIMarkup.Libraries.SemanticUI.TabItem, new System.Windows.PropertyMetadata.$ctor2(Bridge.CustomUIMarkup.Libraries.SemanticUI.TabItem.OnHeaderChanged));
+                }
+            },
+            methods: {
+                OnHeaderChanged: function (d, e) {
+                    var me = Bridge.cast(d, Bridge.CustomUIMarkup.Libraries.SemanticUI.TabItem);
+
+                    me._headerElement.html(Bridge.cast(e.NewValue, System.String));
+                }
+            }
+        },
+        fields: {
+            _headerElement: null,
+            _contentElement: null
+        },
+        props: {
+            Header: {
+                get: function () {
+                    return Bridge.cast(this.GetValue$1(Bridge.CustomUIMarkup.Libraries.SemanticUI.TabItem.HeaderProperty), System.String);
+                },
+                set: function (value) {
+                    this.SetValue$1(Bridge.CustomUIMarkup.Libraries.SemanticUI.TabItem.HeaderProperty, value);
+                }
+            }
+        },
+        methods: {
+            InitDOM: function () {
+                this._headerElement = System.Windows.DOM.a("item").attr("data-tab", this["Id"]);
+
+                this._root = (this._contentElement = System.Windows.DOM.div("ui bottom attached tab segment").attr("data-tab", this["Id"]));
+            }
+        }
+    });
+
     Bridge.define("Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_button", {
         inherits: [Bridge.CustomUIMarkup.Libraries.SemanticUI.ElementBase],
         statics: {
@@ -5788,6 +5891,17 @@ setTimeout(function(){
             HtmlClassName: {
                 get: function () {
                     return "ui cards";
+                }
+            }
+        }
+    });
+
+    Bridge.define("Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_comments", {
+        inherits: [Bridge.CustomUIMarkup.Libraries.SemanticUI.ElementBase],
+        props: {
+            HtmlClassName: {
+                get: function () {
+                    return "ui comments";
                 }
             }
         }
@@ -5926,6 +6040,67 @@ setTimeout(function(){
         }
     });
 
+    Bridge.define("Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_rating", {
+        inherits: [Bridge.CustomUIMarkup.Libraries.SemanticUI.ElementBase],
+        statics: {
+            fields: {
+                "IconIsStarProperty": null,
+                MaxRateProperty: null,
+                RateProperty: null
+            },
+            ctors: {
+                init: function () {
+                    this["IconIsStarProperty"] = System.Windows.DependencyProperty.Register$1("IconIsStar", System.Boolean, Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_rating, System.Windows.FrameworkElement.AddCssClassOnTrueElseRemove("star"));
+                    this.MaxRateProperty = System.Windows.DependencyProperty.Register$1("MaxRate", System.Nullable$1(System.Int32), Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_rating, System.Windows.FrameworkElement.CreateHtmlAttributeUpdater("data-max-rating"));
+                    this.RateProperty = System.Windows.DependencyProperty.Register$1("Rate", System.Nullable$1(System.Int32), Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_rating, System.Windows.FrameworkElement.CreateHtmlAttributeUpdater("data-rating"));
+                }
+            }
+        },
+        props: {
+            HtmlClassName: {
+                get: function () {
+                    return "ui rating";
+                }
+            },
+            "IconIsStar": {
+                get: function () {
+                    return Bridge.cast(Bridge.unbox(this.GetValue$1(Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_rating["IconIsStarProperty"])), System.Boolean, true);
+                },
+                set: function (value) {
+                    this.SetValue$1(Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_rating["IconIsStarProperty"], Bridge.box(value, System.Boolean, System.Nullable.toStringFn(System.Boolean.toString), System.Nullable.getHashCode));
+                }
+            },
+            MaxRate: {
+                get: function () {
+                    return Bridge.cast(Bridge.unbox(this.GetValue$1(Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_rating.MaxRateProperty)), System.Int32, true);
+                },
+                set: function (value) {
+                    this.SetValue$1(Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_rating.MaxRateProperty, Bridge.box(value, System.Int32, System.Nullable.toString, System.Nullable.getHashCode));
+                }
+            },
+            Rate: {
+                get: function () {
+                    return Bridge.cast(Bridge.unbox(this.GetValue$1(Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_rating.RateProperty)), System.Int32, true);
+                },
+                set: function (value) {
+                    this.SetValue$1(Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_rating.RateProperty, Bridge.box(value, System.Int32, System.Nullable.toString, System.Nullable.getHashCode));
+                }
+            }
+        },
+        ctors: {
+            ctor: function () {
+                this.$initialize();
+                Bridge.CustomUIMarkup.Libraries.SemanticUI.ElementBase.ctor.call(this);
+                this.addBeforeConnectToParent(Bridge.fn.cacheBind(this, this.OnBeforeConnectToParent));
+            }
+        },
+        methods: {
+            OnBeforeConnectToParent: function () {
+                this._root.rating();
+            }
+        }
+    });
+
     Bridge.define("Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_segment", {
         inherits: [Bridge.CustomUIMarkup.Libraries.SemanticUI.ElementBase],
         props: {
@@ -5956,6 +6131,86 @@ setTimeout(function(){
                     return "ui text menu navbar";
                 }
             }
+        }
+    });
+
+    Bridge.define("Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_top_attached_tabular_menu", {
+        inherits: [Bridge.CustomUIMarkup.Libraries.SemanticUI.ElementBase],
+        statics: {
+            fields: {
+                active: null
+            },
+            ctors: {
+                init: function () {
+                    this.active = "active";
+                }
+            }
+        },
+        fields: {
+            _menuElement: null
+        },
+        props: {
+            Tabs: {
+                get: function () {
+                    return System.Linq.Enumerable.from(this.Childeren).select(function (tab) {
+                            return Bridge.as(tab, Bridge.CustomUIMarkup.Libraries.SemanticUI.TabItem);
+                        });
+                }
+            }
+        },
+        ctors: {
+            ctor: function () {
+                this.$initialize();
+                Bridge.CustomUIMarkup.Libraries.SemanticUI.ElementBase.ctor.call(this);
+                this.addAfterInitDOM(Bridge.fn.cacheBind(this, this.OnAfterInitDOM));
+                this.addAfterAddChild(Bridge.fn.cacheBind(this, this.OnAfterAddChild));
+                this.addBeforeConnectToParent(Bridge.fn.cacheBind(this, this.OnBeforeConnectToParent));
+            }
+        },
+        methods: {
+            ActivateTab: function (tabItem) {
+                this.RemoveClassActive();
+
+                tabItem._headerElement.addClass(Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_top_attached_tabular_menu.active);
+                tabItem._contentElement.addClass(Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_top_attached_tabular_menu.active);
+            },
+            OnAfterAddChild: function (element) {
+                var tabItem = Bridge.as(element, Bridge.CustomUIMarkup.Libraries.SemanticUI.TabItem);
+                if (tabItem == null) {
+                    throw new System.ArgumentException();
+                }
+
+                this._menuElement.append(tabItem._headerElement);
+
+                this._root.append(tabItem._contentElement);
+
+                tabItem._headerElement.click(Bridge.fn.bind(this, function () {
+                    this.ActivateTab(tabItem);
+                }));
+            },
+            OnAfterInitDOM: function () {
+                this._menuElement = System.Windows.DOM.div("ui top attached tabular menu").appendTo(this._root);
+            },
+            OnBeforeConnectToParent: function () {
+                this._root.tab();
+                if (System.Linq.Enumerable.from(this.Tabs).any()) {
+                    this.ActivateTab(System.Linq.Enumerable.from(this.Tabs).firstOrDefault(null, null));
+                }
+            },
+            RemoveClassActive: function () {
+                var $t;
+                $t = Bridge.getEnumerator(this.Tabs, Bridge.CustomUIMarkup.Libraries.SemanticUI.TabItem);
+                try {
+                    while ($t.moveNext()) {
+                        var tabItem = $t.Current;
+                        tabItem._contentElement.removeClass(Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_top_attached_tabular_menu.active);
+                        tabItem._headerElement.removeClass(Bridge.CustomUIMarkup.Libraries.SemanticUI.ui_top_attached_tabular_menu.active);
+                    }
+                } finally {
+                    if (Bridge.is($t, System.IDisposable)) {
+                        $t.System$IDisposable$dispose();
+                    }
+                }}
         }
     });
 
